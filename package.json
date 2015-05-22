@@ -2,7 +2,7 @@
   "name": "bdate",
   "version": "0.0.0",
   "description": "backend-based angular datepicker",
-  "main": "app.js",
+  "main": "bdate.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

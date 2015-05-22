@@ -6,6 +6,7 @@
     "S.Panfilov <se-panfilov@ya.ru>"
   ],
   "description": "backend-based angular datepicker",
+  "main": "bdate.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/Light241/bdate.git"
