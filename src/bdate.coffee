@@ -4,6 +4,8 @@ angular.module('bdate.datepicker', [])
   {
   restrict: 'E'
   replace: true
+  templateUrl: '../dist/templates/default.html'
+#  templateUrl: 'dist/templates/default.html'
   link: (scope, elem) ->
 
   }

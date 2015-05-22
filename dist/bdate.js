@@ -2,6 +2,7 @@ angular.module('bdate.datepicker', []).directive('bdatepicker', function() {
   return {
     restrict: 'E',
     replace: true,
+    templateUrl: '../dist/templates/default.html',
     link: function(scope, elem) {}
   };
 });
