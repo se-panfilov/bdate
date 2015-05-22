@@ -1,3 +1,11 @@
-/**
- * Created by night on 22.05.15.
- */
+'use strict';
+
+angular.module('app', [
+    'bsdate'
+])
+
+
+    .controller('DemoPageCtrl', function ($scope) {
+        console.log(1);
+    })
+;
