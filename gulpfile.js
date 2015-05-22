@@ -90,12 +90,8 @@ gulp.task('coffee', function () {
 gulp.task('jade_demo', function () {
     return gulp.src(src.jade.demo)
         .pipe(changed(dest.demo, {extension: '.html'}))
-        .pipe(jade({pretty: false}))
+        .pipe(jade({pretty: true}))
         .on('error', console.log)
-        .pipe(minifyHTML({
-            empty: true,
-            spare: true
-        }))
         .pipe(gulp.dest(dest.demo));
 });
 
@@ -114,7 +110,7 @@ gulp.task('jade_src', function () {
 gulp.task('stylus_demo', function () {
     return gulp.src(src.styles.demo, {base: 'demo'})
         .pipe(concat('demo.styl'))
-        .pipe(stylus({use: [nib()], compress: true}))
+        .pipe(stylus({use: [nib()], compress: false}))
         .on('error', console.log)
         .pipe(minifyCss())
         .pipe(gulp.dest(dest.demo));

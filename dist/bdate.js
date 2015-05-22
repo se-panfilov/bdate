@@ -1,4 +1,3 @@
-'use strict';
 angular.module('bdate.datepicker', []).directive('bgColorTransition', function() {
   return {
     restrict: 'E',
@@ -7,7 +6,7 @@ angular.module('bdate.datepicker', []).directive('bgColorTransition', function()
   };
 });
 
-angular.module('bdate', []).constant('HTTP_STATUS', {
+angular.module('bdate', ['bdate.datepicker']).constant('HTTP_STATUS', {
   OK: 200,
   CREATED: 201,
   ACCEPTED: 202,
