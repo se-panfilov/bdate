@@ -16,21 +16,26 @@ var minifyCss = require('gulp-minify-css');
 
 var src = {
     styles: {
-        demo: 'demo',
+        demo: [
+            'demo/*.styl',
+            'demo/**/*.styl'
+        ],
         src: [
             'src/styles/**/*.styl'
         ]
     },
     jade: {
-        demo: 'demo',
+        demo: [
+            'demo/*.jade',
+            'demo/**/*.jade'
+        ],
         src: [
-
-            'src/**/*.jade',
-            'src/*.jade'
+            'src/*.jade',
+            'src/**/*.jade'
         ]
     }
     ,
-    js: 'src/**/*.js'
+    js: ['src/**/*.js']
 };
 
 var dest = {
@@ -53,16 +58,16 @@ gulp.task('lint', function () {
 
 gulp.task('js', function () {
     return gulp.src([src.js])
-        .pipe(changed(dest.staticDir))
-        .pipe(concat('app.js'))
+        .pipe(changed(dest.dist))
+        .pipe(concat('bdate.js'))
         .pipe(ngAnnotate({remove: true, add: true, single_quotes: true}))
         .on('error', console.log)
-        .pipe(gulp.dest(dest.staticDir))
+        .pipe(gulp.dest(dest.dist))
         .pipe(sourcemaps.init())
         .pipe(uglify())
-        .pipe(rename({basename: 'app.min'}))
+        .pipe(rename({basename: 'bdate.min'}))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(dest.staticDir))
+        .pipe(gulp.dest(dest.dist))
         ;
 });
 
