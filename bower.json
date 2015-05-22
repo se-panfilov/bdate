@@ -1,0 +1,29 @@
+{
+  "name": "bdate",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Light241/bdate",
+  "authors": [
+    "S.Panfilov <se-panfilov@ya.ru>"
+  ],
+  "description": "backend-based angular datepicker",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Light241/bdate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Light241/bdate/issues"
+  },
+  "keywords": [
+    "datepicker",
+    "backend",
+    "Angular",
+    "Angular.js"
+  ],
+  "license": "Apache 2.0",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
