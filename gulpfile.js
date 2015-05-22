@@ -13,6 +13,7 @@ var nib = require('nib');
 var connect = require('gulp-connect');
 var minifyHTML = require('gulp-minify-html');
 var minifyCss = require('gulp-minify-css');
+var coffee = require('gulp-coffee');
 
 var src = {
     styles: {
@@ -35,7 +36,8 @@ var src = {
         ]
     }
     ,
-    js: ['src/**/*.js']
+    js: ['src/**/*.js'],
+    coffee: ['src/**/*.coffee']
 };
 
 var dest = {
@@ -56,19 +58,33 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('js', function () {
-    return gulp.src([src.js])
-        .pipe(changed(dest.dist))
+//gulp.task('js', function () {
+//    return gulp.src([src.js])
+//        .pipe(changed(dest.dist))
+//        .pipe(concat('bdate.js'))
+//        .pipe(ngAnnotate({remove: true, add: true, single_quotes: true}))
+//        .on('error', console.log)
+//        .pipe(gulp.dest(dest.dist))
+//        .pipe(sourcemaps.init())
+//        .pipe(uglify())
+//        .pipe(rename({basename: 'bdate.min'}))
+//        .pipe(sourcemaps.write('.'))
+//        .pipe(gulp.dest(dest.dist))
+//        ;
+//});
+
+gulp.task('coffee', function () {
+    gulp.src(src.coffee)
+        .pipe(coffee({bare: true}))
+        .on('error', console.log)
         .pipe(concat('bdate.js'))
         .pipe(ngAnnotate({remove: true, add: true, single_quotes: true}))
-        .on('error', console.log)
         .pipe(gulp.dest(dest.dist))
         .pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(rename({basename: 'bdate.min'}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(dest.dist))
-        ;
 });
 
 gulp.task('jade_demo', function () {
@@ -130,11 +146,11 @@ gulp.task('watch', function () {
     gulp.watch(src.styles.demo, ['stylus_demo']);
     gulp.watch(src.styles.src, ['stylus_src']);
 
-    gulp.watch(src.js, ['js']);
+    gulp.watch(src.coffee, ['coffee']);
 });
 
 gulp.task('build', function () {
-    gulp.start('js');
+    gulp.start('coffee');
     gulp.start('jade');
     gulp.start('stylus');
 });
