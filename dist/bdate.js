@@ -1,4 +1,4 @@
-angular.module('bdate.datepicker', []).directive('bgColorTransition', function() {
+angular.module('bdate.datepicker', []).directive('bdatepicker', function() {
   return {
     restrict: 'E',
     replace: true,

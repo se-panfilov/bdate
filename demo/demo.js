@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('app', [
-    // 'bsdate'
+angular.module('demo', [
+     'bdate'
 ])
 
     .controller('DemoPageCtrl', function ($scope) {
