@@ -1,6 +1,6 @@
-angular.module('bdate.popup', [])
+angular.module 'bdate.popup', ['bdate.utils']
 
-.directive 'bdatePopup', () ->
+.directive 'bdatePopup', (bdateUtils) ->
   {
   restrict: 'E'
   replace: true
@@ -9,44 +9,27 @@ angular.module('bdate.popup', [])
   scope:
     isHidden: '='
   link: (scope, elem) ->
-#    scope.isHidden = false;
-
     source =
       format: 'dd-mm-YYYY'
-      today: 1432537266825
+      current:
+        date: 1432537266825
+        year: 2015
+        month: 4
+        day: 25
+        day_of_week: 1
       years:
         2015: [
           {
-            1: 'monday'
-            2: 'tuesday'
-            3: 'wednesday'
-            4: 'thursday'
-            5: 'friday'
-            6: 'saturday'
-            7: 'sunday'
-            8: 'monday'
-            9: 'tuesday'
-            10: 'wednesday'
-            11: 'thursday'
-            12: 'friday'
-            13: 'saturday'
-            14: 'sunday'
-            15: 'monday'
+            days_total: 31
+            start: 4
           }
           {
-            1: 'wednesday'
-            2: 'thursday'
-            3: 'friday'
-            4: 'saturday'
-            5: 'sunday'
-            6: 'monday'
-            7: 'tuesday'
-            8: 'wednesday'
-            9: 'thursday'
-            10: 'friday'
-            11: 'saturday'
-            12: 'sunday'
-            13: 'monday'
+            days_total: 28
+            start: 7
+          }
+          {
+            days_total: 31
+            start: 7
           }
         ]
     ;
@@ -54,20 +37,19 @@ angular.module('bdate.popup', [])
     scope.data =
       source: source
       format: source.format
+      viewedMonth: source.years[source.current.year][source.current.month]
       selected: null
       current:
         year: (new Date).getFullYear()
         month: (new Date).getMonth()
         day: (new Date).getUTCDate()
         dayOfWeek: (new Date).getDay()
+      daysOfWeekShorts: bdateUtils.getDaysOfWeekShorts()
       getYearFromSource: (year)->
         return date.source.years[year]
       getMonthFromSource: (month, year)->
         return date.source.years[year][month]
       getToday: ->
-        return source.today
+        return source.current.date
 
-
-#    scope.togglePopup = () ->
-#      console.log 1
   }

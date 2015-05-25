@@ -1,6 +1,4 @@
-angular.module('bdate.datepicker', [
-  'bdate.popup'
-])
+angular.module 'bdate.datepicker', ['bdate.popup']
 
 .directive 'bdatepicker', () ->
   {
