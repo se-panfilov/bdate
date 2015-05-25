@@ -78,7 +78,10 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
       return scope.data = {
         source: source,
         format: source.format,
-        viewedMonth: source.years[source.current.year][source.current.month],
+        viewedMonth: {
+          month: source.years[source.current.year][source.current.month],
+          number: source.current.month
+        },
         selected: null,
         current: {
           year: source.current.year,
@@ -121,6 +124,14 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
             j++;
           }
           return arr;
+        },
+        setViewed: function(isForward) {
+          if (isForward) {
+            viewedMonth.number = viewedMonth.number + 1;
+          } else {
+            viewedMonth.number = viewedMonth.number - 1;
+          }
+          return viewedMonth.month = source.years[source.current.year][viewedMonth.number];
         }
       };
     }
