@@ -8,7 +8,7 @@ angular.module 'bdate.popup', ['bdate.utils']
 #  templateUrl: 'dist/templates/popup.html'
   scope:
     isHidden: '='
-  link: (scope, elem) ->
+  link: (scope) ->
     source =
       format: 'dd-mm-YYYY'
       current:
@@ -31,6 +31,14 @@ angular.module 'bdate.popup', ['bdate.utils']
             days_total: 31
             start: 7
           }
+          {
+            days_total: 30
+            start: 3
+          }
+          {
+            days_total: 31
+            start: 5
+          }
         ]
     ;
 
@@ -40,8 +48,10 @@ angular.module 'bdate.popup', ['bdate.utils']
       viewedMonth: source.years[source.current.year][source.current.month]
       selected: null
       current:
-        year: (new Date).getFullYear()
-        month: (new Date).getMonth()
+        year: source.current.year
+        month:
+          name: bdateUtils.getMonthName(source.current.month)
+          number: source.current.month
         day: (new Date).getUTCDate()
         dayOfWeek: (new Date).getDay()
       daysOfWeekShorts: bdateUtils.getDaysOfWeekShorts()
@@ -50,6 +60,16 @@ angular.module 'bdate.popup', ['bdate.utils']
       getMonthFromSource: (month, year)->
         return date.source.years[year][month]
       getToday: ->
-        return source.current.date
+        console.log data.source.current.date
+        return data.source.current.date
+      getDaysForMonths: (daysCount, startDay) ->
+        arr = Array.apply(null, {length: daysCount + 1}).map(Number.call, Number)
+        arr.shift();
+
+        i = 1
+        while i <= startDay
+          arr.unshift('x')
+          i++
+        return arr;
 
   }

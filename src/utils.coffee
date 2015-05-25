@@ -11,8 +11,24 @@ angular.module 'bdate.utils', []
     {name: 'Воскресенье', short: 'Вс'}
   ]
 
+  month = [
+    {name: 'Январь', short: 'Янв'}
+    {name: 'Февраль', short: 'Фев'}
+    {name: 'Март', short: 'Март'}
+    {name: 'Апрель', short: 'Май'}
+    {name: 'Май', short: 'Май'}
+    {name: 'Июнь', short: 'Июнь'}
+    {name: 'Июль', short: 'Июль'}
+    {name: 'Август', short: 'Авг'}
+    {name: 'Сентябрь', short: 'Сент'}
+    {name: 'Октябрь', short: 'Окт'}
+    {name: 'Ноябрь', short: 'Ноя'}
+    {name: 'Декабрь', short: 'Дек'}
+  ]
+
   return exports =
     daysOfWeek: daysOfWeek
+    month: month
     getDaysOfWeekShorts: ->
       i = 0
       result = []
@@ -20,3 +36,5 @@ angular.module 'bdate.utils', []
         result.push daysOfWeek[i].short
         i++
       result
+    getMonthName: (number)->
+      return month[number].name

@@ -43,7 +43,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
     scope: {
       isHidden: '='
     },
-    link: function(scope, elem) {
+    link: function(scope) {
       var source;
       source = {
         format: 'dd-mm-YYYY',
@@ -65,6 +65,12 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
             }, {
               days_total: 31,
               start: 7
+            }, {
+              days_total: 30,
+              start: 3
+            }, {
+              days_total: 31,
+              start: 5
             }
           ]
         }
@@ -75,8 +81,11 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         viewedMonth: source.years[source.current.year][source.current.month],
         selected: null,
         current: {
-          year: (new Date).getFullYear(),
-          month: (new Date).getMonth(),
+          year: source.current.year,
+          month: {
+            name: bdateUtils.getMonthName(source.current.month),
+            number: source.current.month
+          },
           day: (new Date).getUTCDate(),
           dayOfWeek: (new Date).getDay()
         },
@@ -88,7 +97,21 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           return date.source.years[year][month];
         },
         getToday: function() {
-          return source.current.date;
+          console.log(data.source.current.date);
+          return data.source.current.date;
+        },
+        getDaysForMonths: function(daysCount, startDay) {
+          var arr, i;
+          arr = Array.apply(null, {
+            length: daysCount + 1
+          }).map(Number.call, Number);
+          arr.shift();
+          i = 1;
+          while (i <= startDay) {
+            arr.unshift('x');
+            i++;
+          }
+          return arr;
         }
       };
     }
@@ -96,7 +119,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
 }]);
 
 angular.module('bdate.utils', []).factory('bdateUtils', function() {
-  var daysOfWeek, exports;
+  var daysOfWeek, exports, month;
   daysOfWeek = [
     {
       name: 'Понедельник',
@@ -121,8 +144,48 @@ angular.module('bdate.utils', []).factory('bdateUtils', function() {
       short: 'Вс'
     }
   ];
+  month = [
+    {
+      name: 'Январь',
+      short: 'Янв'
+    }, {
+      name: 'Февраль',
+      short: 'Фев'
+    }, {
+      name: 'Март',
+      short: 'Март'
+    }, {
+      name: 'Апрель',
+      short: 'Май'
+    }, {
+      name: 'Май',
+      short: 'Май'
+    }, {
+      name: 'Июнь',
+      short: 'Июнь'
+    }, {
+      name: 'Июль',
+      short: 'Июль'
+    }, {
+      name: 'Август',
+      short: 'Авг'
+    }, {
+      name: 'Сентябрь',
+      short: 'Сент'
+    }, {
+      name: 'Октябрь',
+      short: 'Окт'
+    }, {
+      name: 'Ноябрь',
+      short: 'Ноя'
+    }, {
+      name: 'Декабрь',
+      short: 'Дек'
+    }
+  ];
   return exports = {
     daysOfWeek: daysOfWeek,
+    month: month,
     getDaysOfWeekShorts: function() {
       var i, result;
       i = 0;
@@ -132,6 +195,9 @@ angular.module('bdate.utils', []).factory('bdateUtils', function() {
         i++;
       }
       return result;
+    },
+    getMonthName: function(number) {
+      return month[number].name;
     }
   };
 });
