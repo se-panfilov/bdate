@@ -7,9 +7,14 @@ angular.module('bdate.popup', [])
   templateUrl: '../dist/templates/popup.html'
 #  templateUrl: 'dist/templates/popup.html'
   scope:
-    isHidden: '@'
+    isHidden: '='
   link: (scope, elem) ->
-    scope.isHidden = false;
+#    scope.isHidden = false;
+
+    scope.$watch 'isHidden', ->
+      console.log scope.isHidden
+
+
 
 #    scope.togglePopup = () ->
 #      console.log 1

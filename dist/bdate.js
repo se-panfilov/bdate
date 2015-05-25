@@ -38,10 +38,12 @@ angular.module('bdate.popup', []).directive('bdatePopup', function() {
     replace: true,
     templateUrl: '../dist/templates/popup.html',
     scope: {
-      isHidden: '@'
+      isHidden: '='
     },
     link: function(scope, elem) {
-      return scope.isHidden = false;
+      return scope.$watch('isHidden', function() {
+        return console.log(scope.isHidden);
+      });
     }
   };
 });
