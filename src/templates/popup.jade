@@ -23,3 +23,7 @@
                 .b_popup_day 5
                 .b_popup_day 6
                 .b_popup_day 7
+    .b_popup_today
+        | Сегодня
+        | &nbsp;
+        span(ng-bind="data.source.today | date:'dd-MM-yyyy'")
