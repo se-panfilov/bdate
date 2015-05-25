@@ -4,9 +4,11 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', fun
     replace: true,
     templateUrl: '../dist/templates/default.html',
     link: function(scope, elem) {
-      scope.isPopupOpen = false;
+      scope.popup = {
+        isOpen: false
+      };
       return scope.togglePopup = function() {
-        return scope.isPopupOpen = !scope.isPopupOpen;
+        return scope.popup.isOpen = !scope.popup.isOpen;
       };
     }
   };
@@ -36,7 +38,7 @@ angular.module('bdate.popup', []).directive('bdatePopup', function() {
     replace: true,
     templateUrl: '../dist/templates/popup.html',
     scope: {
-      isHidden: '='
+      isHidden: '@'
     },
     link: function(scope, elem) {
       return scope.isHidden = false;

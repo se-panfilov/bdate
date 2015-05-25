@@ -10,8 +10,9 @@ angular.module('bdate.datepicker', [
 #  templateUrl: 'dist/templates/default.html'
   link: (scope, elem) ->
 
-    scope.isPopupOpen = false;
+    scope.popup =
+      isOpen: false;
 
     scope.togglePopup = () ->
-      scope.isPopupOpen = !scope.isPopupOpen;
+      scope.popup.isOpen = !scope.popup.isOpen;
   }
