@@ -3,6 +3,9 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', fun
     restrict: 'E',
     replace: true,
     templateUrl: '../dist/templates/default.html',
+    scope: {
+      source: '='
+    },
     link: function(scope, elem) {
       scope.popup = {
         isOpen: false

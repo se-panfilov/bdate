@@ -8,8 +8,9 @@ angular.module('bdate.datepicker', [
   replace: true
   templateUrl: '../dist/templates/default.html'
 #  templateUrl: 'dist/templates/default.html'
+  scope:
+    source: '='
   link: (scope, elem) ->
-
     scope.popup =
       isOpen: false;
 
