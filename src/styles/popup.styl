@@ -1,23 +1,52 @@
+b_control_height = 25px
+bg_color = #16a085
+bg_day_color = #2980b9
+
 .b_popup
-  height 200px
   width 200px
-  background-color #5fa063
+  background-color bg_color
   position absolute
   color white
+  border-bottom-right-radius 3px
+  border-bottom-left-radius 3px
   .b_popup_controls
+    text-align center
+    height b_control_height
+    margin-bottom 5px
     *
-      display inline-block
       text-align center
     .b_popup_btn
-      border 1px solid black
-      color red
+      min-height b_control_height
+    .b_btn_prev
+      float left
+    .b_btn_next
+      float right
+    .b_popup_month
+      display inline-block
+      cursor pointer
+      line-height b_control_height
+    .b_popup_year
+      display inline-block
+      cursor pointer
+    .b_popup_btn
+      border 1px solid darken(bg_day_color, 5)
+      background-color bg_day_color
   .b_popup_weeks
-    border 1px solid black
+    text-align center
+    margin 15px
     .b_popup_week
       .b_popup_days
         .b_popup_day
-          border 1px solid black
+          border 1px solid darken(bg_day_color, 5)
+          background-color bg_day_color
+          border-radius 100%
           display inline-block
-          width 20px
-          height 20px
+          width 22px
+          height 23px
           text-align center
+          margin 1px
+          cursor pointer
+          &:hover
+            background-color lighten(bg_day_color, 5)
+          &:active
+            background-color darken(bg_day_color, 5)
