@@ -1,9 +1,14 @@
-angular.module('bdate.datepicker', []).directive('bdatepicker', function() {
+angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', function() {
   return {
     restrict: 'E',
     replace: true,
     templateUrl: '../dist/templates/default.html',
-    link: function(scope, elem) {}
+    link: function(scope, elem) {
+      scope.isPopupOpen = false;
+      return scope.togglePopup = function() {
+        return scope.isPopupOpen = !scope.isPopupOpen;
+      };
+    }
   };
 });
 
@@ -23,4 +28,18 @@ angular.module('bdate', ['bdate.datepicker']).constant('HTTP_STATUS', {
   minute: 60000,
   hour: 3600000,
   day: 86400000
+});
+
+angular.module('bdate.popup', []).directive('bdatePopup', function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    templateUrl: '../dist/templates/popup.html',
+    scope: {
+      isHidden: '='
+    },
+    link: function(scope, elem) {
+      return scope.isHidden = false;
+    }
+  };
 });

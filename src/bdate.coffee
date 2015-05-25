@@ -1,4 +1,6 @@
-angular.module('bdate.datepicker', [])
+angular.module('bdate.datepicker', [
+  'bdate.popup'
+])
 
 .directive 'bdatepicker', () ->
   {
@@ -8,4 +10,8 @@ angular.module('bdate.datepicker', [])
 #  templateUrl: 'dist/templates/default.html'
   link: (scope, elem) ->
 
+    scope.isPopupOpen = false;
+
+    scope.togglePopup = () ->
+      scope.isPopupOpen = !scope.isPopupOpen;
   }
