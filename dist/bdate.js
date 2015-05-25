@@ -91,25 +91,34 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         },
         daysOfWeekShorts: bdateUtils.getDaysOfWeekShorts(),
         getYearFromSource: function(year) {
-          return date.source.years[year];
+          return scope.data.source.years[year];
         },
         getMonthFromSource: function(month, year) {
-          return date.source.years[year][month];
+          return scope.data.source.years[year][month];
         },
         getToday: function() {
-          console.log(data.source.current.date);
-          return data.source.current.date;
+          console.log(scope.data.source.current.date);
+          return scope.data.source.current.date;
         },
         getDaysForMonths: function(daysCount, startDay) {
-          var arr, i;
+          var arr, daysInWeek, i, j;
           arr = Array.apply(null, {
             length: daysCount + 1
           }).map(Number.call, Number);
           arr.shift();
           i = 1;
-          while (i <= startDay) {
+          while (i <= startDay - 1) {
             arr.unshift('x');
             i++;
+          }
+          daysInWeek = 7;
+          if ((arr.length / daysInWeek) === Math.floor(arr.length / daysInWeek)) {
+            return arr;
+          }
+          j = daysCount;
+          while (j <= daysCount + startDay - 1) {
+            arr.push('x');
+            j++;
           }
           return arr;
         }

@@ -56,20 +56,31 @@ angular.module 'bdate.popup', ['bdate.utils']
         dayOfWeek: (new Date).getDay()
       daysOfWeekShorts: bdateUtils.getDaysOfWeekShorts()
       getYearFromSource: (year)->
-        return date.source.years[year]
+        return scope.data.source.years[year]
       getMonthFromSource: (month, year)->
-        return date.source.years[year][month]
+        return scope.data.source.years[year][month]
       getToday: ->
-        console.log data.source.current.date
-        return data.source.current.date
+        console.log scope.data.source.current.date
+        return scope.data.source.current.date
       getDaysForMonths: (daysCount, startDay) ->
         arr = Array.apply(null, {length: daysCount + 1}).map(Number.call, Number)
         arr.shift();
 
         i = 1
-        while i <= startDay
+        while i <= startDay - 1
           arr.unshift('x')
           i++
+
+        daysInWeek = 7
+
+        if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
+          return arr
+
+        j = daysCount
+        while j <= daysCount + startDay - 1
+          arr.push('x')
+          j++
+
         return arr;
 
   }

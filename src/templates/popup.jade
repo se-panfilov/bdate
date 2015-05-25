@@ -2,7 +2,7 @@
     .b_popup_controls
         button.b_popup_btn.b_btn_prev(type="button") <
         .b_popup_month(ng-bind="data.current.month.name")
-        |&nbsp;
+        | &nbsp;
         .b_popup_year(ng-bind="data.current.year")
         button.b_popup_btn.b_btn_next(type="button") >
     .b_popup_days
@@ -13,6 +13,6 @@
             td.b_popup_day(ng-repeat="day in data.getDaysForMonths(data.viewedMonth.days_total, data.viewedMonth.start) track by $index")
                 span(ng-bind="day")
     .b_popup_today
-        | Сегодня 
+        | Сегодня
         | &nbsp;
-        span(ng-bind="getToday() | date:'dd-MM-yyyy'")
+        span(ng-bind="data.getToday() | date:'dd-MM-yyyy'")
