@@ -52,7 +52,7 @@ angular.module 'bdate.popup', ['bdate.utils']
 
     messages =
       invalidParams: 'Invalid params'
-      errorOnChangeMOnthOrYear: 'cannot change month or year'
+      errorOnChangeMonthOrYear: 'cannot change month or year'
 
     scope.data =
       dateModel: null
@@ -126,7 +126,7 @@ angular.module 'bdate.popup', ['bdate.utils']
         !!scope.data.source.years[yearNum]
       getFirstYearInSource: ->
         Object.keys(scope.data.source.years)[0]
-      isMonthExistInSource: (monthNum, yearNum)->
+      isMonthExistInSource: (yearNum, monthNum)->
         return console.error messages.invalidParams if not yearNum or not monthNum
         yearNum = +yearNum
         monthNum = +monthNum
@@ -145,7 +145,7 @@ angular.module 'bdate.popup', ['bdate.utils']
         monthNum is Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1]
       getFirstMonthInSource: (yearNum)->
         Object.keys(scope.data.source.years[+yearNum])[0]
-      isCanGoNextMonth: (isForward, monthNum, yearNum) ->
+      isCanGoNextMonth: (isForward, yearNum, monthNum) ->
         yearNum = +yearNum
         monthNum = +monthNum
         isFirstMonthInSource = scope.data.isFirstMonthInSource yearNum, monthNum
@@ -163,7 +163,7 @@ angular.module 'bdate.popup', ['bdate.utils']
             if scope.data.isYearExistInSource nextYearNum
               nextMonth = scope.data.getFirstMonthInSource nextYearNum
             else
-              console.error messages.errorOnChangeMOnthOrYear
+              console.error messages.errorOnChangeMonthOrYear
               return false
         else if not isForward
           if not isFirstMonthInSource
@@ -174,14 +174,14 @@ angular.module 'bdate.popup', ['bdate.utils']
             if scope.data.isYearExistInSource nextYearNum
               nextMonth = scope.data.getLastMonthInSource nextYearNum
             else
-              console.error messages.errorOnChangeMOnthOrYear
+              console.error messages.errorOnChangeMonthOrYear
               return false
 
         result =
           year: nextYearNum
           month: nextMonth
       goNextMonth: (isForward) ->
-        nextObj = scope.data.isCanGoNextMonth isForward, scope.data.viewedDate.month.number, scope.data.viewedDate.year.number
+        nextObj = scope.data.isCanGoNextMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
       init: (dateSource) ->

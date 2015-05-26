@@ -39,24 +39,46 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           day_of_week: 1
         },
         years: {
-          2015: {
-            5: {
-              days_total: 31,
-              start_day: 4
-            },
+          2014: {
             6: {
-              days_total: 28,
+              days_total: 30,
               start_day: 7
             },
             7: {
               days_total: 31,
-              start_day: 7
+              start_day: 2
             },
             8: {
+              days_total: 31,
+              start_day: 5
+            },
+            9: {
+              days_total: 30,
+              start_day: 1
+            },
+            10: {
+              days_total: 31,
+              start_day: 3
+            }
+          },
+          2015: {
+            1: {
+              days_total: 31,
+              start_day: 4
+            },
+            2: {
+              days_total: 28,
+              start_day: 7
+            },
+            3: {
+              days_total: 31,
+              start_day: 7
+            },
+            4: {
               days_total: 30,
               start_day: 3
             },
-            9: {
+            5: {
               days_total: 31,
               start_day: 5
             }
@@ -65,7 +87,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
       };
       messages = {
         invalidParams: 'Invalid params',
-        errorOnChangeMOnthOrYear: 'cannot change month or year'
+        errorOnChangeMonthOrYear: 'cannot change month or year'
       };
       scope.data = {
         dateModel: null,
@@ -161,7 +183,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         getFirstYearInSource: function() {
           return Object.keys(scope.data.source.years)[0];
         },
-        isMonthExistInSource: function(monthNum, yearNum) {
+        isMonthExistInSource: function(yearNum, monthNum) {
           if (!yearNum || !monthNum) {
             return console.error(messages.invalidParams);
           }
@@ -185,7 +207,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         getFirstMonthInSource: function(yearNum) {
           return Object.keys(scope.data.source.years[+yearNum])[0];
         },
-        isCanGoNextMonth: function(isForward, monthNum, yearNum) {
+        isCanGoNextMonth: function(isForward, yearNum, monthNum) {
           var isChangeYear, isFirstMonthInSource, isLastMonthInSource, nextMonth, nextYearNum, result;
           yearNum = +yearNum;
           monthNum = +monthNum;
@@ -203,7 +225,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
               if (scope.data.isYearExistInSource(nextYearNum)) {
                 nextMonth = scope.data.getFirstMonthInSource(nextYearNum);
               } else {
-                console.error(messages.errorOnChangeMOnthOrYear);
+                console.error(messages.errorOnChangeMonthOrYear);
                 return false;
               }
             }
@@ -216,7 +238,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
               if (scope.data.isYearExistInSource(nextYearNum)) {
                 nextMonth = scope.data.getLastMonthInSource(nextYearNum);
               } else {
-                console.error(messages.errorOnChangeMOnthOrYear);
+                console.error(messages.errorOnChangeMonthOrYear);
                 return false;
               }
             }
@@ -228,7 +250,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         },
         goNextMonth: function(isForward) {
           var nextObj;
-          nextObj = scope.data.isCanGoNextMonth(isForward, scope.data.viewedDate.month.number, scope.data.viewedDate.year.number);
+          nextObj = scope.data.isCanGoNextMonth(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number);
           if (nextObj) {
             return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
