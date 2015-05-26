@@ -9,7 +9,7 @@ angular.module 'bdate.popup', ['bdate.utils']
     isHidden: '='
   link: (scope) ->
     source =
-      format: 'dd-mm-YYYY'
+      format: 'dd-mm-yyyy'
       today:
         date: 1432537266825
         year: 2015
@@ -72,8 +72,8 @@ angular.module 'bdate.popup', ['bdate.utils']
       getMonthObj: (month, year)->
         return scope.data.source.years[year][month]
       getDaysArr: (monthObj) ->
-        daysCount = monthObj.days_total
-        startDay = monthObj.start_day
+        daysCount = monthObj.daysTotal
+        startDay = monthObj.startDay
 
         arr = Array.apply(null, length: daysCount + 1).map Number.call, Number
         arr.shift()
@@ -96,12 +96,12 @@ angular.module 'bdate.popup', ['bdate.utils']
         return arr
       goNextMonth: (isForward) ->
         if isForward
-          scope.data.viewedDate.number = scope.data.viewedDate.number + 1
+          scope.data.viewedDate.month.number = scope.data.viewedDate.month.number + 1
         else
-          scope.data.viewedDate.number = scope.data.viewedDate.number - 1
+          scope.data.viewedDate.month.number = scope.data.viewedDate.month.number - 1
 
         #TODO not current year, but calculate what year should to be
-        scope.data.setViewedDate scope.data.source.today.year, scope.data.viewedDate.number
+        scope.data.setViewedDate scope.data.source.today.year, scope.data.viewedDate.month.number
       init: (dateSource) ->
         scope.data.setSource dateSource
         scope.data.setFormat dateSource.format

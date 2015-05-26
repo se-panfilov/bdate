@@ -46,7 +46,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
     link: function(scope) {
       var init, source;
       source = {
-        format: 'dd-mm-YYYY',
+        format: 'dd-mm-yyyy',
         today: {
           date: 1432537266825,
           year: 2015,
@@ -120,8 +120,8 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         },
         getDaysArr: function(monthObj) {
           var arr, daysCount, daysInWeek, i, j, startDay;
-          daysCount = monthObj.days_total;
-          startDay = monthObj.start_day;
+          daysCount = monthObj.daysTotal;
+          startDay = monthObj.startDay;
           arr = Array.apply(null, {
             length: daysCount + 1
           }).map(Number.call, Number);
@@ -144,11 +144,11 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         },
         goNextMonth: function(isForward) {
           if (isForward) {
-            scope.data.viewedDate.number = scope.data.viewedDate.number + 1;
+            scope.data.viewedDate.month.number = scope.data.viewedDate.month.number + 1;
           } else {
-            scope.data.viewedDate.number = scope.data.viewedDate.number - 1;
+            scope.data.viewedDate.month.number = scope.data.viewedDate.month.number - 1;
           }
-          return scope.data.setViewedDate(scope.data.source.today.year, scope.data.viewedDate.number);
+          return scope.data.setViewedDate(scope.data.source.today.year, scope.data.viewedDate.month.number);
         },
         init: function(dateSource) {
           scope.data.setSource(dateSource);

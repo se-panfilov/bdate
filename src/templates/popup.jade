@@ -6,7 +6,7 @@
         .b_popup_year(ng-bind="data.viewedDate.year")
         button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextMonth(true)") >
     .b_popup_days
-        .b_popup_day_of_week(ng-repeat="dayOfWeek in ::data.daysOfWeekShorts")
+        .b_popup_day_of_week(ng-repeat="dayOfWeek in ::data.daysOfWeek.getShorts()")
             span(ng-bind="::dayOfWeek")
     table.b_popup_weeks
         tr.b_popup_week
@@ -15,4 +15,4 @@
     .b_popup_today
         | Сегодня
         | &nbsp;
-        span(ng-bind="data.getToday() | date:'dd-MM-yyyy'")
+        span(ng-bind="data.today.date | date:data.format")
