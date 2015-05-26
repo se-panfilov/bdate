@@ -44,10 +44,10 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
       isHidden: '='
     },
     link: function(scope) {
-      var source;
+      var init, source;
       source = {
         format: 'dd-mm-YYYY',
-        current: {
+        today: {
           date: 1432537266825,
           year: 2015,
           month: 4,
@@ -58,53 +58,70 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           2015: [
             {
               days_total: 31,
-              start: 4
+              start_day: 4
             }, {
               days_total: 28,
-              start: 7
+              start_day: 7
             }, {
               days_total: 31,
-              start: 7
+              start_day: 7
             }, {
               days_total: 30,
-              start: 3
+              start_day: 3
             }, {
               days_total: 31,
-              start: 5
+              start_day: 5
             }
           ]
         }
       };
-      return scope.data = {
-        source: source,
-        format: source.format,
-        viewedMonth: {
-          month: source.years[source.current.year][source.current.month],
-          number: source.current.month
+      scope.data = {
+        dateModel: null,
+        setDateModel: function(dateModel) {
+          return scope.data.dateModel = dateModel;
         },
-        selected: null,
-        current: {
-          year: source.current.year,
-          month: {
-            name: bdateUtils.getMonthName(source.current.month),
-            number: source.current.month
+        source: null,
+        setSource: function(dateSource) {
+          return scope.data.source = dateSource;
+        },
+        format: null,
+        setFormat: function(format) {
+          return scope.data.format = format;
+        },
+        viewedDate: null,
+        setViewedDate: function(year, monthNumber) {
+          return scope.data.viewedDate = {
+            year: year,
+            month: {
+              daysTotal: scope.data.source.years[year][monthNumber].days_total,
+              startDay: scope.data.source.years[year][monthNumber].start_day,
+              number: monthNumber,
+              name: bdateUtils.getMonthName(monthNumber)
+            }
+          };
+        },
+        daysOfWeek: {
+          get: function() {
+            return bdateUtils.daysOfWeek;
           },
-          day: (new Date).getUTCDate(),
-          dayOfWeek: (new Date).getDay()
+          getShorts: function() {
+            return bdateUtils.getDaysOfWeekShorts();
+          }
         },
-        daysOfWeekShorts: bdateUtils.getDaysOfWeekShorts(),
-        getYearFromSource: function(year) {
+        today: null,
+        setToday: function(today) {
+          return scope.data.today = today;
+        },
+        getYearObj: function(year) {
           return scope.data.source.years[year];
         },
-        getMonthFromSource: function(month, year) {
+        getMonthObj: function(month, year) {
           return scope.data.source.years[year][month];
         },
-        getToday: function() {
-          console.log(scope.data.source.current.date);
-          return scope.data.source.current.date;
-        },
-        getDaysForMonths: function(daysCount, startDay) {
-          var arr, daysInWeek, i, j;
+        getDaysArr: function(monthObj) {
+          var arr, daysCount, daysInWeek, i, j, startDay;
+          daysCount = monthObj.days_total;
+          startDay = monthObj.start_day;
           arr = Array.apply(null, {
             length: daysCount + 1
           }).map(Number.call, Number);
@@ -125,15 +142,24 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           }
           return arr;
         },
-        setViewed: function(isForward) {
+        goNextMonth: function(isForward) {
           if (isForward) {
-            viewedMonth.number = viewedMonth.number + 1;
+            scope.data.viewedDate.number = scope.data.viewedDate.number + 1;
           } else {
-            viewedMonth.number = viewedMonth.number - 1;
+            scope.data.viewedDate.number = scope.data.viewedDate.number - 1;
           }
-          return viewedMonth.month = source.years[source.current.year][viewedMonth.number];
+          return scope.data.setViewedDate(scope.data.source.today.year, scope.data.viewedDate.number);
+        },
+        init: function(dateSource) {
+          scope.data.setSource(dateSource);
+          scope.data.setFormat(dateSource.format);
+          scope.data.setViewedDate(dateSource.today.year, dateSource.today.month);
+          return scope.data.setToday(dateSource.today);
         }
       };
+      return (init = function() {
+        return scope.data.init(source);
+      })();
     }
   };
 }]);

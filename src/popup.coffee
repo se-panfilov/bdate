@@ -1,7 +1,6 @@
 angular.module 'bdate.popup', ['bdate.utils']
 
 .directive 'bdatePopup', (bdateUtils) ->
-  {
   restrict: 'E'
   replace: true
   templateUrl: '../dist/templates/popup.html'
@@ -11,7 +10,7 @@ angular.module 'bdate.popup', ['bdate.utils']
   link: (scope) ->
     source =
       format: 'dd-mm-YYYY'
-      current:
+      today:
         date: 1432537266825
         year: 2015
         month: 4
@@ -21,52 +20,63 @@ angular.module 'bdate.popup', ['bdate.utils']
         2015: [
           {
             days_total: 31
-            start: 4
+            start_day: 4
           }
           {
             days_total: 28
-            start: 7
+            start_day: 7
           }
           {
             days_total: 31
-            start: 7
+            start_day: 7
           }
           {
             days_total: 30
-            start: 3
+            start_day: 3
           }
           {
             days_total: 31
-            start: 5
+            start_day: 5
           }
         ]
-    ;
 
     scope.data =
-      source: source
-      format: source.format
-      viewedMonth:
-        month: source.years[source.current.year][source.current.month]
-        number: source.current.month
-      selected: null
-      current:
-        year: source.current.year
-        month:
-          name: bdateUtils.getMonthName(source.current.month)
-          number: source.current.month
-        day: (new Date).getUTCDate()
-        dayOfWeek: (new Date).getDay()
-      daysOfWeekShorts: bdateUtils.getDaysOfWeekShorts()
-      getYearFromSource: (year)->
+      dateModel: null
+      setDateModel: (dateModel) ->
+        scope.data.dateModel = dateModel
+      source: null
+      setSource: (dateSource) ->
+        scope.data.source = dateSource
+      format: null #scope.data.source.format
+      setFormat: (format) ->
+        scope.data.format = format
+      viewedDate: null
+      setViewedDate: (year, monthNumber) ->
+        scope.data.viewedDate =
+          year: year
+          month:
+            daysTotal: scope.data.source.years[year][monthNumber].days_total
+            startDay: scope.data.source.years[year][monthNumber].start_day
+            number: monthNumber
+            name: bdateUtils.getMonthName monthNumber
+      daysOfWeek:
+        get: ->
+          bdateUtils.daysOfWeek
+        getShorts: ->
+          bdateUtils.getDaysOfWeekShorts()
+      today: null
+      setToday: (today) ->
+        scope.data.today = today
+      getYearObj: (year)->
         return scope.data.source.years[year]
-      getMonthFromSource: (month, year)->
+      getMonthObj: (month, year)->
         return scope.data.source.years[year][month]
-      getToday: ->
-        console.log scope.data.source.current.date
-        return scope.data.source.current.date
-      getDaysForMonths: (daysCount, startDay) ->
-        arr = Array.apply(null, {length: daysCount + 1}).map(Number.call, Number)
-        arr.shift();
+      getDaysArr: (monthObj) ->
+        daysCount = monthObj.days_total
+        startDay = monthObj.start_day
+
+        arr = Array.apply(null, length: daysCount + 1).map Number.call, Number
+        arr.shift()
 
         i = 1
         while i <= startDay - 1
@@ -83,13 +93,21 @@ angular.module 'bdate.popup', ['bdate.utils']
           arr.push('x')
           j++
 
-        return arr;
-      setViewed: (isForward) ->
+        return arr
+      goNextMonth: (isForward) ->
         if isForward
-          viewedMonth.number = viewedMonth.number + 1
+          scope.data.viewedDate.number = scope.data.viewedDate.number + 1
         else
-          viewedMonth.number = viewedMonth.number - 1
+          scope.data.viewedDate.number = scope.data.viewedDate.number - 1
 
-        viewedMonth.month = source.years[source.current.year][viewedMonth.number]
+        #TODO not current year, but calculate what year should to be
+        scope.data.setViewedDate scope.data.source.today.year, scope.data.viewedDate.number
+      init: (dateSource) ->
+        scope.data.setSource dateSource
+        scope.data.setFormat dateSource.format
+        scope.data.setViewedDate dateSource.today.year, dateSource.today.month
+        scope.data.setToday dateSource.today
 
-  }
+    do init = ->
+      scope.data.init(source)
+

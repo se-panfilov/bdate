@@ -1,16 +1,16 @@
 .b_popup(ng-hide="isHidden")
     .b_popup_controls
-        button.b_popup_btn.b_btn_prev(type="button", ng-click="data.setViewed(false)") <
-        .b_popup_month(ng-bind="data.current.month.name")
+        button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextMonth(false)") <
+        .b_popup_month(ng-bind="data.viewedDate.month.name")
         | &nbsp;
-        .b_popup_year(ng-bind="data.current.year")
-        button.b_popup_btn.b_btn_next(type="button", ng-click="data.setViewed(true)") >
+        .b_popup_year(ng-bind="data.viewedDate.year")
+        button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextMonth(true)") >
     .b_popup_days
         .b_popup_day_of_week(ng-repeat="dayOfWeek in ::data.daysOfWeekShorts")
             span(ng-bind="::dayOfWeek")
     table.b_popup_weeks
         tr.b_popup_week
-            td.b_popup_day(ng-repeat="day in data.getDaysForMonths(data.viewedMonth.month.days_total, data.viewedMonth.start) track by $index")
+            td.b_popup_day(ng-repeat="day in data.getDaysArr(data.viewedDate.month) track by $index")
                 span(ng-bind="day")
     .b_popup_today
         | Сегодня
