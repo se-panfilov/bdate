@@ -18,24 +18,25 @@ angular.module 'bdate.popup', ['bdate.utils']
         day_of_week: 1
       years:
         2015:
-          6:
+          5:
             days_total: 31
             start_day: 4
-          7:
+          6:
             days_total: 28
             start_day: 7
-          8:
+          7:
             days_total: 31
             start_day: 7
-          9:
+          8:
             days_total: 30
             start_day: 3
-          10:
+          9:
             days_total: 31
             start_day: 5
 
     messages =
       invalidParams: 'Invalid params'
+      errorOnChangeMOnthOrYear: 'cannot change month or year'
 
     scope.data =
       dateModel: null
@@ -53,6 +54,8 @@ angular.module 'bdate.popup', ['bdate.utils']
       viewedDate: null
       setViewedDate: (yearNum, monthNum) ->
         return console.error messages.invalidParams if not yearNum or not monthNum
+        yearNum = +yearNum
+        monthNum = +monthNum
 
         scope.data.viewedDate =
           year:
@@ -102,20 +105,33 @@ angular.module 'bdate.popup', ['bdate.utils']
         return arr
       isYearExistInSource: (yearNum) ->
         return console.error messages.invalidParams if not yearNum
+        yearNum = +yearNum
+
         !!scope.data.source.years[yearNum]
       getFirstYearInSource: ->
         Object.keys(scope.data.source.years)[0]
       isMonthExistInSource: (monthNum, yearNum)->
         return console.error messages.invalidParams if not yearNum or not monthNum
+        yearNum = +yearNum
+        monthNum = +monthNum
+
         return false if not scope.data.source.years[yearNum]
         !!scope.data.source.years[yearNum][monthNum]
       isFirstMonthInSource: (yearNum, monthNum) ->
+        yearNum = +yearNum
+        monthNum = +monthNum
+
         monthNum is Object.keys(scope.data.source.years[yearNum])[0]
       isLastMonthInSource: (yearNum, monthNum) ->
+        yearNum = +yearNum
+        monthNum = +monthNum
+
         monthNum is Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1]
       getFirstMonthInSource: (yearNum)->
-        Object.keys(scope.data.source.years[yearNum])[0]
+        Object.keys(scope.data.source.years[+yearNum])[0]
       isCanGoNextMonth: (isForward, monthNum, yearNum) ->
+        yearNum = +yearNum
+        monthNum = +monthNum
         isFirstMonthInSource = scope.data.isFirstMonthInSource yearNum, monthNum
         isLastMonthInSource = scope.data.isLastMonthInSource yearNum, monthNum
         isChangeYear = false
@@ -129,33 +145,30 @@ angular.module 'bdate.popup', ['bdate.utils']
             isChangeYear = true
             nextYearNum = yearNum + 1
             if scope.data.isYearExistInSource nextYearNum
-#nextYear = scope.data.source.years[nextYearNum]
               nextMonth = scope.data.getFirstMonthInSource nextYearNum
+            else
+              console.error messages.errorOnChangeMOnthOrYear
+              return false
         else if not isForward
-#TODO fix
           if not isFirstMonthInSource
-            nextMonth = monthNum / 1
+            nextMonth = monthNum - 1
           else
             isChangeYear = true
             nextYearNum = yearNum - 1
             if scope.data.isYearExistInSource nextYearNum
-#nextYear = scope.data.source.years[nextYearNum]
               nextMonth = scope.data.getLastMonthInSource nextYearNum
+            else
+              console.error messages.errorOnChangeMOnthOrYear
+              return false
 
         result =
           year: nextYearNum
           month: nextMonth
 
       goNextMonth: (isForward) ->
-        if isForward
-          if scope.data.isCanGoNextMonth isForward, scope.data.viewedDate.month.number, scope.data.viewedDate.year.number
-            scope.data.viewedDate.month.number = scope.data.viewedDate.month.number + 1
-
-        else
-          scope.data.viewedDate.month.number = scope.data.viewedDate.month.number - 1
-
-        #TODO not current year, but calculate what year should to be
-        scope.data.setViewedDate scope.data.source.today.year, scope.data.viewedDate.month.number
+        nextObj = scope.data.isCanGoNextMonth isForward, scope.data.viewedDate.month.number, scope.data.viewedDate.year.number
+        if nextObj
+          scope.data.setViewedDate nextObj.year, nextObj.month
       init: (dateSource) ->
         scope.data.setSource dateSource
         scope.data.setFormat dateSource.format

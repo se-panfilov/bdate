@@ -40,23 +40,23 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         },
         years: {
           2015: {
-            6: {
+            5: {
               days_total: 31,
               start_day: 4
             },
-            7: {
+            6: {
               days_total: 28,
               start_day: 7
             },
-            8: {
+            7: {
               days_total: 31,
               start_day: 7
             },
-            9: {
+            8: {
               days_total: 30,
               start_day: 3
             },
-            10: {
+            9: {
               days_total: 31,
               start_day: 5
             }
@@ -64,7 +64,8 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         }
       };
       messages = {
-        invalidParams: 'Invalid params'
+        invalidParams: 'Invalid params',
+        errorOnChangeMOnthOrYear: 'cannot change month or year'
       };
       scope.data = {
         dateModel: null,
@@ -93,6 +94,8 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           if (!yearNum || !monthNum) {
             return console.error(messages.invalidParams);
           }
+          yearNum = +yearNum;
+          monthNum = +monthNum;
           return scope.data.viewedDate = {
             year: {
               first: Object.keys(scope.data.source.years)[0],
@@ -152,6 +155,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           if (!yearNum) {
             return console.error(messages.invalidParams);
           }
+          yearNum = +yearNum;
           return !!scope.data.source.years[yearNum];
         },
         getFirstYearInSource: function() {
@@ -161,22 +165,30 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           if (!yearNum || !monthNum) {
             return console.error(messages.invalidParams);
           }
+          yearNum = +yearNum;
+          monthNum = +monthNum;
           if (!scope.data.source.years[yearNum]) {
             return false;
           }
           return !!scope.data.source.years[yearNum][monthNum];
         },
         isFirstMonthInSource: function(yearNum, monthNum) {
+          yearNum = +yearNum;
+          monthNum = +monthNum;
           return monthNum === Object.keys(scope.data.source.years[yearNum])[0];
         },
         isLastMonthInSource: function(yearNum, monthNum) {
+          yearNum = +yearNum;
+          monthNum = +monthNum;
           return monthNum === Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
         },
         getFirstMonthInSource: function(yearNum) {
-          return Object.keys(scope.data.source.years[yearNum])[0];
+          return Object.keys(scope.data.source.years[+yearNum])[0];
         },
         isCanGoNextMonth: function(isForward, monthNum, yearNum) {
           var isChangeYear, isFirstMonthInSource, isLastMonthInSource, nextMonth, nextYearNum, result;
+          yearNum = +yearNum;
+          monthNum = +monthNum;
           isFirstMonthInSource = scope.data.isFirstMonthInSource(yearNum, monthNum);
           isLastMonthInSource = scope.data.isLastMonthInSource(yearNum, monthNum);
           isChangeYear = false;
@@ -190,16 +202,22 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
               nextYearNum = yearNum + 1;
               if (scope.data.isYearExistInSource(nextYearNum)) {
                 nextMonth = scope.data.getFirstMonthInSource(nextYearNum);
+              } else {
+                console.error(messages.errorOnChangeMOnthOrYear);
+                return false;
               }
             }
           } else if (!isForward) {
             if (!isFirstMonthInSource) {
-              nextMonth = monthNum / 1;
+              nextMonth = monthNum - 1;
             } else {
               isChangeYear = true;
               nextYearNum = yearNum - 1;
               if (scope.data.isYearExistInSource(nextYearNum)) {
                 nextMonth = scope.data.getLastMonthInSource(nextYearNum);
+              } else {
+                console.error(messages.errorOnChangeMOnthOrYear);
+                return false;
               }
             }
           }
@@ -209,14 +227,11 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           };
         },
         goNextMonth: function(isForward) {
-          if (isForward) {
-            if (scope.data.isCanGoNextMonth(isForward, scope.data.viewedDate.month.number, scope.data.viewedDate.year.number)) {
-              scope.data.viewedDate.month.number = scope.data.viewedDate.month.number + 1;
-            }
-          } else {
-            scope.data.viewedDate.month.number = scope.data.viewedDate.month.number - 1;
+          var nextObj;
+          nextObj = scope.data.isCanGoNextMonth(isForward, scope.data.viewedDate.month.number, scope.data.viewedDate.year.number);
+          if (nextObj) {
+            return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
-          return scope.data.setViewedDate(scope.data.source.today.year, scope.data.viewedDate.month.number);
         },
         init: function(dateSource) {
           var firstYear;
