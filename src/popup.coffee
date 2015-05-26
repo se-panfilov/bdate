@@ -9,7 +9,6 @@ angular.module 'bdate.popup', ['bdate.utils']
     popupState: '='
     dateModel: '='
   link: (scope) ->
-
     source =
       format: 'dd-mm-yyyy'
       today:
@@ -112,8 +111,8 @@ angular.module 'bdate.popup', ['bdate.utils']
         daysCount = month.daysTotal
         startDay = month.startDay
 
-#        arr = Array.apply(null, length: daysCount + 1).map Number.call, Number
-#        arr.shift()
+        #        arr = Array.apply(null, length: daysCount + 1).map Number.call, Number
+        #        arr.shift()
 
         arr = []
         k = 1
@@ -124,18 +123,19 @@ angular.module 'bdate.popup', ['bdate.utils']
             year: year.number
           k++
 
-#        i = 1
-#        while i <= startDay - 1
-#          arr.unshift ''
-#          i++
-#
-#        daysInWeek = 7
-#        return arr if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
-#
-#        j = daysCount
-#        while j <= daysCount + startDay - 1
-#          arr.push ''
-#          j++
+        i = 1
+        while i <= startDay - 1
+          arr.unshift ''
+          i++
+
+        daysInWeek = 7
+        expectedWeeksCount = Math.ceil arr.length / daysInWeek
+        return arr if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
+
+        j = arr.length
+        while j < (expectedWeeksCount * daysInWeek)
+          arr.push ''
+          j++
 
         return arr
       isYearExistInSource: (yearNum) ->

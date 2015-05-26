@@ -178,7 +178,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           return scope.data.today = today;
         },
         getDaysArr: function(month, year) {
-          var arr, daysCount, k, startDay;
+          var arr, daysCount, daysInWeek, expectedWeeksCount, i, j, k, startDay;
           daysCount = month.daysTotal;
           startDay = month.startDay;
           arr = [];
@@ -190,6 +190,21 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
               year: year.number
             });
             k++;
+          }
+          i = 1;
+          while (i <= startDay - 1) {
+            arr.unshift('');
+            i++;
+          }
+          daysInWeek = 7;
+          expectedWeeksCount = Math.ceil(arr.length / daysInWeek);
+          if ((arr.length / daysInWeek) === Math.floor(arr.length / daysInWeek)) {
+            return arr;
+          }
+          j = arr.length;
+          while (j < (expectedWeeksCount * daysInWeek)) {
+            arr.push('');
+            j++;
           }
           return arr;
         },
