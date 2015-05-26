@@ -10,8 +10,8 @@
             span(ng-bind="::dayOfWeek")
     table.b_popup_weeks
         tr.b_popup_week
-            td.b_popup_day(ng-repeat="day in data.getDaysArr(data.viewedDate.month) track by $index")
-                span(ng-bind="day")
+            td.b_popup_day(ng-repeat="date in data.viewedDate.days track by $index")
+                span(ng-bind="date.day", ng-click="popup.selectDate(date)")
     .b_popup_today
         | Сегодня
         | &nbsp;

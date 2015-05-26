@@ -1,4 +1,4 @@
-angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', function() {
+angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$filter', function($filter) {
   return {
     restrict: 'E',
     replace: true,
@@ -7,6 +7,16 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', fun
       source: '='
     },
     link: function(scope) {
+      scope.date = {
+        viewed: '',
+        model: {}
+      };
+      scope.$watch('date.model', function() {
+        var dateTime, formattedDate;
+        dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime();
+        formattedDate = $filter('date')(dateTime, "dd/MM/yyyy");
+        return scope.date.viewed = formattedDate;
+      });
       scope.popup = {
         isOpen: false
       };
@@ -15,7 +25,7 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', fun
       };
     }
   };
-});
+}]);
 
 angular.module('bdate', ['bdate.datepicker']);
 
@@ -25,7 +35,8 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
     replace: true,
     templateUrl: '../dist/templates/popup.html',
     scope: {
-      isHidden: '='
+      isHidden: '=',
+      dateModel: '='
     },
     link: function(scope) {
       var messages, source;
@@ -89,13 +100,19 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         invalidParams: 'Invalid params',
         errorOnChangeMonthOrYear: 'cannot change month or year'
       };
+      scope.popup = {
+        hidePopup: function() {},
+        selectDate: function(date) {
+          scope.data.setDateModel(date);
+          return scope.popup.hidePopup();
+        }
+      };
       scope.data = {
-        dateModel: null,
         setDateModel: function(dateModel) {
           if (!dateModel) {
             return console.error(messages.invalidParams);
           }
-          return scope.data.dateModel = dateModel;
+          return scope.dateModel = dateModel;
         },
         source: null,
         setSource: function(dateSource) {
@@ -118,7 +135,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           }
           yearNum = +yearNum;
           monthNum = +monthNum;
-          return scope.data.viewedDate = {
+          scope.data.viewedDate = {
             year: {
               first: Object.keys(scope.data.source.years)[0],
               last: Object.keys(scope.data.source.years)[Object.keys(scope.data.source.years).length - 1],
@@ -133,6 +150,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
               count: Object.keys(scope.data.source.years[yearNum]).length
             }
           };
+          return scope.data.viewedDate.days = scope.data.getDaysArr(scope.data.viewedDate.month, scope.data.viewedDate.year);
         },
         daysOfWeek: {
           get: function() {
@@ -149,27 +167,19 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           }
           return scope.data.today = today;
         },
-        getDaysArr: function(monthObj) {
-          var arr, daysCount, daysInWeek, i, j, startDay;
-          daysCount = monthObj.daysTotal;
-          startDay = monthObj.startDay;
-          arr = Array.apply(null, {
-            length: daysCount + 1
-          }).map(Number.call, Number);
-          arr.shift();
-          i = 1;
-          while (i <= startDay - 1) {
-            arr.unshift('');
-            i++;
-          }
-          daysInWeek = 7;
-          if ((arr.length / daysInWeek) === Math.floor(arr.length / daysInWeek)) {
-            return arr;
-          }
-          j = daysCount;
-          while (j <= daysCount + startDay - 1) {
-            arr.push('');
-            j++;
+        getDaysArr: function(month, year) {
+          var arr, daysCount, k, startDay;
+          daysCount = month.daysTotal;
+          startDay = month.startDay;
+          arr = [];
+          k = 1;
+          while (k <= daysCount) {
+            arr.push({
+              day: k,
+              month: month.number,
+              year: year.number
+            });
+            k++;
           }
           return arr;
         },

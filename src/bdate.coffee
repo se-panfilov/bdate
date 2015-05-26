@@ -1,6 +1,6 @@
 angular.module 'bdate.datepicker', ['bdate.popup']
 
-.directive 'bdatepicker', () ->
+.directive 'bdatepicker', ($filter) ->
   restrict: 'E'
   replace: true
   templateUrl: '../dist/templates/default.html'
@@ -8,8 +8,17 @@ angular.module 'bdate.datepicker', ['bdate.popup']
   scope:
     source: '='
   link: (scope) ->
+    scope.date =
+      viewed: ''
+      model: {}
+
+    scope.$watch 'date.model', ->
+      dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime()
+      formattedDate = $filter('date')(dateTime, "dd/MM/yyyy") #TODO replace 'dd/MM/yyyy' format with format in json
+      scope.date.viewed = formattedDate
+
     scope.popup =
-      isOpen: false;
+      isOpen: false
 
     scope.togglePopup = () ->
-      scope.popup.isOpen = not scope.popup.isOpen;
+      scope.popup.isOpen = not scope.popup.isOpen

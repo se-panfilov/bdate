@@ -7,6 +7,7 @@ angular.module 'bdate.popup', ['bdate.utils']
 #  templateUrl: 'dist/templates/popup.html'
   scope:
     isHidden: '='
+    dateModel: '='
   link: (scope) ->
     source =
       format: 'dd-mm-yyyy'
@@ -54,11 +55,17 @@ angular.module 'bdate.popup', ['bdate.utils']
       invalidParams: 'Invalid params'
       errorOnChangeMonthOrYear: 'cannot change month or year'
 
+    scope.popup =
+      hidePopup: ->
+        #scope.isHidden = true
+      selectDate: (date) ->
+        scope.data.setDateModel date
+        scope.popup.hidePopup()
+
     scope.data =
-      dateModel: null
       setDateModel: (dateModel) ->
         return console.error messages.invalidParams if not dateModel
-        scope.data.dateModel = dateModel
+        scope.dateModel = dateModel
       source: null
       setSource: (dateSource) ->
         return console.error messages.invalidParams if not dateSource
@@ -85,6 +92,8 @@ angular.module 'bdate.popup', ['bdate.utils']
             number: monthNum
             name: bdateUtils.getMonthName monthNum
             count: Object.keys(scope.data.source.years[yearNum]).length
+
+        scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.month, scope.data.viewedDate.year
       daysOfWeek:
         get: ->
           bdateUtils.daysOfWeek
@@ -98,25 +107,34 @@ angular.module 'bdate.popup', ['bdate.utils']
 #        return scope.data.source.years[year]
 #      getMonthObj: (month, year)->
 #        return scope.data.source.years[year][month]
-      getDaysArr: (monthObj) ->
-        daysCount = monthObj.daysTotal
-        startDay = monthObj.startDay
+      getDaysArr: (month, year) ->
+        daysCount = month.daysTotal
+        startDay = month.startDay
 
-        arr = Array.apply(null, length: daysCount + 1).map Number.call, Number
-        arr.shift()
+#        arr = Array.apply(null, length: daysCount + 1).map Number.call, Number
+#        arr.shift()
 
-        i = 1
-        while i <= startDay - 1
-          arr.unshift('')
-          i++
+        arr = []
+        k = 1
+        while k <= daysCount
+          arr.push
+            day: k
+            month: month.number
+            year: year.number
+          k++
 
-        daysInWeek = 7
-        return arr if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
-
-        j = daysCount
-        while j <= daysCount + startDay - 1
-          arr.push('')
-          j++
+#        i = 1
+#        while i <= startDay - 1
+#          arr.unshift ''
+#          i++
+#
+#        daysInWeek = 7
+#        return arr if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
+#
+#        j = daysCount
+#        while j <= daysCount + startDay - 1
+#          arr.push ''
+#          j++
 
         return arr
       isYearExistInSource: (yearNum) ->
