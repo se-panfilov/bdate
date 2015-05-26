@@ -103,16 +103,9 @@ angular.module 'bdate.popup', ['bdate.utils']
       setToday: (today) ->
         return console.error messages.invalidParams if not today
         scope.data.today = today
-#      getYearObj: (year)->
-#        return scope.data.source.years[year]
-#      getMonthObj: (month, year)->
-#        return scope.data.source.years[year][month]
       getDaysArr: (month, year) ->
         daysCount = month.daysTotal
         startDay = month.startDay
-
-        #        arr = Array.apply(null, length: daysCount + 1).map Number.call, Number
-        #        arr.shift()
 
         arr = []
         k = 1
@@ -156,14 +149,18 @@ angular.module 'bdate.popup', ['bdate.utils']
         yearNum = +yearNum
         monthNum = +monthNum
 
-        monthNum is Object.keys(scope.data.source.years[yearNum])[0]
+        monthNum is +Object.keys(scope.data.source.years[yearNum])[0]
       isLastMonthInSource: (yearNum, monthNum) ->
         yearNum = +yearNum
         monthNum = +monthNum
 
-        monthNum is Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1]
-      getFirstMonthInSource: (yearNum)->
-        Object.keys(scope.data.source.years[+yearNum])[0]
+        monthNum is +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1]
+      getFirstMonthInSource: (yearNum) ->
+        yearNum = +yearNum
+        +Object.keys(scope.data.source.years[yearNum])[0]
+      getLastMonthInSource: (yearNum) ->
+        yearNum = +yearNum
+        +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1]
       isCanGoNextMonth: (isForward, yearNum, monthNum) ->
         yearNum = +yearNum
         monthNum = +monthNum
@@ -203,6 +200,8 @@ angular.module 'bdate.popup', ['bdate.utils']
         nextObj = scope.data.isCanGoNextMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
+      goNextYear: (isForward) ->
+#        TODO
       init: (dateSource) ->
         scope.data.setSource dateSource
         scope.data.setFormat dateSource.format

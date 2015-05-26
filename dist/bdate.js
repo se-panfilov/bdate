@@ -232,15 +232,20 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         isFirstMonthInSource: function(yearNum, monthNum) {
           yearNum = +yearNum;
           monthNum = +monthNum;
-          return monthNum === Object.keys(scope.data.source.years[yearNum])[0];
+          return monthNum === +Object.keys(scope.data.source.years[yearNum])[0];
         },
         isLastMonthInSource: function(yearNum, monthNum) {
           yearNum = +yearNum;
           monthNum = +monthNum;
-          return monthNum === Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
+          return monthNum === +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
         },
         getFirstMonthInSource: function(yearNum) {
-          return Object.keys(scope.data.source.years[+yearNum])[0];
+          yearNum = +yearNum;
+          return +Object.keys(scope.data.source.years[yearNum])[0];
+        },
+        getLastMonthInSource: function(yearNum) {
+          yearNum = +yearNum;
+          return +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
         },
         isCanGoNextMonth: function(isForward, yearNum, monthNum) {
           var isChangeYear, isFirstMonthInSource, isLastMonthInSource, nextMonth, nextYearNum, result;
@@ -290,6 +295,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
             return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
         },
+        goNextYear: function(isForward) {},
         init: function(dateSource) {
           var firstYear;
           scope.data.setSource(dateSource);
