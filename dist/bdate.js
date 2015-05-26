@@ -4,7 +4,10 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$
     replace: true,
     templateUrl: '../dist/templates/default.html',
     scope: {
-      source: '='
+      source: '=',
+      bRootId: '@?',
+      bInputId: '@?',
+      bPopupId: '@?'
     },
     link: function(scope) {
       scope.date = {

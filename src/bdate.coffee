@@ -7,6 +7,9 @@ angular.module 'bdate.datepicker', ['bdate.popup']
 #  templateUrl: 'dist/templates/default.html'
   scope:
     source: '='
+    bRootId: '@?'
+    bInputId: '@?'
+    bPopupId: '@?'
   link: (scope) ->
     scope.date =
       viewed: ''
