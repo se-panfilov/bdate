@@ -44,7 +44,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
       isHidden: '='
     },
     link: function(scope) {
-      var init, source;
+      var init, messages, source;
       source = {
         format: 'dd-mm-yyyy',
         today: {
@@ -75,28 +75,49 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           ]
         }
       };
+      messages = {
+        invalidParams: 'Invalid params'
+      };
       scope.data = {
         dateModel: null,
         setDateModel: function(dateModel) {
+          if (!dateModel) {
+            return console.error(messages.invalidParams);
+          }
           return scope.data.dateModel = dateModel;
         },
         source: null,
         setSource: function(dateSource) {
+          if (!dateSource) {
+            return console.error(messages.invalidParams);
+          }
           return scope.data.source = dateSource;
         },
         format: null,
         setFormat: function(format) {
+          if (!format) {
+            return console.error(messages.invalidParams);
+          }
           return scope.data.format = format;
         },
         viewedDate: null,
         setViewedDate: function(year, monthNumber) {
+          if (!year || !monthNumber) {
+            return console.error(messages.invalidParams);
+          }
           return scope.data.viewedDate = {
-            year: year,
+            year: {
+              first: Object.keys(scope.data.source.years)[0],
+              last: Object.keys(scope.data.source.years)[Object.keys(scope.data.source.years).length - 1],
+              number: year,
+              count: Object.keys(scope.data.source.years).length
+            },
             month: {
               daysTotal: scope.data.source.years[year][monthNumber].days_total,
               startDay: scope.data.source.years[year][monthNumber].start_day,
               number: monthNumber,
-              name: bdateUtils.getMonthName(monthNumber)
+              name: bdateUtils.getMonthName(monthNumber),
+              count: scope.data.source.years[year].length
             }
           };
         },
@@ -110,13 +131,10 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         },
         today: null,
         setToday: function(today) {
+          if (!today) {
+            return console.error(messages.invalidParams);
+          }
           return scope.data.today = today;
-        },
-        getYearObj: function(year) {
-          return scope.data.source.years[year];
-        },
-        getMonthObj: function(month, year) {
-          return scope.data.source.years[year][month];
         },
         getDaysArr: function(monthObj) {
           var arr, daysCount, daysInWeek, i, j, startDay;
@@ -128,7 +146,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           arr.shift();
           i = 1;
           while (i <= startDay - 1) {
-            arr.unshift('x');
+            arr.unshift('');
             i++;
           }
           daysInWeek = 7;
@@ -137,7 +155,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           }
           j = daysCount;
           while (j <= daysCount + startDay - 1) {
-            arr.push('x');
+            arr.push('');
             j++;
           }
           return arr;

@@ -40,25 +40,38 @@ angular.module 'bdate.popup', ['bdate.utils']
           }
         ]
 
+    messages =
+      invalidParams: 'Invalid params'
+
     scope.data =
       dateModel: null
       setDateModel: (dateModel) ->
+        return console.error messages.invalidParams if not dateModel
         scope.data.dateModel = dateModel
       source: null
       setSource: (dateSource) ->
+        return console.error messages.invalidParams if not dateSource
         scope.data.source = dateSource
-      format: null #scope.data.source.format
+      format: null
       setFormat: (format) ->
+        return console.error messages.invalidParams if not format
         scope.data.format = format
       viewedDate: null
       setViewedDate: (year, monthNumber) ->
+        return console.error messages.invalidParams if not year or not monthNumber
+
         scope.data.viewedDate =
-          year: year
+          year:
+            first: Object.keys(scope.data.source.years)[0]
+            last: Object.keys(scope.data.source.years)[Object.keys(scope.data.source.years).length - 1]
+            number: year
+            count: Object.keys(scope.data.source.years).length
           month:
             daysTotal: scope.data.source.years[year][monthNumber].days_total
             startDay: scope.data.source.years[year][monthNumber].start_day
             number: monthNumber
             name: bdateUtils.getMonthName monthNumber
+            count: scope.data.source.years[year].length
       daysOfWeek:
         get: ->
           bdateUtils.daysOfWeek
@@ -66,11 +79,12 @@ angular.module 'bdate.popup', ['bdate.utils']
           bdateUtils.getDaysOfWeekShorts()
       today: null
       setToday: (today) ->
+        return console.error messages.invalidParams if not today
         scope.data.today = today
-      getYearObj: (year)->
-        return scope.data.source.years[year]
-      getMonthObj: (month, year)->
-        return scope.data.source.years[year][month]
+#      getYearObj: (year)->
+#        return scope.data.source.years[year]
+#      getMonthObj: (month, year)->
+#        return scope.data.source.years[year][month]
       getDaysArr: (monthObj) ->
         daysCount = monthObj.daysTotal
         startDay = monthObj.startDay
@@ -80,17 +94,15 @@ angular.module 'bdate.popup', ['bdate.utils']
 
         i = 1
         while i <= startDay - 1
-          arr.unshift('x')
+          arr.unshift('')
           i++
 
         daysInWeek = 7
-
-        if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
-          return arr
+        return arr if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
 
         j = daysCount
         while j <= daysCount + startDay - 1
-          arr.push('x')
+          arr.push('')
           j++
 
         return arr

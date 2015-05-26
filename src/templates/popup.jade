@@ -3,7 +3,7 @@
         button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextMonth(false)") <
         .b_popup_month(ng-bind="data.viewedDate.month.name")
         | &nbsp;
-        .b_popup_year(ng-bind="data.viewedDate.year")
+        .b_popup_year(ng-bind="data.viewedDate.year.number")
         button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextMonth(true)") >
     .b_popup_days
         .b_popup_day_of_week(ng-repeat="dayOfWeek in ::data.daysOfWeek.getShorts()")
