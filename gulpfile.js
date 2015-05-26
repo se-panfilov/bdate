@@ -58,21 +58,6 @@ gulp.task('lint', function () {
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-//gulp.task('js', function () {
-//    return gulp.src([src.js])
-//        .pipe(changed(dest.dist))
-//        .pipe(concat('bdate.js'))
-//        .pipe(ngAnnotate({remove: true, add: true, single_quotes: true}))
-//        .on('error', console.log)
-//        .pipe(gulp.dest(dest.dist))
-//        .pipe(sourcemaps.init())
-//        .pipe(uglify())
-//        .pipe(rename({basename: 'bdate.min'}))
-//        .pipe(sourcemaps.write('.'))
-//        .pipe(gulp.dest(dest.dist))
-//        ;
-//});
-
 gulp.task('coffee', function () {
     gulp.src(src.coffee)
         .pipe(coffee({bare: true}))
