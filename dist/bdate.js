@@ -44,7 +44,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
       isHidden: '='
     },
     link: function(scope) {
-      var init, messages, source;
+      var messages, source;
       source = {
         format: 'dd-mm-yyyy',
         today: {
@@ -175,7 +175,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           return scope.data.setToday(dateSource.today);
         }
       };
-      return (init = function() {
+      return (function() {
         return scope.data.init(source);
       })();
     }

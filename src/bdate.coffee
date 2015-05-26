@@ -7,9 +7,9 @@ angular.module 'bdate.datepicker', ['bdate.popup']
 #  templateUrl: 'dist/templates/default.html'
   scope:
     source: '='
-  link: (scope, elem) ->
+  link: (scope) ->
     scope.popup =
       isOpen: false;
 
     scope.togglePopup = () ->
-      scope.popup.isOpen = !scope.popup.isOpen;
+      scope.popup.isOpen = not scope.popup.isOpen;

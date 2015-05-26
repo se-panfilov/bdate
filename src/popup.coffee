@@ -120,6 +120,5 @@ angular.module 'bdate.popup', ['bdate.utils']
         scope.data.setViewedDate dateSource.today.year, dateSource.today.month
         scope.data.setToday dateSource.today
 
-    do init = ->
-      scope.data.init(source)
-
+    #init
+    do -> scope.data.init(source)
