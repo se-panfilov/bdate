@@ -13,6 +13,9 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$
       };
       scope.$watch('date.model', function() {
         var dateTime, formattedDate;
+        if (angular.equals({}, scope.date.model)) {
+          return;
+        }
         dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime();
         formattedDate = $filter('date')(dateTime, "dd/MM/yyyy");
         return scope.date.viewed = formattedDate;
