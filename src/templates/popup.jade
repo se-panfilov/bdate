@@ -1,4 +1,4 @@
-.b_popup(ng-hide="isHidden")
+.b_popup(ng-show="popupState.isOpen")
     .b_popup_controls
         button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextMonth(false)") <
         .b_popup_month(ng-bind="data.viewedDate.month.name")

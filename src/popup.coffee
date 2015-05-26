@@ -6,9 +6,10 @@ angular.module 'bdate.popup', ['bdate.utils']
   templateUrl: '../dist/templates/popup.html'
 #  templateUrl: 'dist/templates/popup.html'
   scope:
-    isHidden: '='
+    popupState: '='
     dateModel: '='
   link: (scope) ->
+
     source =
       format: 'dd-mm-yyyy'
       today:
@@ -57,7 +58,7 @@ angular.module 'bdate.popup', ['bdate.utils']
 
     scope.popup =
       hidePopup: ->
-        #scope.isHidden = true
+        scope.popupState.isOpen = false
       selectDate: (date) ->
         scope.data.setDateModel date
         scope.popup.hidePopup()

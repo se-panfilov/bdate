@@ -18,7 +18,8 @@ angular.module 'bdate.datepicker', ['bdate.popup']
       scope.date.viewed = formattedDate
 
     scope.popup =
-      isOpen: false
+      state:
+        isOpen: false
 
     scope.togglePopup = () ->
-      scope.popup.isOpen = not scope.popup.isOpen
+      scope.popup.state.isOpen = not scope.popup.state.isOpen

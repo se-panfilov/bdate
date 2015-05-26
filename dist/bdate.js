@@ -18,10 +18,12 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$
         return scope.date.viewed = formattedDate;
       });
       scope.popup = {
-        isOpen: false
+        state: {
+          isOpen: false
+        }
       };
       return scope.togglePopup = function() {
-        return scope.popup.isOpen = !scope.popup.isOpen;
+        return scope.popup.state.isOpen = !scope.popup.state.isOpen;
       };
     }
   };
@@ -35,7 +37,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
     replace: true,
     templateUrl: '../dist/templates/popup.html',
     scope: {
-      isHidden: '=',
+      popupState: '=',
       dateModel: '='
     },
     link: function(scope) {
@@ -101,7 +103,9 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
         errorOnChangeMonthOrYear: 'cannot change month or year'
       };
       scope.popup = {
-        hidePopup: function() {},
+        hidePopup: function() {
+          return scope.popupState.isOpen = false;
+        },
         selectDate: function(date) {
           scope.data.setDateModel(date);
           return scope.popup.hidePopup();
