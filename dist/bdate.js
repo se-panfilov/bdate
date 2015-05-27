@@ -58,7 +58,17 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           day_of_week: 1
         },
         years: {
+          2013: {
+            1: {
+              days_total: 31,
+              start_day: 2
+            }
+          },
           2014: {
+            5: {
+              days_total: 31,
+              start_day: 4
+            },
             6: {
               days_total: 30,
               start_day: 7
@@ -81,10 +91,6 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
             }
           },
           2015: {
-            1: {
-              days_total: 31,
-              start_day: 4
-            },
             2: {
               days_total: 28,
               start_day: 7
@@ -100,6 +106,22 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
             5: {
               days_total: 31,
               start_day: 5
+            }
+          },
+          2016: {
+            1: {
+              days_total: 31,
+              start_day: 5
+            }
+          },
+          2017: {
+            1: {
+              days_total: 31,
+              start_day: 7
+            },
+            2: {
+              days_total: 28,
+              start_day: 3
             }
           }
         }
@@ -234,18 +256,32 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           monthNum = +monthNum;
           return monthNum === +Object.keys(scope.data.source.years[yearNum])[0];
         },
+        isFirstYearInSource: function(yearNum) {
+          yearNum = +yearNum;
+          return yearNum === +Object.keys(scope.data.source.years)[0];
+        },
         isLastMonthInSource: function(yearNum, monthNum) {
           yearNum = +yearNum;
           monthNum = +monthNum;
           return monthNum === +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
         },
+        isLastYearInSource: function(yearNum) {
+          yearNum = +yearNum;
+          return monthNum === +Object.keys(scope.data.source.years)[Object.keys(scope.data.source.years).length - 1];
+        },
         getFirstMonthInSource: function(yearNum) {
           yearNum = +yearNum;
           return +Object.keys(scope.data.source.years[yearNum])[0];
         },
+        getFirstYearInSource: function() {
+          return +Object.keys(scope.data.source.years)[0];
+        },
         getLastMonthInSource: function(yearNum) {
           yearNum = +yearNum;
           return +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
+        },
+        getLastYearInSource: function() {
+          return +Object.keys(scope.data.source.years)[Object.keys(scope.data.source.years).length - 1];
         },
         isCanGoNextMonth: function(isForward, yearNum, monthNum) {
           var isChangeYear, isFirstMonthInSource, isLastMonthInSource, nextMonth, nextYearNum, result;
@@ -294,6 +330,45 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           if (nextObj) {
             return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
+        },
+        isCanGoNextYear: function(isForward, yearNum, monthNum) {
+          var isFirstYearInSource, isLastYearInSource, isMonthExistInYear, nextMonth, nextYearNum, result;
+          yearNum = +yearNum;
+          monthNum = +monthNum;
+          isFirstYearInSource = scope.data.isFirstYearInSource(yearNum);
+          isLastYearInSource = scope.data.isLastYearInSource(yearNum);
+          isMonthExistInYear = scope.data.isMonthExistInYear(yearNum(monthNum));
+          nextYearNum = yearNum;
+          nextMonth = monthNum;
+          if (isForward) {
+            if (!isLastYearInSource) {
+              nextMonth = monthNum + 1;
+            } else {
+              nextYearNum = yearNum + 1;
+              if (scope.data.isYearExistInSource(nextYearNum)) {
+                nextMonth = scope.data.getFirstMonthInSource(nextYearNum);
+              } else {
+                console.error(messages.errorOnChangeMonthOrYear);
+                return false;
+              }
+            }
+          } else if (!isForward) {
+            if (!isFirstYearInSource) {
+              nextMonth = monthNum - 1;
+            } else {
+              nextYearNum = yearNum - 1;
+              if (scope.data.isYearExistInSource(nextYearNum)) {
+                nextMonth = scope.data.getLastMonthInSource(nextYearNum);
+              } else {
+                console.error(messages.errorOnChangeMonthOrYear);
+                return false;
+              }
+            }
+          }
+          return result = {
+            year: nextYearNum,
+            month: nextMonth
+          };
         },
         goNextYear: function(isForward) {},
         init: function(dateSource) {
