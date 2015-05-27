@@ -12,7 +12,7 @@ gulp.task('jade', function () {
     return gulp.src('./*.jade')
         .pipe(jade({pretty: true}))
         .on('error', console.log)
-        .pipe(gulp.dest(dest.demo));
+        .pipe(gulp.dest('./'));
 });
 
 gulp.task('stylus', function () {
@@ -21,7 +21,7 @@ gulp.task('stylus', function () {
         .pipe(stylus({use: [nib()], compress: false}))
         .on('error', console.log)
         .pipe(minifyCss())
-        .pipe(gulp.dest(dest.demo));
+        .pipe(gulp.dest('./'));
 });
 
 gulp.task('watch', function () {
