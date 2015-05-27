@@ -1,1 +1,7 @@
-{"name":"Bdate","tagline":"","body":"Backend-based angular datepicker\r\n","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
+{
+  "name": "Bdate",
+  "tagline": "",
+  "body": "Backend-based angular datepicker\r\n",
+  "google": "",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
