@@ -3,8 +3,7 @@ angular.module 'bdate.datepicker', ['bdate.popup']
 .directive 'bdatepicker', ($filter) ->
   restrict: 'E'
   replace: true
-  templateUrl: '../dist/templates/default.html'
-#  templateUrl: 'dist/templates/default.html'
+  templateUrl: 'bdate/dist/templates/default.html'
   scope:
     source: '='
     bRootId: '@?'

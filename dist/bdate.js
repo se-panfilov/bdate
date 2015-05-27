@@ -2,7 +2,7 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$
   return {
     restrict: 'E',
     replace: true,
-    templateUrl: '../dist/templates/default.html',
+    templateUrl: 'bdate/dist/templates/default.html',
     scope: {
       source: '=',
       bRootId: '@?',
@@ -41,7 +41,7 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
   return {
     restrict: 'E',
     replace: true,
-    templateUrl: '../dist/templates/popup.html',
+    templateUrl: 'bdate/dist/templates/popup.html',
     scope: {
       popupState: '=',
       dateModel: '='
