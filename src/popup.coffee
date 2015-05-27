@@ -85,7 +85,9 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data']
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
       goNextYear: (isForward) ->
-#        TODO
+        nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
+        if nextObj
+          scope.data.setViewedDate nextObj.year, nextObj.month
       init: (dateSource) ->
         scope.data.setFormat dateSource.format
         scope.data.setToday dateSource.today

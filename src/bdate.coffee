@@ -20,7 +20,7 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data']
     scope.$watch 'date.model', ->
       return if angular.equals {}, scope.date.model
       dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime()
-      formattedDate = $filter('date')(dateTime, "dd/MM/yyyy") #TODO replace 'dd/MM/yyyy' format with format in json
+      formattedDate = $filter('date')(dateTime, bDataFactory.data.format) 
       scope.date.viewed = formattedDate
 
     scope.popup =

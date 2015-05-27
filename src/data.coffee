@@ -4,7 +4,7 @@ angular.module 'bdate.data', []
 
   #TODO this is a mock
   sourceData =
-    format: 'dd-mm-yyyy'
+    format: 'dd-MM-yyyy'
     today:
       date: 1432537266825
       year: 2015

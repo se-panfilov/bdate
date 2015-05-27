@@ -67,34 +67,34 @@ angular.module 'bdate.utils', ['bdate.data']
           isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, monthNum
           isChangeYear = false
           nextYearNum = yearNum
-          nextMonth = monthNum
+          nextMonthNum = monthNum
 
           if isForward
             if not isLastMonth
-              nextMonth = monthNum + 1
+              nextMonthNum = monthNum + 1
             else
               isChangeYear = true
               nextYearNum = yearNum + 1
               if scope.data.isYearExist nextYearNum
-                nextMonth = exports.sourceCheckers.month.getFirstMonth nextYearNum
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
               else
                 console.error MESSAGES.errorOnChangeMonthOrYear
                 return false
           else if not isForward
             if not isFirstMonth
-              nextMonth = monthNum - 1
+              nextMonthNum = monthNum - 1
             else
               isChangeYear = true
               nextYearNum = yearNum - 1
               if exports.sourceCheckers.year.isYearExist nextYearNum
-                nextMonth = exports.sourceCheckers.month.getLastMonth nextYearNum
+                nextMonthNum = exports.sourceCheckers.month.getLastMonth nextYearNum
               else
                 console.error MESSAGES.errorOnChangeMonthOrYear
                 return false
 
           result =
             year: nextYearNum
-            month: nextMonth
+            month: nextMonthNum
       year:
         isYearExist: (yearNum) ->
           return console.error MESSAGES.invalidParams if not yearNum
@@ -115,31 +115,28 @@ angular.module 'bdate.utils', ['bdate.data']
           monthNum = +monthNum
           isFirstYear = exports.sourceCheckers.year.isFirstYear yearNum
           isLastYear = exports.sourceCheckers.year.isLastYear yearNum
-          isMonthExistInYear = exports.sourceCheckers.month.isMonthExist yearNum monthNum
           nextYearNum = yearNum
-          nextMonth = monthNum
+          nextMonthNum = monthNum
 
           if isForward
             if not isLastYear
-              nextMonth = monthNum + 1
-            else
               nextYearNum = yearNum + 1
-              if exports.sourceCheckers.year.isYearExist nextYearNum
-                nextMonth = exports.sourceCheckers.month.getFirstMonth nextYearNum
+              if exports.sourceCheckers.month.isMonthExist nextYearNum, monthNum
+                nextMonthNum = monthNum
               else
-                console.error MESSAGES.errorOnChangeMonthOrYear
-                return false
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
+            else
+              return false
           else if not isForward
             if not isFirstYear
-              nextMonth = monthNum - 1
-            else
               nextYearNum = yearNum - 1
-              if exports.sourceCheckers.year.isYearExist nextYearNum
-                nextMonth = exports.sourceCheckers.month.getLastMonth nextYearNum
+              if exports.sourceCheckers.month.isMonthExist nextYearNum, monthNum
+                nextMonthNum = monthNum
               else
-                console.error MESSAGES.errorOnChangeMonthOrYear
-                return false
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
+            else
+              return false
 
           result =
             year: nextYearNum
-            month: nextMonth
+            month: nextMonthNum

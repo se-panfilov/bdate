@@ -23,7 +23,7 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data']).directive('bda
           return;
         }
         dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime();
-        formattedDate = $filter('date')(dateTime, "dd/MM/yyyy");
+        formattedDate = $filter('date')(dateTime, bDataFactory.data.format);
         return scope.date.viewed = formattedDate;
       });
       scope.popup = {
@@ -41,7 +41,7 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data']).directive('bda
 angular.module('bdate.data', []).factory('bDataFactory', function() {
   var exports, sourceData;
   sourceData = {
-    format: 'dd-mm-yyyy',
+    format: 'dd-MM-yyyy',
     today: {
       date: 1432537266825,
       year: 2015,
@@ -244,7 +244,13 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data']).directive('bdatePop
             return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
         },
-        goNextYear: function(isForward) {},
+        goNextYear: function(isForward) {
+          var nextObj;
+          nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number);
+          if (nextObj) {
+            return scope.data.setViewedDate(nextObj.year, nextObj.month);
+          }
+        },
         init: function(dateSource) {
           var firstYear;
           scope.data.setFormat(dateSource.format);
@@ -377,22 +383,22 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
           return +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1];
         },
         getNextAvailableMonth: function(isForward, yearNum, monthNum) {
-          var isChangeYear, isFirstMonth, isLastMonth, nextMonth, nextYearNum, result;
+          var isChangeYear, isFirstMonth, isLastMonth, nextMonthNum, nextYearNum, result;
           yearNum = +yearNum;
           monthNum = +monthNum;
           isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, monthNum);
           isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, monthNum);
           isChangeYear = false;
           nextYearNum = yearNum;
-          nextMonth = monthNum;
+          nextMonthNum = monthNum;
           if (isForward) {
             if (!isLastMonth) {
-              nextMonth = monthNum + 1;
+              nextMonthNum = monthNum + 1;
             } else {
               isChangeYear = true;
               nextYearNum = yearNum + 1;
               if (scope.data.isYearExist(nextYearNum)) {
-                nextMonth = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
               } else {
                 console.error(MESSAGES.errorOnChangeMonthOrYear);
                 return false;
@@ -400,12 +406,12 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
             }
           } else if (!isForward) {
             if (!isFirstMonth) {
-              nextMonth = monthNum - 1;
+              nextMonthNum = monthNum - 1;
             } else {
               isChangeYear = true;
               nextYearNum = yearNum - 1;
               if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
-                nextMonth = exports.sourceCheckers.month.getLastMonth(nextYearNum);
+                nextMonthNum = exports.sourceCheckers.month.getLastMonth(nextYearNum);
               } else {
                 console.error(MESSAGES.errorOnChangeMonthOrYear);
                 return false;
@@ -414,7 +420,7 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
           }
           return result = {
             year: nextYearNum,
-            month: nextMonth
+            month: nextMonthNum
           };
         }
       },
@@ -441,42 +447,39 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
           return +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1];
         },
         getNextAvailableYear: function(isForward, yearNum, monthNum) {
-          var isFirstYear, isLastYear, isMonthExistInYear, nextMonth, nextYearNum, result;
+          var isFirstYear, isLastYear, nextMonthNum, nextYearNum, result;
           yearNum = +yearNum;
           monthNum = +monthNum;
           isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum);
           isLastYear = exports.sourceCheckers.year.isLastYear(yearNum);
-          isMonthExistInYear = exports.sourceCheckers.month.isMonthExist(yearNum(monthNum));
           nextYearNum = yearNum;
-          nextMonth = monthNum;
+          nextMonthNum = monthNum;
           if (isForward) {
             if (!isLastYear) {
-              nextMonth = monthNum + 1;
-            } else {
               nextYearNum = yearNum + 1;
-              if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
-                nextMonth = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum)) {
+                nextMonthNum = monthNum;
               } else {
-                console.error(MESSAGES.errorOnChangeMonthOrYear);
-                return false;
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
               }
+            } else {
+              return false;
             }
           } else if (!isForward) {
             if (!isFirstYear) {
-              nextMonth = monthNum - 1;
-            } else {
               nextYearNum = yearNum - 1;
-              if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
-                nextMonth = exports.sourceCheckers.month.getLastMonth(nextYearNum);
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum)) {
+                nextMonthNum = monthNum;
               } else {
-                console.error(MESSAGES.errorOnChangeMonthOrYear);
-                return false;
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
               }
+            } else {
+              return false;
             }
           }
           return result = {
             year: nextYearNum,
-            month: nextMonth
+            month: nextMonthNum
           };
         }
       }
