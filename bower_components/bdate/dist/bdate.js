@@ -1,13 +1,18 @@
-angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$filter', function($filter) {
+angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("default.html","<div id={{bRootId}} class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed readonly=readonly class=b_input><button type=button ng-click=togglePopup() class=b_datepicker_button>H</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
+$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" ng-class=\"{b_popup_clickable_day: date.day}\" class=b_popup_day><span ng-bind=date.day ng-click=popup.selectDate(date) role=button></span></td></tr></table><div class=b_popup_today>Сегодня &nbsp;<span ng-bind=\"data.today.date | date:data.format\"></span></div></div>");}]);
+angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', function($filter, bDataFactory) {
   return {
     restrict: 'E',
     replace: true,
-    templateUrl: '../dist/templates/default.html',
+    templateUrl: 'default.html',
     scope: {
       source: '=',
       bRootId: '@?',
       bInputId: '@?',
       bPopupId: '@?'
+    },
+    controller: function() {
+      return bDataFactory.makeDataQuery();
     },
     link: function(scope) {
       scope.date = {
@@ -20,7 +25,7 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$
           return;
         }
         dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime();
-        formattedDate = $filter('date')(dateTime, "dd/MM/yyyy");
+        formattedDate = $filter('date')(dateTime, bDataFactory.data.format);
         return scope.date.viewed = formattedDate;
       });
       scope.popup = {
@@ -35,79 +40,112 @@ angular.module('bdate.datepicker', ['bdate.popup']).directive('bdatepicker', ['$
   };
 }]);
 
-angular.module('bdate', ['bdate.datepicker']);
+angular.module('bdate.data', []).factory('bDataFactory', function() {
+  var exports, sourceData;
+  sourceData = {
+    format: 'dd-MM-yyyy',
+    today: {
+      date: 1432537266825,
+      year: 2015,
+      month: 5,
+      day: 25,
+      day_of_week: 1
+    },
+    years: {
+      2013: {
+        1: {
+          days_total: 31,
+          start_day: 2
+        }
+      },
+      2014: {
+        5: {
+          days_total: 31,
+          start_day: 4
+        },
+        6: {
+          days_total: 30,
+          start_day: 7
+        },
+        7: {
+          days_total: 31,
+          start_day: 2
+        },
+        8: {
+          days_total: 31,
+          start_day: 5
+        },
+        9: {
+          days_total: 30,
+          start_day: 1
+        },
+        10: {
+          days_total: 31,
+          start_day: 3
+        }
+      },
+      2015: {
+        2: {
+          days_total: 28,
+          start_day: 7
+        },
+        3: {
+          days_total: 31,
+          start_day: 7
+        },
+        4: {
+          days_total: 30,
+          start_day: 3
+        },
+        5: {
+          days_total: 31,
+          start_day: 5
+        }
+      },
+      2016: {
+        1: {
+          days_total: 31,
+          start_day: 5
+        }
+      },
+      2017: {
+        1: {
+          days_total: 31,
+          start_day: 7
+        },
+        2: {
+          days_total: 28,
+          start_day: 3
+        }
+      }
+    }
+  };
+  return exports = {
+    data: null,
+    setData: function(source) {
+      return exports.data = source;
+    },
+    makeDataQuery: function() {
+      return exports.setData(sourceData);
+    }
+  };
+});
 
-angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUtils', function(bdateUtils) {
+angular.module('bdate', ['bdate.datepicker']).constant('MESSAGES', {
+  invalidParams: 'Invalid params',
+  errorOnChangeMonthOrYear: 'cannot change month or year'
+});
+
+angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).directive('bdatePopup', ['bDateUtils', 'bDataFactory', 'MESSAGES', function(bDateUtils, bDataFactory, MESSAGES) {
   return {
     restrict: 'E',
     replace: true,
-    templateUrl: '../dist/templates/popup.html',
+    templateUrl: 'popup.html',
     scope: {
       popupState: '=',
       dateModel: '='
     },
     link: function(scope) {
-      var messages, source;
-      source = {
-        format: 'dd-mm-yyyy',
-        today: {
-          date: 1432537266825,
-          year: 2015,
-          month: 5,
-          day: 25,
-          day_of_week: 1
-        },
-        years: {
-          2014: {
-            6: {
-              days_total: 30,
-              start_day: 7
-            },
-            7: {
-              days_total: 31,
-              start_day: 2
-            },
-            8: {
-              days_total: 31,
-              start_day: 5
-            },
-            9: {
-              days_total: 30,
-              start_day: 1
-            },
-            10: {
-              days_total: 31,
-              start_day: 3
-            }
-          },
-          2015: {
-            1: {
-              days_total: 31,
-              start_day: 4
-            },
-            2: {
-              days_total: 28,
-              start_day: 7
-            },
-            3: {
-              days_total: 31,
-              start_day: 7
-            },
-            4: {
-              days_total: 30,
-              start_day: 3
-            },
-            5: {
-              days_total: 31,
-              start_day: 5
-            }
-          }
-        }
-      };
-      messages = {
-        invalidParams: 'Invalid params',
-        errorOnChangeMonthOrYear: 'cannot change month or year'
-      };
       scope.popup = {
         hidePopup: function() {
           return scope.popupState.isOpen = false;
@@ -120,60 +158,53 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
       scope.data = {
         setDateModel: function(dateModel) {
           if (!dateModel) {
-            return console.error(messages.invalidParams);
+            return console.error(MESSAGES.invalidParams);
           }
           return scope.dateModel = dateModel;
-        },
-        source: null,
-        setSource: function(dateSource) {
-          if (!dateSource) {
-            return console.error(messages.invalidParams);
-          }
-          return scope.data.source = dateSource;
         },
         format: null,
         setFormat: function(format) {
           if (!format) {
-            return console.error(messages.invalidParams);
+            return console.error(MESSAGES.invalidParams);
           }
           return scope.data.format = format;
         },
         viewedDate: null,
         setViewedDate: function(yearNum, monthNum) {
           if (!yearNum || !monthNum) {
-            return console.error(messages.invalidParams);
+            return console.error(MESSAGES.invalidParams);
           }
           yearNum = +yearNum;
           monthNum = +monthNum;
           scope.data.viewedDate = {
             year: {
-              first: Object.keys(scope.data.source.years)[0],
-              last: Object.keys(scope.data.source.years)[Object.keys(scope.data.source.years).length - 1],
+              first: Object.keys(bDataFactory.data.years)[0],
+              last: Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1],
               number: yearNum,
-              count: Object.keys(scope.data.source.years).length
+              count: Object.keys(bDataFactory.data.years).length
             },
             month: {
-              daysTotal: scope.data.source.years[yearNum][monthNum].days_total,
-              startDay: scope.data.source.years[yearNum][monthNum].start_day,
+              daysTotal: bDataFactory.data.years[yearNum][monthNum].days_total,
+              startDay: bDataFactory.data.years[yearNum][monthNum].start_day,
               number: monthNum,
-              name: bdateUtils.getMonthName(monthNum),
-              count: Object.keys(scope.data.source.years[yearNum]).length
+              name: bDateUtils.getMonthName(monthNum),
+              count: Object.keys(bDataFactory.data.years[yearNum]).length
             }
           };
           return scope.data.viewedDate.days = scope.data.getDaysArr(scope.data.viewedDate.month, scope.data.viewedDate.year);
         },
         daysOfWeek: {
           get: function() {
-            return bdateUtils.daysOfWeek;
+            return bDateUtils.daysOfWeek;
           },
           getShorts: function() {
-            return bdateUtils.getDaysOfWeekShorts();
+            return bDateUtils.getDaysOfWeekShorts();
           }
         },
         today: null,
         setToday: function(today) {
           if (!today) {
-            return console.error(messages.invalidParams);
+            return console.error(MESSAGES.invalidParams);
           }
           return scope.data.today = today;
         },
@@ -208,115 +239,40 @@ angular.module('bdate.popup', ['bdate.utils']).directive('bdatePopup', ['bdateUt
           }
           return arr;
         },
-        isYearExistInSource: function(yearNum) {
-          if (!yearNum) {
-            return console.error(messages.invalidParams);
-          }
-          yearNum = +yearNum;
-          return !!scope.data.source.years[yearNum];
-        },
-        getFirstYearInSource: function() {
-          return Object.keys(scope.data.source.years)[0];
-        },
-        isMonthExistInSource: function(yearNum, monthNum) {
-          if (!yearNum || !monthNum) {
-            return console.error(messages.invalidParams);
-          }
-          yearNum = +yearNum;
-          monthNum = +monthNum;
-          if (!scope.data.source.years[yearNum]) {
-            return false;
-          }
-          return !!scope.data.source.years[yearNum][monthNum];
-        },
-        isFirstMonthInSource: function(yearNum, monthNum) {
-          yearNum = +yearNum;
-          monthNum = +monthNum;
-          return monthNum === +Object.keys(scope.data.source.years[yearNum])[0];
-        },
-        isLastMonthInSource: function(yearNum, monthNum) {
-          yearNum = +yearNum;
-          monthNum = +monthNum;
-          return monthNum === +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
-        },
-        getFirstMonthInSource: function(yearNum) {
-          yearNum = +yearNum;
-          return +Object.keys(scope.data.source.years[yearNum])[0];
-        },
-        getLastMonthInSource: function(yearNum) {
-          yearNum = +yearNum;
-          return +Object.keys(scope.data.source.years[yearNum])[Object.keys(scope.data.source.years[yearNum]).length - 1];
-        },
-        isCanGoNextMonth: function(isForward, yearNum, monthNum) {
-          var isChangeYear, isFirstMonthInSource, isLastMonthInSource, nextMonth, nextYearNum, result;
-          yearNum = +yearNum;
-          monthNum = +monthNum;
-          isFirstMonthInSource = scope.data.isFirstMonthInSource(yearNum, monthNum);
-          isLastMonthInSource = scope.data.isLastMonthInSource(yearNum, monthNum);
-          isChangeYear = false;
-          nextYearNum = yearNum;
-          nextMonth = monthNum;
-          if (isForward) {
-            if (!isLastMonthInSource) {
-              nextMonth = monthNum + 1;
-            } else {
-              isChangeYear = true;
-              nextYearNum = yearNum + 1;
-              if (scope.data.isYearExistInSource(nextYearNum)) {
-                nextMonth = scope.data.getFirstMonthInSource(nextYearNum);
-              } else {
-                console.error(messages.errorOnChangeMonthOrYear);
-                return false;
-              }
-            }
-          } else if (!isForward) {
-            if (!isFirstMonthInSource) {
-              nextMonth = monthNum - 1;
-            } else {
-              isChangeYear = true;
-              nextYearNum = yearNum - 1;
-              if (scope.data.isYearExistInSource(nextYearNum)) {
-                nextMonth = scope.data.getLastMonthInSource(nextYearNum);
-              } else {
-                console.error(messages.errorOnChangeMonthOrYear);
-                return false;
-              }
-            }
-          }
-          return result = {
-            year: nextYearNum,
-            month: nextMonth
-          };
-        },
         goNextMonth: function(isForward) {
           var nextObj;
-          nextObj = scope.data.isCanGoNextMonth(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number);
+          nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number);
           if (nextObj) {
             return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
         },
-        goNextYear: function(isForward) {},
+        goNextYear: function(isForward) {
+          var nextObj;
+          nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number);
+          if (nextObj) {
+            return scope.data.setViewedDate(nextObj.year, nextObj.month);
+          }
+        },
         init: function(dateSource) {
           var firstYear;
-          scope.data.setSource(dateSource);
           scope.data.setFormat(dateSource.format);
           scope.data.setToday(dateSource.today);
-          if (scope.data.isMonthExistInSource(dateSource.today.year, dateSource.today.month)) {
+          if (bDateUtils.sourceCheckers.month.isMonthExist(dateSource.today.year, dateSource.today.month)) {
             return scope.data.setViewedDate(dateSource.today.year, dateSource.today.month);
           } else {
-            firstYear = scope.data.getFirstYearInSource();
-            return scope.data.setViewedDate(firstYear, scope.data.getFirstMonthInSource(firstYear));
+            firstYear = bDateUtils.sourceCheckers.year.getFirstYear();
+            return scope.data.setViewedDate(firstYear, bDateUtils.sourceCheckers.month.getFirstMonth(firstYear));
           }
         }
       };
       return (function() {
-        return scope.data.init(source);
+        return scope.data.init(bDataFactory.data);
       })();
     }
   };
 }]);
 
-angular.module('bdate.utils', []).factory('bdateUtils', function() {
+angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES', 'bDataFactory', function(MESSAGES, bDataFactory) {
   var daysOfWeek, exports, month;
   daysOfWeek = [
     {
@@ -397,11 +353,138 @@ angular.module('bdate.utils', []).factory('bdateUtils', function() {
     getMonthName: function(number) {
       return month[number].name;
     },
-    isJanuary: function(monthNum) {
-      return monthNum === 1;
-    },
-    isDecember: function(monthNum) {
-      return monthNum === 12;
+    sourceCheckers: {
+      month: {
+        isMonthExist: function(yearNum, monthNum) {
+          if (!yearNum || !monthNum) {
+            return console.error(MESSAGES.invalidParams);
+          }
+          yearNum = +yearNum;
+          monthNum = +monthNum;
+          if (!bDataFactory.data.years[yearNum]) {
+            return false;
+          }
+          return !!bDataFactory.data.years[yearNum][monthNum];
+        },
+        isFirstMonth: function(yearNum, monthNum) {
+          yearNum = +yearNum;
+          monthNum = +monthNum;
+          return monthNum === +Object.keys(bDataFactory.data.years[yearNum])[0];
+        },
+        getFirstMonth: function(yearNum) {
+          yearNum = +yearNum;
+          return +Object.keys(bDataFactory.data.years[yearNum])[0];
+        },
+        isLastMonth: function(yearNum, monthNum) {
+          yearNum = +yearNum;
+          monthNum = +monthNum;
+          return monthNum === +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1];
+        },
+        getLastMonth: function(yearNum) {
+          yearNum = +yearNum;
+          return +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1];
+        },
+        getNextAvailableMonth: function(isForward, yearNum, monthNum) {
+          var isChangeYear, isFirstMonth, isLastMonth, nextMonthNum, nextYearNum, result;
+          yearNum = +yearNum;
+          monthNum = +monthNum;
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, monthNum);
+          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, monthNum);
+          isChangeYear = false;
+          nextYearNum = yearNum;
+          nextMonthNum = monthNum;
+          if (isForward) {
+            if (!isLastMonth) {
+              nextMonthNum = monthNum + 1;
+            } else {
+              isChangeYear = true;
+              nextYearNum = yearNum + 1;
+              if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+              } else {
+                console.error(MESSAGES.errorOnChangeMonthOrYear);
+                return false;
+              }
+            }
+          } else if (!isForward) {
+            if (!isFirstMonth) {
+              nextMonthNum = monthNum - 1;
+            } else {
+              isChangeYear = true;
+              nextYearNum = yearNum - 1;
+              if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
+                nextMonthNum = exports.sourceCheckers.month.getLastMonth(nextYearNum);
+              } else {
+                console.error(MESSAGES.errorOnChangeMonthOrYear);
+                return false;
+              }
+            }
+          }
+          return result = {
+            year: nextYearNum,
+            month: nextMonthNum
+          };
+        }
+      },
+      year: {
+        isYearExist: function(yearNum) {
+          if (!yearNum) {
+            return console.error(MESSAGES.invalidParams);
+          }
+          yearNum = +yearNum;
+          return !!bDataFactory.data.years[yearNum];
+        },
+        isFirstYear: function(yearNum) {
+          yearNum = +yearNum;
+          return yearNum === +Object.keys(bDataFactory.data.years)[0];
+        },
+        getFirstYear: function() {
+          return +Object.keys(bDataFactory.data.years)[0];
+        },
+        isLastYear: function(yearNum) {
+          yearNum = +yearNum;
+          return yearNum === +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1];
+        },
+        getLastYear: function() {
+          return +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1];
+        },
+        getNextAvailableYear: function(isForward, yearNum, monthNum) {
+          var isFirstYear, isLastYear, nextMonthNum, nextYearNum, result;
+          yearNum = +yearNum;
+          monthNum = +monthNum;
+          isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum);
+          isLastYear = exports.sourceCheckers.year.isLastYear(yearNum);
+          nextYearNum = yearNum;
+          nextMonthNum = monthNum;
+          if (isForward) {
+            if (!isLastYear) {
+              nextYearNum = yearNum + 1;
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum)) {
+                nextMonthNum = monthNum;
+              } else {
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+              }
+            } else {
+              return false;
+            }
+          } else if (!isForward) {
+            if (!isFirstYear) {
+              nextYearNum = yearNum - 1;
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum)) {
+                nextMonthNum = monthNum;
+              } else {
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+              }
+            } else {
+              return false;
+            }
+          }
+          return result = {
+            year: nextYearNum,
+            month: nextMonthNum
+          };
+        }
+      }
     }
   };
-});
+}]);

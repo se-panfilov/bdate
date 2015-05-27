@@ -1,17 +1,22 @@
 .b_popup(ng-show="popupState.isOpen")
     .b_popup_controls
-        button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextMonth(false)") <
+        .b_btn_prev_container
+            button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextYear(false)") <<
+            button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextMonth(false)") <
         .b_popup_month(ng-bind="data.viewedDate.month.name")
         | &nbsp;
         .b_popup_year(ng-bind="data.viewedDate.year.number")
-        button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextMonth(true)") >
-    .b_popup_days
-        .b_popup_day_of_week(ng-repeat="dayOfWeek in ::data.daysOfWeek.getShorts()")
-            span(ng-bind="::dayOfWeek")
+        .b_btn_next_container
+            button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextMonth(true)") >
+            button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextYear(true)") >>
+    table.b_popup_days
+        tr
+            td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::data.daysOfWeek.getShorts()")
+                span(ng-bind="::dayOfWeek")
     table.b_popup_weeks
         tr.b_popup_week
-            td.b_popup_day(ng-repeat="date in data.viewedDate.days track by $index")
-                span(ng-bind="date.day", ng-click="popup.selectDate(date)")
+            td.b_popup_day(ng-repeat="date in data.viewedDate.days track by $index", ng-class="{b_popup_clickable_day: date.day}")
+                span(ng-bind="date.day", ng-click="popup.selectDate(date)", role="button")
     .b_popup_today
         | Сегодня
         | &nbsp;

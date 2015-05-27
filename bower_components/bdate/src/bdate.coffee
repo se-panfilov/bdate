@@ -1,15 +1,17 @@
-angular.module 'bdate.datepicker', ['bdate.popup']
+angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']
 
-.directive 'bdatepicker', ($filter) ->
+.directive 'bdatepicker', ($filter, bDataFactory) ->
   restrict: 'E'
   replace: true
-  templateUrl: '../dist/templates/default.html'
-#  templateUrl: 'dist/templates/default.html'
+  templateUrl: 'default.html'
   scope:
     source: '='
     bRootId: '@?'
     bInputId: '@?'
     bPopupId: '@?'
+  controller: ->
+#TODO we should disable datepicker somehow until data received from server
+    bDataFactory.makeDataQuery()
   link: (scope) ->
     scope.date =
       viewed: ''
@@ -18,7 +20,7 @@ angular.module 'bdate.datepicker', ['bdate.popup']
     scope.$watch 'date.model', ->
       return if angular.equals {}, scope.date.model
       dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime()
-      formattedDate = $filter('date')(dateTime, "dd/MM/yyyy") #TODO replace 'dd/MM/yyyy' format with format in json
+      formattedDate = $filter('date')(dateTime, bDataFactory.data.format) 
       scope.date.viewed = formattedDate
 
     scope.popup =
