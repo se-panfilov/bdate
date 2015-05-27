@@ -397,7 +397,7 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
             } else {
               isChangeYear = true;
               nextYearNum = yearNum + 1;
-              if (scope.data.isYearExist(nextYearNum)) {
+              if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
                 nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
               } else {
                 console.error(MESSAGES.errorOnChangeMonthOrYear);
