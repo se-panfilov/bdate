@@ -13,6 +13,7 @@ var minifyHTML = require('gulp-minify-html');
 var minifyCss = require('gulp-minify-css');
 var coffee = require('gulp-coffee');
 var templateCache = require('gulp-angular-templatecache');
+var mergeStream = require('merge-stream');
 
 var src = {
     styles: ['src/styles/**/*.styl'],
@@ -29,30 +30,39 @@ var dest = {
 };
 
 
-gulp.task('coffee', function () {
-    gulp.src(src.coffee)
+function makeTemplates() {
+    return gulp.src(src.html)
+        .pipe(templateCache({
+            module: 'bdate.templates',
+            standalone: true
+        }));
+}
+
+function makeCoffee() {
+    return gulp.src(src.coffee)
         .pipe(coffee({bare: true}))
         .on('error', console.log)
         .pipe(concat('bdate.js'))
         .pipe(ngAnnotate({remove: true, add: true, single_quotes: true}))
-        //.pipe(templateReplace())
+}
+
+function buildJS() {
+    var templates = makeTemplates();
+    var mainJs = makeCoffee();
+
+    return mergeStream(templates, mainJs)
+        .pipe(concat('bdate.js'))
         .pipe(gulp.dest(dest.dist))
         .pipe(sourcemaps.init())
         .pipe(uglify())
         .pipe(rename({basename: 'bdate.min'}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(dest.dist))
-});
+}
 
-gulp.task('tmp', function(){
-    //return gulp.src(src.html)
-    return gulp.src('src/templates/**/*.html')
-        .pipe(templateCache({
-            module: 'bdate.templates',
-            standalone: true
-        }))
-        .pipe(gulp.dest(dest.dist));
 
+gulp.task('coffee', function () {
+    return buildJS();
 });
 
 gulp.task('jade', function () {
