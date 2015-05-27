@@ -17,7 +17,3 @@ angular.module 'bdate', ['bdate.datepicker']
 #  minute: 60000
 #  hour: 3600000
 #  day: 86400000
-
-.constant 'MESSAGES',
-  invalidParams: 'Invalid params'
-  errorOnChangeMonthOrYear: 'cannot change month or year'
