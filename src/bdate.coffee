@@ -1,6 +1,6 @@
-angular.module 'bdate.datepicker', ['bdate.popup']
+angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data']
 
-.directive 'bdatepicker', ($filter) ->
+.directive 'bdatepicker', ($filter, bDataFactory) ->
   restrict: 'E'
   replace: true
   templateUrl: 'bdate/dist/templates/default.html'
@@ -9,6 +9,9 @@ angular.module 'bdate.datepicker', ['bdate.popup']
     bRootId: '@?'
     bInputId: '@?'
     bPopupId: '@?'
+  controller: ->
+#TODO we should disable datepicker somehow until data received from server
+    bDataFactory.makeDataQuery()
   link: (scope) ->
     scope.date =
       viewed: ''
