@@ -1,8 +1,12 @@
-angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data']).directive('bdatepicker', ['$filter', 'bDataFactory', function($filter, bDataFactory) {
+angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("default.html","<div id={{bRootId}} class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed readonly=readonly class=b_input><button type=button ng-click=togglePopup() class=b_datepicker_button>H</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
+  $templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" ng-class=\"{b_popup_clickable_day: date.day}\" class=b_popup_day><span ng-bind=date.day ng-click=popup.selectDate(date) role=button></span></td></tr></table><div class=b_popup_today>Сегодня &nbsp;<span ng-bind=\"data.today.date | date:data.format\"></span></div></div>");}]);
+
+
+angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', function($filter, bDataFactory) {
   return {
     restrict: 'E',
     replace: true,
-    templateUrl: 'bdate/dist/templates/default.html',
+    templateUrl: 'default.html',
     scope: {
       source: '=',
       bRootId: '@?',
@@ -134,11 +138,11 @@ angular.module('bdate', ['bdate.datepicker']).constant('MESSAGES', {
   errorOnChangeMonthOrYear: 'cannot change month or year'
 });
 
-angular.module('bdate.popup', ['bdate.utils', 'bdate.data']).directive('bdatePopup', ['bDateUtils', 'bDataFactory', 'MESSAGES', function(bDateUtils, bDataFactory, MESSAGES) {
+angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).directive('bdatePopup', ['bDateUtils', 'bDataFactory', 'MESSAGES', function(bDateUtils, bDataFactory, MESSAGES) {
   return {
     restrict: 'E',
     replace: true,
-    templateUrl: 'bdate/dist/templates/popup.html',
+    templateUrl: 'popup.html',
     scope: {
       popupState: '=',
       dateModel: '='

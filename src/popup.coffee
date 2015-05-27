@@ -1,9 +1,9 @@
-angular.module 'bdate.popup', ['bdate.utils', 'bdate.data']
+angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
 .directive 'bdatePopup', (bDateUtils, bDataFactory, MESSAGES) ->
   restrict: 'E'
   replace: true
-  templateUrl: 'bdate/dist/templates/popup.html'
+  templateUrl: 'popup.html'
   scope:
     popupState: '='
     dateModel: '='

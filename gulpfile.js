@@ -12,26 +12,20 @@ var nib = require('nib');
 var minifyHTML = require('gulp-minify-html');
 var minifyCss = require('gulp-minify-css');
 var coffee = require('gulp-coffee');
+var templateCache = require('gulp-angular-templatecache');
 
 var src = {
-    styles: {
-        src: [
-            'src/styles/**/*.styl'
-        ]
-    },
-    jade: {
-        src: [
-            'src/*.jade',
-            'src/**/*.jade'
-        ]
-    },
+    styles: ['src/styles/**/*.styl'],
+    jade: ['src/templates/**/*.jade'],
+    html: ['src/templates/**/*.html'],
     js: ['src/**/*.js'],
     coffee: ['src/**/*.coffee']
 };
 
 var dest = {
     dist: 'dist',
-    src: 'src'
+    src: 'src',
+    templates: 'src/templates'
 };
 
 
@@ -41,6 +35,7 @@ gulp.task('coffee', function () {
         .on('error', console.log)
         .pipe(concat('bdate.js'))
         .pipe(ngAnnotate({remove: true, add: true, single_quotes: true}))
+        //.pipe(templateReplace())
         .pipe(gulp.dest(dest.dist))
         .pipe(sourcemaps.init())
         .pipe(uglify())
@@ -49,20 +44,31 @@ gulp.task('coffee', function () {
         .pipe(gulp.dest(dest.dist))
 });
 
+gulp.task('tmp', function(){
+    //return gulp.src(src.html)
+    return gulp.src('src/templates/**/*.html')
+        .pipe(templateCache({
+            module: 'bdate.templates',
+            standalone: true
+        }))
+        .pipe(gulp.dest(dest.dist));
+
+});
+
 gulp.task('jade', function () {
-    return gulp.src(src.jade.src)
-        .pipe(changed(dest.dist, {extension: '.html'}))
+    return gulp.src(src.jade)
+        .pipe(changed(dest.templates, {extension: '.html'}))
         .pipe(jade({pretty: false}))
         .on('error', console.log)
         .pipe(minifyHTML({
             empty: true,
             spare: true
         }))
-        .pipe(gulp.dest(dest.dist));
+        .pipe(gulp.dest(dest.templates));
 });
 
 gulp.task('stylus', function () {
-    return gulp.src(src.styles.src, {base: 'src'})
+    return gulp.src(src.styles, {base: 'src'})
         .pipe(concat('bdate.styl'))
         .pipe(stylus({use: [nib()], compress: true}))
         .on('error', console.log)
@@ -71,8 +77,8 @@ gulp.task('stylus', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(src.jade.src, ['jade']);
-    gulp.watch(src.styles.src, ['stylus']);
+    gulp.watch(src.jade, ['jade']);
+    gulp.watch(src.styles, ['stylus']);
     gulp.watch(src.coffee, ['coffee']);
 });
 

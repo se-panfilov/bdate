@@ -1,9 +1,9 @@
-angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data']
+angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']
 
 .directive 'bdatepicker', ($filter, bDataFactory) ->
   restrict: 'E'
   replace: true
-  templateUrl: 'bdate/dist/templates/default.html'
+  templateUrl: 'default.html'
   scope:
     source: '='
     bRootId: '@?'
