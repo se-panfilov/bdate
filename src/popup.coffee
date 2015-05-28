@@ -113,12 +113,21 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
             year: yearNum
           i++
         return result
+      _markToday: (daysArr) ->
+        i = 1
+        while i < daysArr.length
+          if daysArr[i].day is scope.data.today.day
+            daysArr[i].isToday = true
+          i++
+        daysArr
       getDaysArr: (year, month) ->
         daysCount = +month.daysTotal
         startDay = +month.startDay
 
         prevMonthTailDaysArr = scope.data._getPrevMonthTailDaysArr year.number, month.number, startDay
         currentMonthDaysArr = scope.data._getMonthDaysArr year.number, month.number, daysCount
+        if year.number is scope.data.today.year and month.number is scope.data.today.month
+          currentMonthDaysArr = scope.data._markToday currentMonthDaysArr
         result = prevMonthTailDaysArr.concat currentMonthDaysArr
         nextMonthTailDaysArr = scope.data._getNextMonthTailDaysArr year.number, month.number, startDay, daysCount, result
         result = result.concat nextMonthTailDaysArr
@@ -150,6 +159,6 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
       scope.bDateUtils = bDateUtils
 
     scope.$watch 'popupState.isOpen', ->
-      if scope.popupState.isOpen
+      if scope.popupState.isOpen and (scope.dateModel and not angular.equals {}, scope.dateModel)
         scope.data.setDateModel scope.dateModel
         scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day
