@@ -89,7 +89,7 @@ angular.module('bdate.data', []).factory('bDataFactory', function() {
         },
         3: {
           days_total: 31,
-          start_day: 7
+          start_day: 5
         },
         4: {
           days_total: 30,
@@ -209,21 +209,23 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
           return scope.data.today = today;
         },
         _getPrevMonthTailDaysArr: function(yearNum, monthNum, startDay) {
-          var i, isPrevMonthExist, prevMonthDate, result;
+          var i, isPrevMonthExist, prevMonthDate, prevMonthDaysCount, result;
           result = [];
-          i = 1;
-          isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist(yearNum, monthNum);
           prevMonthDate = {
             day: null,
             month: null,
             year: null
           };
+          isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist(yearNum, monthNum);
+          prevMonthDaysCount = 0;
           if (isPrevMonthExist) {
             prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj(yearNum, monthNum);
+            prevMonthDaysCount = new Date(prevMonthDate.year, prevMonthDate.month, 0).getDate();
           }
-          while (i <= startDay - 1) {
-            result.push({
-              day: i,
+          i = 0;
+          while (i < startDay - 1) {
+            result.unshift({
+              day: prevMonthDaysCount - i,
               month: prevMonthDate.month,
               year: prevMonthDate.year,
               isOtherMonth: true
@@ -233,21 +235,29 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
           return result;
         },
         _getNextMonthTailDaysArr: function(yearNum, monthNum, startDay, daysCount, daysArr) {
-          var daysInWeek, expectedWeeksCount, i, isLastMonth, isLastYear, result;
+          var daysInWeek, expectedWeeksCount, i, isNextMonthExist, nextMonthDate, result;
           result = [];
           daysInWeek = 7;
           expectedWeeksCount = Math.ceil(daysArr.length / daysInWeek);
           if ((daysArr.length / daysInWeek) === Math.floor(daysArr.length / daysInWeek)) {
             return result;
           }
-          isLastMonth = bDateUtils.sourceCheckers.month.isLastMonth(yearNum, monthNum);
-          isLastYear = bDateUtils.sourceCheckers.year.isLastYear(yearNum, monthNum);
+          nextMonthDate = {
+            day: null,
+            month: null,
+            year: null
+          };
+          isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist(yearNum, monthNum);
+          if (isNextMonthExist) {
+            nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj(yearNum, monthNum);
+          }
           i = daysArr.length;
           while (i < (expectedWeeksCount * daysInWeek)) {
             daysArr.push({
               day: i - (daysCount + startDay - 2),
-              month: monthNum + 1,
-              year: yearNum
+              month: nextMonthDate.month,
+              year: nextMonthDate.year,
+              isOtherMonth: true
             });
             i++;
           }

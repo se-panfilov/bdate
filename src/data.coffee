@@ -41,7 +41,7 @@ angular.module 'bdate.data', []
           start_day: 7
         3:
           days_total: 31
-          start_day: 7
+          start_day: 5
         4:
           days_total: 30
           start_day: 3
