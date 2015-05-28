@@ -24,7 +24,7 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         return console.error MESSAGES.invalidParams if not format
         scope.data.format = format
       viewedDate: null
-      setViewedDate: (yearNum, monthNum) ->
+      setViewedDate: (yearNum, monthNum, dayNum) ->
         return console.error MESSAGES.invalidParams if not yearNum or not monthNum
         yearNum = +yearNum
         monthNum = +monthNum
@@ -43,6 +43,8 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
             number: monthNum
             name: bDateUtils.getMonthName monthNum
             count: Object.keys(bDataFactory.data.years[yearNum]).length
+          day:
+            number: dayNum
 
         scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.year, scope.data.viewedDate.month
       daysOfWeek:
@@ -134,7 +136,9 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         scope.data.setFormat dateSource.format
         scope.data.setToday dateSource.today
 
-        if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month
+        if scope.dateModel and not angular.equals {}, scope.dateModel
+          scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day
+        else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month
           scope.data.setViewedDate dateSource.today.year, dateSource.today.month
         else
           firstYear = bDateUtils.sourceCheckers.year.getFirstYear()
@@ -144,3 +148,8 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
     do ->
       scope.data.init(bDataFactory.data)
       scope.bDateUtils = bDateUtils
+
+    scope.$watch 'popupState.isOpen', ->
+      if scope.popupState.isOpen
+        scope.data.setDateModel scope.dateModel
+        scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day
