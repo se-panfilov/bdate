@@ -58,19 +58,21 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         result = []
         i = 1
 
-        isFirstMonth = bDateUtils.sourceCheckers.month.isFirstMonth yearNum, monthNum
-        isFirstYear = bDateUtils.sourceCheckers.year.isFirstYear yearNum, monthNum
-        prevMonthNum = monthNum - 1
-        isPrevMonthExist = bDateUtils.sourceCheckers.month.isMonthExist yearNum, prevMonthNum
-        prevMonth = bDateUtils.sourceCheckers.month.getMonth yearNum, prevMonthNum
+        isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum
+        prevMonthDate =
+          day: null
+          month: null
+          year: null
+
+        if isPrevMonthExist
+          prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj yearNum, monthNum
 
         while i <= startDay - 1
-          #result.unshift ''
-          result.unshift
-            #day: i - (daysCount + startDay - 2)
+          result.push
             day: i
-            month: monthNum - 1
-            year: yearNum
+            month: prevMonthDate.month
+            year: prevMonthDate.year
+            isOtherMonth: true
           i++
         return result
       _getNextMonthTailDaysArr: (yearNum, monthNum, startDay, daysCount, daysArr) ->

@@ -209,19 +209,24 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
           return scope.data.today = today;
         },
         _getPrevMonthTailDaysArr: function(yearNum, monthNum, startDay) {
-          var i, isFirstMonth, isFirstYear, isPrevMonthExist, prevMonth, prevMonthNum, result;
+          var i, isPrevMonthExist, prevMonthDate, result;
           result = [];
           i = 1;
-          isFirstMonth = bDateUtils.sourceCheckers.month.isFirstMonth(yearNum, monthNum);
-          isFirstYear = bDateUtils.sourceCheckers.year.isFirstYear(yearNum, monthNum);
-          prevMonthNum = monthNum - 1;
-          isPrevMonthExist = bDateUtils.sourceCheckers.month.isMonthExist(yearNum, prevMonthNum);
-          prevMonth = bDateUtils.sourceCheckers.month.getMonth(yearNum, prevMonthNum);
+          isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist(yearNum, monthNum);
+          prevMonthDate = {
+            day: null,
+            month: null,
+            year: null
+          };
+          if (isPrevMonthExist) {
+            prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj(yearNum, monthNum);
+          }
           while (i <= startDay - 1) {
-            result.unshift({
+            result.push({
               day: i,
-              month: monthNum - 1,
-              year: yearNum
+              month: prevMonthDate.month,
+              year: prevMonthDate.year,
+              isOtherMonth: true
             });
             i++;
           }
@@ -412,19 +417,19 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
           }
           return !!bDataFactory.data.years[yearNum][monthNum];
         },
-        isPrevMonthExist: function(yearNum, monthNum) {
+        isPrevMonthExist: function(yearNum, curMonthNum) {
           var isFirstMonth, isFirstYear, lastMonthOfPrevYearNum, prevMonthNum, prevYearNum;
-          if (!yearNum || !monthNum) {
+          if (!yearNum || !curMonthNum) {
             return console.error(MESSAGES.invalidParams);
           }
           yearNum = +yearNum;
-          monthNum = +monthNum;
-          if (!exports.sourceCheckers.month.isMonthExist(yearNum, monthNum)) {
+          curMonthNum = +curMonthNum;
+          if (!exports.sourceCheckers.month.isMonthExist(yearNum, curMonthNum)) {
             return false;
           }
-          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, monthNum);
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, curMonthNum);
           if (!isFirstMonth) {
-            prevMonthNum = monthNum - 1;
+            prevMonthNum = curMonthNum - 1;
             return exports.sourceCheckers.month.isMonthExist(yearNum, prevMonthNum);
           } else {
             isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum);
@@ -437,19 +442,55 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
             }
           }
         },
-        isNextMonthExist: function(yearNum, monthNum) {
-          var firstMonthOfNextYearNum, isLastMonth, isLastYear, nextMonthNum, nextYearNum;
-          if (!yearNum || !monthNum) {
+        getPrevMonthObj: function(yearNum, curMonthNum) {
+          var isFirstMonth, isFirstYear, lastMonthOfPrevYearNum, prevMonthNum, prevYearNum;
+          if (!yearNum || !curMonthNum) {
             return console.error(MESSAGES.invalidParams);
           }
           yearNum = +yearNum;
-          monthNum = +monthNum;
-          if (!exports.sourceCheckers.month.isMonthExist(yearNum, monthNum)) {
+          curMonthNum = +curMonthNum;
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, curMonthNum);
+          if (!isFirstMonth) {
+            prevMonthNum = curMonthNum - 1;
+            if (exports.sourceCheckers.month.isMonthExist(yearNum, prevMonthNum)) {
+              return {
+                year: yearNum,
+                month: prevMonthNum
+              };
+            } else {
+              return null;
+            }
+          } else {
+            isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum);
+            if (!isFirstYear) {
+              prevYearNum = yearNum - 1;
+              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth(prevYearNum);
+              if (exports.sourceCheckers.month.isMonthExist(prevYearNum, lastMonthOfPrevYearNum)) {
+                return {
+                  year: prevYearNum,
+                  month: lastMonthOfPrevYearNum
+                };
+              } else {
+                return null;
+              }
+            } else {
+              return null;
+            }
+          }
+        },
+        isNextMonthExist: function(yearNum, curMonthNum) {
+          var firstMonthOfNextYearNum, isLastMonth, isLastYear, nextMonthNum, nextYearNum;
+          if (!yearNum || !curMonthNum) {
+            return console.error(MESSAGES.invalidParams);
+          }
+          yearNum = +yearNum;
+          curMonthNum = +curMonthNum;
+          if (!exports.sourceCheckers.month.isMonthExist(yearNum, curMonthNum)) {
             return false;
           }
-          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, monthNum);
+          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, curMonthNum);
           if (!isLastMonth) {
-            nextMonthNum = monthNum + 1;
+            nextMonthNum = curMonthNum + 1;
             return exports.sourceCheckers.month.isMonthExist(yearNum, nextMonthNum);
           } else {
             isLastYear = exports.sourceCheckers.year.isLastYear(yearNum);
@@ -459,6 +500,42 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
               return exports.sourceCheckers.month.isMonthExist(nextYearNum, firstMonthOfNextYearNum);
             } else {
               return false;
+            }
+          }
+        },
+        getNextMonthObj: function(yearNum, curMonthNum) {
+          var firstMonthOfNextYearNum, isLastMonth, isLastYear, nextMonthNum, nextYearNum;
+          if (!yearNum || !curMonthNum) {
+            return console.error(MESSAGES.invalidParams);
+          }
+          yearNum = +yearNum;
+          curMonthNum = +curMonthNum;
+          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, curMonthNum);
+          if (!isLastMonth) {
+            nextMonthNum = curMonthNum + 1;
+            if (exports.sourceCheckers.month.isMonthExist(yearNum, nextMonthNum)) {
+              return {
+                year: yearNum,
+                month: nextMonthNum
+              };
+            } else {
+              return null;
+            }
+          } else {
+            isLastYear = exports.sourceCheckers.year.isLastYear(yearNum);
+            if (!isLastYear) {
+              nextYearNum = yearNum + 1;
+              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, firstMonthOfNextYearNum)) {
+                return {
+                  year: nextYearNum,
+                  month: firstMonthOfNextYearNum
+                };
+              } else {
+                return null;
+              }
+            } else {
+              return null;
             }
           }
         },
@@ -598,4 +675,4 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
 }]);
 
 angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("default.html","<div id={{bRootId}} class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed readonly=readonly class=b_input><button type=button ng-click=togglePopup() class=b_datepicker_button>H</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
-$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" ng-class=\"{b_popup_clickable_day: date.day}\" class=b_popup_day><span ng-bind=date.day ng-click=popup.selectDate(date) role=button></span></td></tr></table><div class=b_popup_today>Сегодня &nbsp;<span ng-bind=\"data.today.date | date:data.format\"></span></div></div>");}]);
+$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth}\" class=b_popup_day_btn></button></td></tr></table><div class=b_popup_today>Сегодня &nbsp;<span ng-bind=\"data.today.date | date:data.format\"></span></div></div>");}]);

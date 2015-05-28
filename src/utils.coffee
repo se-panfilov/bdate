@@ -45,15 +45,15 @@ angular.module 'bdate.utils', ['bdate.data']
           monthNum = +monthNum
           return false if not bDataFactory.data.years[yearNum]
           !!bDataFactory.data.years[yearNum][monthNum]
-        isPrevMonthExist: (yearNum, monthNum) ->
-          return console.error MESSAGES.invalidParams if not yearNum or not monthNum
+        isPrevMonthExist: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
-          monthNum = +monthNum
+          curMonthNum = +curMonthNum
 
-          return false if not exports.sourceCheckers.month.isMonthExist yearNum, monthNum
-          isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, monthNum
+          return false if not exports.sourceCheckers.month.isMonthExist yearNum, curMonthNum
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, curMonthNum
           if not isFirstMonth
-            prevMonthNum = monthNum - 1
+            prevMonthNum = curMonthNum - 1
             return exports.sourceCheckers.month.isMonthExist yearNum, prevMonthNum
           else
             isFirstYear = exports.sourceCheckers.year.isFirstYear yearNum
@@ -63,15 +63,38 @@ angular.module 'bdate.utils', ['bdate.data']
               return exports.sourceCheckers.month.isMonthExist prevYearNum, lastMonthOfPrevYearNum
             else
               return false
-        isNextMonthExist: (yearNum, monthNum) ->
-          return console.error MESSAGES.invalidParams if not yearNum or not monthNum
+        getPrevMonthObj: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
-          monthNum = +monthNum
+          curMonthNum = +curMonthNum
 
-          return false if not exports.sourceCheckers.month.isMonthExist yearNum, monthNum
-          isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, monthNum
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, curMonthNum
+          if not isFirstMonth
+            prevMonthNum = curMonthNum - 1
+            if exports.sourceCheckers.month.isMonthExist yearNum, prevMonthNum
+              return {year: yearNum, month: prevMonthNum}
+            else
+              return null
+          else
+            isFirstYear = exports.sourceCheckers.year.isFirstYear yearNum
+            if not isFirstYear
+              prevYearNum = yearNum - 1
+              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth prevYearNum
+              if exports.sourceCheckers.month.isMonthExist prevYearNum, lastMonthOfPrevYearNum
+                return {year: prevYearNum, month: lastMonthOfPrevYearNum}
+              else
+                return null
+            else
+              return null
+        isNextMonthExist: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          yearNum = +yearNum
+          curMonthNum = +curMonthNum
+
+          return false if not exports.sourceCheckers.month.isMonthExist yearNum, curMonthNum
+          isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, curMonthNum
           if not isLastMonth
-            nextMonthNum = monthNum + 1
+            nextMonthNum = curMonthNum + 1
             return exports.sourceCheckers.month.isMonthExist yearNum, nextMonthNum
           else
             isLastYear = exports.sourceCheckers.year.isLastYear yearNum
@@ -81,6 +104,29 @@ angular.module 'bdate.utils', ['bdate.data']
               return exports.sourceCheckers.month.isMonthExist nextYearNum, firstMonthOfNextYearNum
             else
               return false
+        getNextMonthObj: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          yearNum = +yearNum
+          curMonthNum = +curMonthNum
+
+          isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, curMonthNum
+          if not isLastMonth
+            nextMonthNum = curMonthNum + 1
+            if exports.sourceCheckers.month.isMonthExist yearNum, nextMonthNum
+              return {year: yearNum, month: nextMonthNum}
+            else
+              return null
+          else
+            isLastYear = exports.sourceCheckers.year.isLastYear yearNum
+            if not isLastYear
+              nextYearNum = yearNum + 1
+              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
+              if exports.sourceCheckers.month.isMonthExist nextYearNum, firstMonthOfNextYearNum
+                return {year: nextYearNum, month: firstMonthOfNextYearNum}
+              else
+                return null
+            else
+              return null
         getMonth: (yearNum, monthNum) ->
           return console.error MESSAGES.invalidParams if not yearNum or not monthNum
           bDataFactory.data.years[yearNum][monthNum]
