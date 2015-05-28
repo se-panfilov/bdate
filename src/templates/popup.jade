@@ -19,5 +19,4 @@
                 button.b_popup_day_btn(type="button", ng-bind="date.day", ng-click="popup.selectDate(date)", ng-class="{b_popup_cur_month_day: !date.isOtherMonth}")
     .b_popup_today
         | Сегодня
-        | &nbsp;
-        span(ng-bind="data.today.date | date:data.format")
+        button.b_popup_today_btn(type="button", ng-bind="data.today.date | date:data.format", ng-click="popup.selectDate(bDateUtils.makeDateModel(data.today.date))")

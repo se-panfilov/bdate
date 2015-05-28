@@ -66,7 +66,7 @@ bg_holiday_color = #ea6153
             &:active
               background-color darken(bg_day_color, 5)
               outline 0
-            &:hover, &:active, &:focus
+            &:hover, &:active, &:focus, &:active:focus
               outline 0
   .b_popup_day_of_week
     display inline-block
@@ -81,3 +81,12 @@ bg_holiday_color = #ea6153
     text-align center
     margin 5px
     cursor pointer
+    .b_popup_today_btn
+      background none
+      border none
+      outline none
+      &:active
+        box-shadow none
+      &:hover, &:active, &:focus, &:active:focus
+        text-decoration underline
+        outline none

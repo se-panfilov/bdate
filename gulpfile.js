@@ -29,15 +29,6 @@ var dest = {
     templates: 'src/templates'
 };
 
-
-//function makeTemplates() {
-//    return gulp.src(src.html)
-//        .pipe(templateCache({
-//            module: 'bdate.templates',
-//            standalone: true
-//        }));
-//}
-
 function makeJade() {
     return gulp.src(src.jade)
         //.pipe(changed(dest.templates, {extension: '.html'}))
@@ -82,18 +73,6 @@ function buildJS() {
 gulp.task('coffee', function () {
     return buildJS();
 });
-
-//gulp.task('jade', function () {
-//    gulp.src(src.jade)
-//        .pipe(changed(dest.templates, {extension: '.html'}))
-//        .pipe(jade({pretty: false}))
-//        .on('error', console.log)
-//        .pipe(minifyHTML({
-//            empty: true,
-//            spare: true
-//        }))
-//        .pipe(gulp.dest(dest.templates));
-//});
 
 gulp.task('stylus', function () {
     return gulp.src(src.styles, {base: 'src'})

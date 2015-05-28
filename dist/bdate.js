@@ -323,8 +323,8 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
 }]);
 
 angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES', 'bDataFactory', function(MESSAGES, bDataFactory) {
-  var daysOfWeek, exports, month;
-  daysOfWeek = [
+  var daysOfWeekList, exports, monthObj;
+  daysOfWeekList = [
     {
       name: 'Понедельник',
       short: 'Пн'
@@ -348,7 +348,7 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
       short: 'Вс'
     }
   ];
-  month = {
+  monthObj = {
     1: {
       name: 'Январь',
       short: 'Янв'
@@ -399,20 +399,32 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
     }
   };
   return exports = {
-    daysOfWeek: daysOfWeek,
-    month: month,
+    daysOfWeek: daysOfWeekList,
+    month: monthObj,
     getDaysOfWeekShorts: function() {
       var i, result;
       i = 0;
       result = [];
-      while (i < daysOfWeek.length) {
-        result.push(daysOfWeek[i].short);
+      while (i < daysOfWeekList.length) {
+        result.push(daysOfWeekList[i].short);
         i++;
       }
       return result;
     },
     getMonthName: function(number) {
-      return month[number].name;
+      return monthObj[number].name;
+    },
+    makeDateModel: function(datetime) {
+      var date, day, year;
+      date = new Date(datetime);
+      day = date.getUTCDate();
+      monthObj = date.getMonth() + 1;
+      year = date.getFullYear();
+      return {
+        day: day,
+        month: monthObj,
+        year: year
+      };
     },
     sourceCheckers: {
       month: {
@@ -574,19 +586,17 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
           return +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1];
         },
         getNextAvailableMonth: function(isForward, yearNum, monthNum) {
-          var isChangeYear, isFirstMonth, isLastMonth, nextMonthNum, nextYearNum, result;
+          var isFirstMonth, isLastMonth, nextMonthNum, nextYearNum, result;
           yearNum = +yearNum;
           monthNum = +monthNum;
           isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, monthNum);
           isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, monthNum);
-          isChangeYear = false;
           nextYearNum = yearNum;
           nextMonthNum = monthNum;
           if (isForward) {
             if (!isLastMonth) {
               nextMonthNum = monthNum + 1;
             } else {
-              isChangeYear = true;
               nextYearNum = yearNum + 1;
               if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
                 nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
@@ -599,7 +609,6 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
             if (!isFirstMonth) {
               nextMonthNum = monthNum - 1;
             } else {
-              isChangeYear = true;
               nextYearNum = yearNum - 1;
               if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
                 nextMonthNum = exports.sourceCheckers.month.getLastMonth(nextYearNum);
@@ -685,4 +694,4 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
 }]);
 
 angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("default.html","<div id={{bRootId}} class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed readonly=readonly class=b_input><button type=button ng-click=togglePopup() class=b_datepicker_button>H</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
-$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth}\" class=b_popup_day_btn></button></td></tr></table><div class=b_popup_today>Сегодня &nbsp;<span ng-bind=\"data.today.date | date:data.format\"></span></div></div>");}]);
+$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth}\" class=b_popup_day_btn></button></td></tr></table><div class=b_popup_today>Сегодня<button type=button ng-bind=\"data.today.date | date:data.format\" ng-click=popup.selectDate(bDateUtils.makeDateModel(data.today.date)) class=b_popup_today_btn></button></div></div>");}]);

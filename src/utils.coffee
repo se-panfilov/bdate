@@ -1,7 +1,7 @@
 angular.module 'bdate.utils', ['bdate.data']
 
 .factory 'bDateUtils', (MESSAGES, bDataFactory) ->
-  daysOfWeek = [
+  daysOfWeekList = [
     {name: 'Понедельник', short: 'Пн'}
     {name: 'Вторник', short: 'Вт'}
     {name: 'Среда', short: 'Ср'}
@@ -11,7 +11,7 @@ angular.module 'bdate.utils', ['bdate.data']
     {name: 'Воскресенье', short: 'Вс'}
   ]
 
-  month =
+  monthObj =
     1: {name: 'Январь', short: 'Янв'}
     2: {name: 'Февраль', short: 'Фев'}
     3: {name: 'Март', short: 'Март'}
@@ -26,17 +26,24 @@ angular.module 'bdate.utils', ['bdate.data']
     12: {name: 'Декабрь', short: 'Дек'}
 
   return exports =
-    daysOfWeek: daysOfWeek
-    month: month
+    daysOfWeek: daysOfWeekList
+    month: monthObj
     getDaysOfWeekShorts: ->
       i = 0
       result = []
-      while i < daysOfWeek.length
-        result.push daysOfWeek[i].short
+      while i < daysOfWeekList.length
+        result.push daysOfWeekList[i].short
         i++
       return result
     getMonthName: (number)->
-      return month[number].name
+      return monthObj[number].name
+    makeDateModel: (datetime) ->
+      #TODO fix select today
+      date = new Date(datetime)
+      day = date.getUTCDate()
+      monthObj = date.getMonth() + 1
+      year = date.getFullYear()
+      return {day: day, month: monthObj, year: year}
     sourceCheckers:
       month:
         isMonthExist: (yearNum, monthNum) ->
@@ -149,7 +156,6 @@ angular.module 'bdate.utils', ['bdate.data']
           monthNum = +monthNum
           isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, monthNum
           isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, monthNum
-          isChangeYear = false
           nextYearNum = yearNum
           nextMonthNum = monthNum
 
@@ -157,7 +163,6 @@ angular.module 'bdate.utils', ['bdate.data']
             if not isLastMonth
               nextMonthNum = monthNum + 1
             else
-              isChangeYear = true
               nextYearNum = yearNum + 1
               if exports.sourceCheckers.year.isYearExist nextYearNum
                 nextMonthNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
@@ -168,7 +173,6 @@ angular.module 'bdate.utils', ['bdate.data']
             if not isFirstMonth
               nextMonthNum = monthNum - 1
             else
-              isChangeYear = true
               nextYearNum = yearNum - 1
               if exports.sourceCheckers.year.isYearExist nextYearNum
                 nextMonthNum = exports.sourceCheckers.month.getLastMonth nextYearNum
