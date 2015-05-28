@@ -24,7 +24,7 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         return console.error MESSAGES.invalidParams if not format
         scope.data.format = format
       viewedDate: null
-      setViewedDate: (yearNum, monthNum) ->
+      setViewedDate: (yearNum, monthNum, dayNum) ->
         return console.error MESSAGES.invalidParams if not yearNum or not monthNum
         yearNum = +yearNum
         monthNum = +monthNum
@@ -36,13 +36,17 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
             number: yearNum
             count: Object.keys(bDataFactory.data.years).length
           month:
+            first: Object.keys(bDataFactory.data.years[yearNum])[0]
+            last: Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
             daysTotal: bDataFactory.data.years[yearNum][monthNum].days_total
             startDay: bDataFactory.data.years[yearNum][monthNum].start_day
             number: monthNum
             name: bDateUtils.getMonthName monthNum
             count: Object.keys(bDataFactory.data.years[yearNum]).length
+          day:
+            number: dayNum
 
-        scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.month, scope.data.viewedDate.year
+        scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.year, scope.data.viewedDate.month
       daysOfWeek:
         get: ->
           bDateUtils.daysOfWeek
@@ -52,34 +56,83 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
       setToday: (today) ->
         return console.error MESSAGES.invalidParams if not today
         scope.data.today = today
-      getDaysArr: (month, year) ->
-        daysCount = month.daysTotal
-        startDay = month.startDay
+      _getPrevMonthTailDaysArr: (yearNum, monthNum, startDay) ->
+        result = []
 
-        arr = []
-        k = 1
-        while k <= daysCount
-          arr.push
-            day: k
-            month: month.number
-            year: year.number
-          k++
+        prevMonthDate =
+          day: null
+          month: null
+          year: null
 
-        i = 1
-        while i <= startDay - 1
-          arr.unshift ''
+        isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum
+        prevMonthDaysCount = 0
+        if isPrevMonthExist
+          prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj yearNum, monthNum
+          prevMonthDaysCount = new Date(prevMonthDate.year, prevMonthDate.month, 0).getDate()
+
+        i = 0
+        while i < startDay - 1
+          result.unshift
+            day: prevMonthDaysCount - i
+            month: prevMonthDate.month
+            year: prevMonthDate.year
+            isOtherMonth: true
           i++
-
+        return result
+      _getNextMonthTailDaysArr: (yearNum, monthNum, startDay, daysCount, daysArr) ->
+        result = []
         daysInWeek = 7
-        expectedWeeksCount = Math.ceil arr.length / daysInWeek
-        return arr if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
+        expectedWeeksCount = Math.ceil daysArr.length / daysInWeek
+        return result if (daysArr.length / daysInWeek) is Math.floor daysArr.length / daysInWeek
 
-        j = arr.length
-        while j < (expectedWeeksCount * daysInWeek)
-          arr.push ''
-          j++
+        nextMonthDate =
+          day: null
+          month: null
+          year: null
 
-        return arr
+        isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist yearNum, monthNum
+        if isNextMonthExist
+          nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj yearNum, monthNum
+
+        i = daysArr.length
+        while i < (expectedWeeksCount * daysInWeek)
+          daysArr.push
+            day: i - (daysCount + startDay - 2)
+            month: nextMonthDate.month
+            year: nextMonthDate.year
+            isOtherMonth: true
+          i++
+        return result
+      _getMonthDaysArr: (yearNum, monthNum, daysCount) ->
+        result = []
+        i = 1
+        while i <= daysCount
+          result.push
+            day: i
+            month: monthNum
+            year: yearNum
+          i++
+        return result
+      _markToday: (daysArr) ->
+        i = 1
+        while i < daysArr.length
+          if daysArr[i].day is scope.data.today.day
+            daysArr[i].isToday = true
+          i++
+        daysArr
+      getDaysArr: (year, month) ->
+        daysCount = +month.daysTotal
+        startDay = +month.startDay
+
+        prevMonthTailDaysArr = scope.data._getPrevMonthTailDaysArr year.number, month.number, startDay
+        currentMonthDaysArr = scope.data._getMonthDaysArr year.number, month.number, daysCount
+        if year.number is scope.data.today.year and month.number is scope.data.today.month
+          currentMonthDaysArr = scope.data._markToday currentMonthDaysArr
+        result = prevMonthTailDaysArr.concat currentMonthDaysArr
+        nextMonthTailDaysArr = scope.data._getNextMonthTailDaysArr year.number, month.number, startDay, daysCount, result
+        result = result.concat nextMonthTailDaysArr
+
+        return result
       goNextMonth: (isForward) ->
         nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
         if nextObj
@@ -92,11 +145,20 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         scope.data.setFormat dateSource.format
         scope.data.setToday dateSource.today
 
-        if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month
+        if scope.dateModel and not angular.equals {}, scope.dateModel
+          scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day
+        else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month
           scope.data.setViewedDate dateSource.today.year, dateSource.today.month
         else
           firstYear = bDateUtils.sourceCheckers.year.getFirstYear()
           scope.data.setViewedDate firstYear, bDateUtils.sourceCheckers.month.getFirstMonth firstYear
 
     #init
-    do -> scope.data.init(bDataFactory.data)
+    do ->
+      scope.data.init(bDataFactory.data)
+      scope.bDateUtils = bDateUtils
+
+    scope.$watch 'popupState.isOpen', ->
+      if scope.popupState.isOpen and (scope.dateModel and not angular.equals {}, scope.dateModel)
+        scope.data.setDateModel scope.dateModel
+        scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day

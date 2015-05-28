@@ -29,13 +29,19 @@ var dest = {
     templates: 'src/templates'
 };
 
-
-function makeTemplates() {
-    return gulp.src(src.html)
+function makeJade() {
+    return gulp.src(src.jade)
+        //.pipe(changed(dest.templates, {extension: '.html'}))
+        .pipe(jade({pretty: false}))
+        .on('error', console.log)
+        .pipe(minifyHTML({
+            empty: true,
+            spare: true
+        }))
         .pipe(templateCache({
             module: 'bdate.templates',
             standalone: true
-        }));
+        }))
 }
 
 function makeCoffee() {
@@ -46,10 +52,7 @@ function makeCoffee() {
         .pipe(ngAnnotate({remove: true, add: true, single_quotes: true}))
 }
 
-function buildJS() {
-    var templates = makeTemplates();
-    var mainJs = makeCoffee();
-
+function mergeJS (templates, mainJs) {
     return mergeStream(templates, mainJs)
         .pipe(concat('bdate.js'))
         .pipe(gulp.dest(dest.dist))
@@ -60,21 +63,15 @@ function buildJS() {
         .pipe(gulp.dest(dest.dist))
 }
 
+function buildJS() {
+    var templates = makeJade();
+    var mainJs = makeCoffee();
+    return mergeJS(templates, mainJs);
+}
+
 
 gulp.task('coffee', function () {
     return buildJS();
-});
-
-gulp.task('jade', function () {
-    return gulp.src(src.jade)
-        .pipe(changed(dest.templates, {extension: '.html'}))
-        .pipe(jade({pretty: false}))
-        .on('error', console.log)
-        .pipe(minifyHTML({
-            empty: true,
-            spare: true
-        }))
-        .pipe(gulp.dest(dest.templates));
 });
 
 gulp.task('stylus', function () {
@@ -87,15 +84,14 @@ gulp.task('stylus', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(src.jade, ['jade']);
+    gulp.watch(src.jade, ['coffee']);
     gulp.watch(src.styles, ['stylus']);
     gulp.watch(src.coffee, ['coffee']);
 });
 
 gulp.task('build', function () {
-    gulp.start('coffee');
-    gulp.start('jade');
     gulp.start('stylus');
+    gulp.start('coffee');
 });
 
 gulp.task('default', function () {

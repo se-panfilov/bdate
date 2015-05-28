@@ -1,7 +1,7 @@
 angular.module 'bdate.utils', ['bdate.data']
 
 .factory 'bDateUtils', (MESSAGES, bDataFactory) ->
-  daysOfWeek = [
+  daysOfWeekList = [
     {name: 'Понедельник', short: 'Пн'}
     {name: 'Вторник', short: 'Вт'}
     {name: 'Среда', short: 'Ср'}
@@ -11,41 +11,132 @@ angular.module 'bdate.utils', ['bdate.data']
     {name: 'Воскресенье', short: 'Вс'}
   ]
 
-  month = [
-    {name: 'Январь', short: 'Янв'}
-    {name: 'Февраль', short: 'Фев'}
-    {name: 'Март', short: 'Март'}
-    {name: 'Апрель', short: 'Май'}
-    {name: 'Май', short: 'Май'}
-    {name: 'Июнь', short: 'Июнь'}
-    {name: 'Июль', short: 'Июль'}
-    {name: 'Август', short: 'Авг'}
-    {name: 'Сентябрь', short: 'Сент'}
-    {name: 'Октябрь', short: 'Окт'}
-    {name: 'Ноябрь', short: 'Ноя'}
-    {name: 'Декабрь', short: 'Дек'}
-  ]
+  monthObj =
+    1: {name: 'Январь', short: 'Янв'}
+    2: {name: 'Февраль', short: 'Фев'}
+    3: {name: 'Март', short: 'Март'}
+    4: {name: 'Апрель', short: 'Май'}
+    5: {name: 'Май', short: 'Май'}
+    6: {name: 'Июнь', short: 'Июнь'}
+    7: {name: 'Июль', short: 'Июль'}
+    8: {name: 'Август', short: 'Авг'}
+    9: {name: 'Сентябрь', short: 'Сент'}
+    10: {name: 'Октябрь', short: 'Окт'}
+    11: {name: 'Ноябрь', short: 'Ноя'}
+    12: {name: 'Декабрь', short: 'Дек'}
 
   return exports =
-    daysOfWeek: daysOfWeek
-    month: month
+    daysOfWeek: daysOfWeekList
+    month: monthObj
     getDaysOfWeekShorts: ->
       i = 0
       result = []
-      while i < daysOfWeek.length
-        result.push daysOfWeek[i].short
+      while i < daysOfWeekList.length
+        result.push daysOfWeekList[i].short
         i++
       return result
     getMonthName: (number)->
-      return month[number].name
+      return monthObj[number].name
+    makeDateModel: (datetime) ->
+      #TODO fix select today
+      date = new Date(datetime)
+      day = date.getUTCDate()
+      monthObj = date.getMonth() + 1
+      year = date.getFullYear()
+      return {day: day, month: monthObj, year: year}
     sourceCheckers:
       month:
-        isMonthExist: (yearNum, monthNum)->
+        isMonthExist: (yearNum, monthNum) ->
           return console.error MESSAGES.invalidParams if not yearNum or not monthNum
           yearNum = +yearNum
           monthNum = +monthNum
           return false if not bDataFactory.data.years[yearNum]
           !!bDataFactory.data.years[yearNum][monthNum]
+        isPrevMonthExist: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          yearNum = +yearNum
+          curMonthNum = +curMonthNum
+
+          return false if not exports.sourceCheckers.month.isMonthExist yearNum, curMonthNum
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, curMonthNum
+          if not isFirstMonth
+            prevMonthNum = curMonthNum - 1
+            return exports.sourceCheckers.month.isMonthExist yearNum, prevMonthNum
+          else
+            isFirstYear = exports.sourceCheckers.year.isFirstYear yearNum
+            if not isFirstYear
+              prevYearNum = yearNum - 1
+              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth prevYearNum
+              return exports.sourceCheckers.month.isMonthExist prevYearNum, lastMonthOfPrevYearNum
+            else
+              return false
+        getPrevMonthObj: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          yearNum = +yearNum
+          curMonthNum = +curMonthNum
+
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, curMonthNum
+          if not isFirstMonth
+            prevMonthNum = curMonthNum - 1
+            if exports.sourceCheckers.month.isMonthExist yearNum, prevMonthNum
+              return {year: yearNum, month: prevMonthNum}
+            else
+              return null
+          else
+            isFirstYear = exports.sourceCheckers.year.isFirstYear yearNum
+            if not isFirstYear
+              prevYearNum = yearNum - 1
+              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth prevYearNum
+              if exports.sourceCheckers.month.isMonthExist prevYearNum, lastMonthOfPrevYearNum
+                return {year: prevYearNum, month: lastMonthOfPrevYearNum}
+              else
+                return null
+            else
+              return null
+        isNextMonthExist: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          yearNum = +yearNum
+          curMonthNum = +curMonthNum
+
+          return false if not exports.sourceCheckers.month.isMonthExist yearNum, curMonthNum
+          isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, curMonthNum
+          if not isLastMonth
+            nextMonthNum = curMonthNum + 1
+            return exports.sourceCheckers.month.isMonthExist yearNum, nextMonthNum
+          else
+            isLastYear = exports.sourceCheckers.year.isLastYear yearNum
+            if not isLastYear
+              nextYearNum = yearNum + 1
+              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
+              return exports.sourceCheckers.month.isMonthExist nextYearNum, firstMonthOfNextYearNum
+            else
+              return false
+        getNextMonthObj: (yearNum, curMonthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          yearNum = +yearNum
+          curMonthNum = +curMonthNum
+
+          isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, curMonthNum
+          if not isLastMonth
+            nextMonthNum = curMonthNum + 1
+            if exports.sourceCheckers.month.isMonthExist yearNum, nextMonthNum
+              return {year: yearNum, month: nextMonthNum}
+            else
+              return null
+          else
+            isLastYear = exports.sourceCheckers.year.isLastYear yearNum
+            if not isLastYear
+              nextYearNum = yearNum + 1
+              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
+              if exports.sourceCheckers.month.isMonthExist nextYearNum, firstMonthOfNextYearNum
+                return {year: nextYearNum, month: firstMonthOfNextYearNum}
+              else
+                return null
+            else
+              return null
+        getMonth: (yearNum, monthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not monthNum
+          bDataFactory.data.years[yearNum][monthNum]
         isFirstMonth: (yearNum, monthNum) ->
           yearNum = +yearNum
           monthNum = +monthNum
@@ -65,7 +156,6 @@ angular.module 'bdate.utils', ['bdate.data']
           monthNum = +monthNum
           isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, monthNum
           isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, monthNum
-          isChangeYear = false
           nextYearNum = yearNum
           nextMonthNum = monthNum
 
@@ -73,7 +163,6 @@ angular.module 'bdate.utils', ['bdate.data']
             if not isLastMonth
               nextMonthNum = monthNum + 1
             else
-              isChangeYear = true
               nextYearNum = yearNum + 1
               if exports.sourceCheckers.year.isYearExist nextYearNum
                 nextMonthNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
@@ -84,7 +173,6 @@ angular.module 'bdate.utils', ['bdate.data']
             if not isFirstMonth
               nextMonthNum = monthNum - 1
             else
-              isChangeYear = true
               nextYearNum = yearNum - 1
               if exports.sourceCheckers.year.isYearExist nextYearNum
                 nextMonthNum = exports.sourceCheckers.month.getLastMonth nextYearNum
@@ -100,6 +188,9 @@ angular.module 'bdate.utils', ['bdate.data']
           return console.error MESSAGES.invalidParams if not yearNum
           yearNum = +yearNum
           !!bDataFactory.data.years[yearNum]
+        getYear: (yearNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum
+          bDataFactory.data.years[yearNum]
         isFirstYear: (yearNum) ->
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data.years)[0]

@@ -2,6 +2,7 @@ b_control_height = 25px
 bg_color = #16a085
 bg_day_color = #2980b9
 bg_holiday_color = #ea6153
+bg_selected_day_color = #8e44ad
 
 .b_popup
   width 235px
@@ -42,22 +43,38 @@ bg_holiday_color = #ea6153
     margin 10px 30px
     .b_popup_week
       .b_popup_day
-        border 1px solid darken(bg_day_color, 5)
-        background-color darken(bg_day_color, 5)
-        border-radius 100%
-        display inline-block
         width 22px
         height 23px
-        text-align center
+        display inline-block
         margin 1px
-        &.b_popup_clickable_day
-          border 1px solid darken(bg_day_color, 5)
-          background-color bg_day_color
-          cursor pointer
-          &:hover
-            background-color lighten(bg_day_color, 5)
-          &:active
+        .b_popup_day_btn
+          border 1px solid darken(bg_day_color, 7)
+          background-color darken(bg_day_color, 7)
+          outline 0
+          border-radius 100%
+          display inline-block
+          width 22px
+          height 23px
+          text-align center
+          padding 0
+          &.b_popup_cur_month_day
+            border 1px solid darken(bg_day_color, 5)
+            background-color bg_day_color
+            cursor pointer
+            &:hover
+              background-color lighten(bg_day_color, 5)
+              outline 0
+            &:active
+              background-color darken(bg_day_color, 5)
+              outline 0
+            &:hover, &:active, &:focus, &:active:focus
+              outline 0
+          &.b_popup_today_day
+            border 1px solid #F8E3D5
             background-color darken(bg_day_color, 5)
+          &.b_popup_selected_day
+            border 1px solid darken(bg_selected_day_color, 5)
+            background-color bg_selected_day_color
   .b_popup_day_of_week
     display inline-block
     width 22px
@@ -71,3 +88,12 @@ bg_holiday_color = #ea6153
     text-align center
     margin 5px
     cursor pointer
+    .b_popup_today_btn
+      background none
+      border none
+      outline none
+      &:active
+        box-shadow none
+      &:hover, &:active, &:focus, &:active:focus
+        text-decoration underline
+        outline none
