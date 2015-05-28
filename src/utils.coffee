@@ -45,6 +45,42 @@ angular.module 'bdate.utils', ['bdate.data']
           monthNum = +monthNum
           return false if not bDataFactory.data.years[yearNum]
           !!bDataFactory.data.years[yearNum][monthNum]
+        isPrevMonthExist: (yearNum, monthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not monthNum
+          yearNum = +yearNum
+          monthNum = +monthNum
+
+          return false if not exports.sourceCheckers.month.isMonthExist yearNum, monthNum
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, monthNum
+          if not isFirstMonth
+            prevMonthNum = monthNum - 1
+            return exports.sourceCheckers.month.isMonthExist yearNum, prevMonthNum
+          else
+            isFirstYear = exports.sourceCheckers.year.isFirstYear yearNum
+            if not isFirstYear
+              prevYearNum = yearNum - 1
+              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth prevYearNum
+              return exports.sourceCheckers.month.isMonthExist prevYearNum, lastMonthOfPrevYearNum
+            else
+              return false
+        isNextMonthExist: (yearNum, monthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not monthNum
+          yearNum = +yearNum
+          monthNum = +monthNum
+
+          return false if not exports.sourceCheckers.month.isMonthExist yearNum, monthNum
+          isLastMonth = exports.sourceCheckers.month.isLastMonth yearNum, monthNum
+          if not isLastMonth
+            nextMonthNum = monthNum + 1
+            return exports.sourceCheckers.month.isMonthExist yearNum, nextMonthNum
+          else
+            isLastYear = exports.sourceCheckers.year.isLastYear yearNum
+            if not isLastYear
+              nextYearNum = yearNum + 1
+              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth nextYearNum
+              return exports.sourceCheckers.month.isMonthExist nextYearNum, firstMonthOfNextYearNum
+            else
+              return false
         getMonth: (yearNum, monthNum) ->
           return console.error MESSAGES.invalidParams if not yearNum or not monthNum
           bDataFactory.data.years[yearNum][monthNum]
