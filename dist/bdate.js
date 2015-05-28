@@ -184,6 +184,8 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
               count: Object.keys(bDataFactory.data.years).length
             },
             month: {
+              first: Object.keys(bDataFactory.data.years[yearNum])[0],
+              last: Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1],
               daysTotal: bDataFactory.data.years[yearNum][monthNum].days_total,
               startDay: bDataFactory.data.years[yearNum][monthNum].start_day,
               number: monthNum,
@@ -191,7 +193,7 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
               count: Object.keys(bDataFactory.data.years[yearNum]).length
             }
           };
-          return scope.data.viewedDate.days = scope.data.getDaysArr(scope.data.viewedDate.month, scope.data.viewedDate.year);
+          return scope.data.viewedDate.days = scope.data.getDaysArr(scope.data.viewedDate.year, scope.data.viewedDate.month);
         },
         daysOfWeek: {
           get: function() {
@@ -208,36 +210,63 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
           }
           return scope.data.today = today;
         },
-        getDaysArr: function(month, year) {
-          var arr, daysCount, daysInWeek, expectedWeeksCount, i, j, k, startDay;
-          daysCount = month.daysTotal;
-          startDay = month.startDay;
-          arr = [];
-          k = 1;
-          while (k <= daysCount) {
-            arr.push({
-              day: k,
-              month: month.number,
-              year: year.number
-            });
-            k++;
-          }
+        _getPrevMonthTailDaysArr: function(yearNum, monthNum, startDay) {
+          var i, isFirstMonth, isFirstYear, result;
+          result = [];
           i = 1;
+          isFirstMonth = bDateUtils.sourceCheckers.month.isFirstMonth(yearNum, monthNum);
+          isFirstYear = bDateUtils.sourceCheckers.year.isFirstYear(yearNum, monthNum);
           while (i <= startDay - 1) {
-            arr.unshift('');
+            result.unshift('');
             i++;
           }
+          return result;
+        },
+        _getNextMonthTailDaysArr: function(yearNum, monthNum, startDay, daysCount, daysArr) {
+          var daysInWeek, expectedWeeksCount, isLastMonth, isLastYear, j, result;
+          result = [];
           daysInWeek = 7;
-          expectedWeeksCount = Math.ceil(arr.length / daysInWeek);
-          if ((arr.length / daysInWeek) === Math.floor(arr.length / daysInWeek)) {
-            return arr;
+          expectedWeeksCount = Math.ceil(daysArr.length / daysInWeek);
+          if ((daysArr.length / daysInWeek) === Math.floor(daysArr.length / daysInWeek)) {
+            return result;
           }
-          j = arr.length;
+          isLastMonth = bDateUtils.sourceCheckers.month.isLastMonth(yearNum, monthNum);
+          isLastYear = bDateUtils.sourceCheckers.year.isLastYear(yearNum, monthNum);
+          j = daysArr.length;
           while (j < (expectedWeeksCount * daysInWeek)) {
-            arr.push('');
+            daysArr.push({
+              day: j - (daysCount + startDay - 2),
+              month: monthNum + 1,
+              year: yearNum
+            });
             j++;
           }
-          return arr;
+          return result;
+        },
+        _getMonthDaysArr: function(yearNum, monthNum, daysCount) {
+          var i, result;
+          result = [];
+          i = 1;
+          while (i <= daysCount) {
+            result.push({
+              day: i,
+              month: monthNum,
+              year: yearNum
+            });
+            i++;
+          }
+          return result;
+        },
+        getDaysArr: function(year, month) {
+          var currentMonthDaysArr, daysCount, nextMonthTailDaysArr, prevMonthTailDaysArr, result, startDay;
+          daysCount = +month.daysTotal;
+          startDay = +month.startDay;
+          prevMonthTailDaysArr = scope.data._getPrevMonthTailDaysArr(year.number, month.number, startDay);
+          currentMonthDaysArr = scope.data._getMonthDaysArr(year.number, month.number, daysCount);
+          result = prevMonthTailDaysArr.concat(currentMonthDaysArr);
+          nextMonthTailDaysArr = scope.data._getNextMonthTailDaysArr(year.number, month.number, startDay, daysCount, result);
+          result = currentMonthDaysArr.concat(nextMonthTailDaysArr);
+          return result;
         },
         goNextMonth: function(isForward) {
           var nextObj;
@@ -298,45 +327,56 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
       short: 'Вс'
     }
   ];
-  month = [
-    {
+  month = {
+    1: {
       name: 'Январь',
       short: 'Янв'
-    }, {
+    },
+    2: {
       name: 'Февраль',
       short: 'Фев'
-    }, {
+    },
+    3: {
       name: 'Март',
       short: 'Март'
-    }, {
+    },
+    4: {
       name: 'Апрель',
       short: 'Май'
-    }, {
+    },
+    5: {
       name: 'Май',
       short: 'Май'
-    }, {
+    },
+    6: {
       name: 'Июнь',
       short: 'Июнь'
-    }, {
+    },
+    7: {
       name: 'Июль',
       short: 'Июль'
-    }, {
+    },
+    8: {
       name: 'Август',
       short: 'Авг'
-    }, {
+    },
+    9: {
       name: 'Сентябрь',
       short: 'Сент'
-    }, {
+    },
+    10: {
       name: 'Октябрь',
       short: 'Окт'
-    }, {
+    },
+    11: {
       name: 'Ноябрь',
       short: 'Ноя'
-    }, {
+    },
+    12: {
       name: 'Декабрь',
       short: 'Дек'
     }
-  ];
+  };
   return exports = {
     daysOfWeek: daysOfWeek,
     month: month,

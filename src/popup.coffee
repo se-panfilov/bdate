@@ -36,13 +36,15 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
             number: yearNum
             count: Object.keys(bDataFactory.data.years).length
           month:
+            first: Object.keys(bDataFactory.data.years[yearNum])[0]
+            last: Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
             daysTotal: bDataFactory.data.years[yearNum][monthNum].days_total
             startDay: bDataFactory.data.years[yearNum][monthNum].start_day
             number: monthNum
             name: bDateUtils.getMonthName monthNum
             count: Object.keys(bDataFactory.data.years[yearNum]).length
 
-        scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.month, scope.data.viewedDate.year
+        scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.year, scope.data.viewedDate.month
       daysOfWeek:
         get: ->
           bDateUtils.daysOfWeek
@@ -52,34 +54,55 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
       setToday: (today) ->
         return console.error MESSAGES.invalidParams if not today
         scope.data.today = today
-      getDaysArr: (month, year) ->
-        daysCount = month.daysTotal
-        startDay = month.startDay
-
-        arr = []
-        k = 1
-        while k <= daysCount
-          arr.push
-            day: k
-            month: month.number
-            year: year.number
-          k++
-
+      _getPrevMonthTailDaysArr: (yearNum, monthNum, startDay) ->
+        result = []
         i = 1
+
+        isFirstMonth = bDateUtils.sourceCheckers.month.isFirstMonth yearNum, monthNum
+        isFirstYear = bDateUtils.sourceCheckers.year.isFirstYear yearNum, monthNum
+
         while i <= startDay - 1
-          arr.unshift ''
+          result.unshift ''
           i++
-
+        return result
+      _getNextMonthTailDaysArr: (yearNum, monthNum, startDay, daysCount, daysArr) ->
+        result = []
         daysInWeek = 7
-        expectedWeeksCount = Math.ceil arr.length / daysInWeek
-        return arr if (arr.length / daysInWeek) is Math.floor arr.length / daysInWeek
+        expectedWeeksCount = Math.ceil daysArr.length / daysInWeek
+        return result if (daysArr.length / daysInWeek) is Math.floor daysArr.length / daysInWeek
 
-        j = arr.length
+        isLastMonth = bDateUtils.sourceCheckers.month.isLastMonth yearNum, monthNum
+        isLastYear = bDateUtils.sourceCheckers.year.isLastYear yearNum, monthNum
+
+        j = daysArr.length
         while j < (expectedWeeksCount * daysInWeek)
-          arr.push ''
+          daysArr.push
+            day: j - (daysCount + startDay - 2)
+            month: monthNum + 1
+            year: yearNum
           j++
+        return result
+      _getMonthDaysArr: (yearNum, monthNum, daysCount) ->
+        result = []
+        i = 1
+        while i <= daysCount
+          result.push
+            day: i
+            month: monthNum
+            year: yearNum
+          i++
+        return result
+      getDaysArr: (year, month) ->
+        daysCount = +month.daysTotal
+        startDay = +month.startDay
 
-        return arr
+        prevMonthTailDaysArr = scope.data._getPrevMonthTailDaysArr year.number, month.number, startDay
+        currentMonthDaysArr = scope.data._getMonthDaysArr year.number, month.number, daysCount
+        result = prevMonthTailDaysArr.concat currentMonthDaysArr
+        nextMonthTailDaysArr = scope.data._getNextMonthTailDaysArr year.number, month.number, startDay, daysCount, result
+        result = currentMonthDaysArr.concat nextMonthTailDaysArr
+
+        return result
       goNextMonth: (isForward) ->
         nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
         if nextObj

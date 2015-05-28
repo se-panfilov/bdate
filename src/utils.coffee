@@ -11,20 +11,19 @@ angular.module 'bdate.utils', ['bdate.data']
     {name: 'Воскресенье', short: 'Вс'}
   ]
 
-  month = [
-    {name: 'Январь', short: 'Янв'}
-    {name: 'Февраль', short: 'Фев'}
-    {name: 'Март', short: 'Март'}
-    {name: 'Апрель', short: 'Май'}
-    {name: 'Май', short: 'Май'}
-    {name: 'Июнь', short: 'Июнь'}
-    {name: 'Июль', short: 'Июль'}
-    {name: 'Август', short: 'Авг'}
-    {name: 'Сентябрь', short: 'Сент'}
-    {name: 'Октябрь', short: 'Окт'}
-    {name: 'Ноябрь', short: 'Ноя'}
-    {name: 'Декабрь', short: 'Дек'}
-  ]
+  month =
+    1: {name: 'Январь', short: 'Янв'}
+    2: {name: 'Февраль', short: 'Фев'}
+    3: {name: 'Март', short: 'Март'}
+    4: {name: 'Апрель', short: 'Май'}
+    5: {name: 'Май', short: 'Май'}
+    6: {name: 'Июнь', short: 'Июнь'}
+    7: {name: 'Июль', short: 'Июль'}
+    8: {name: 'Август', short: 'Авг'}
+    9: {name: 'Сентябрь', short: 'Сент'}
+    10: {name: 'Октябрь', short: 'Окт'}
+    11: {name: 'Ноябрь', short: 'Ноя'}
+    12: {name: 'Декабрь', short: 'Дек'}
 
   return exports =
     daysOfWeek: daysOfWeek
