@@ -39,12 +39,15 @@ angular.module 'bdate.utils', ['bdate.data']
       return month[number].name
     sourceCheckers:
       month:
-        isMonthExist: (yearNum, monthNum)->
+        isMonthExist: (yearNum, monthNum) ->
           return console.error MESSAGES.invalidParams if not yearNum or not monthNum
           yearNum = +yearNum
           monthNum = +monthNum
           return false if not bDataFactory.data.years[yearNum]
           !!bDataFactory.data.years[yearNum][monthNum]
+        getMonth: (yearNum, monthNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum or not monthNum
+          bDataFactory.data.years[yearNum][monthNum]
         isFirstMonth: (yearNum, monthNum) ->
           yearNum = +yearNum
           monthNum = +monthNum
@@ -99,6 +102,9 @@ angular.module 'bdate.utils', ['bdate.data']
           return console.error MESSAGES.invalidParams if not yearNum
           yearNum = +yearNum
           !!bDataFactory.data.years[yearNum]
+        getYear: (yearNum) ->
+          return console.error MESSAGES.invalidParams if not yearNum
+          bDataFactory.data.years[yearNum]
         isFirstYear: (yearNum) ->
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data.years)[0]

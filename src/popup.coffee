@@ -60,9 +60,17 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         isFirstMonth = bDateUtils.sourceCheckers.month.isFirstMonth yearNum, monthNum
         isFirstYear = bDateUtils.sourceCheckers.year.isFirstYear yearNum, monthNum
+        prevMonthNum = monthNum - 1
+        isPrevMonthExist = bDateUtils.sourceCheckers.month.isMonthExist yearNum, prevMonthNum
+        prevMonth = bDateUtils.sourceCheckers.month.getMonth yearNum, prevMonthNum
 
         while i <= startDay - 1
-          result.unshift ''
+          #result.unshift ''
+          result.unshift
+            #day: i - (daysCount + startDay - 2)
+            day: i
+            month: monthNum - 1
+            year: yearNum
           i++
         return result
       _getNextMonthTailDaysArr: (yearNum, monthNum, startDay, daysCount, daysArr) ->
@@ -74,13 +82,13 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         isLastMonth = bDateUtils.sourceCheckers.month.isLastMonth yearNum, monthNum
         isLastYear = bDateUtils.sourceCheckers.year.isLastYear yearNum, monthNum
 
-        j = daysArr.length
-        while j < (expectedWeeksCount * daysInWeek)
+        i = daysArr.length
+        while i < (expectedWeeksCount * daysInWeek)
           daysArr.push
-            day: j - (daysCount + startDay - 2)
+            day: i - (daysCount + startDay - 2)
             month: monthNum + 1
             year: yearNum
-          j++
+          i++
         return result
       _getMonthDaysArr: (yearNum, monthNum, daysCount) ->
         result = []
@@ -100,7 +108,7 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         currentMonthDaysArr = scope.data._getMonthDaysArr year.number, month.number, daysCount
         result = prevMonthTailDaysArr.concat currentMonthDaysArr
         nextMonthTailDaysArr = scope.data._getNextMonthTailDaysArr year.number, month.number, startDay, daysCount, result
-        result = currentMonthDaysArr.concat nextMonthTailDaysArr
+        result = result.concat nextMonthTailDaysArr
 
         return result
       goNextMonth: (isForward) ->
@@ -122,4 +130,6 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
           scope.data.setViewedDate firstYear, bDateUtils.sourceCheckers.month.getFirstMonth firstYear
 
     #init
-    do -> scope.data.init(bDataFactory.data)
+    do ->
+      scope.data.init(bDataFactory.data)
+      scope.bDateUtils = bDateUtils
