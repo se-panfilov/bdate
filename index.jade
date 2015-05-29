@@ -38,7 +38,7 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='demo', lang='en')
                         input#inp_1(type="text")
                     .form-group
                         label.control-label(for="bdatepicker") Date
-                        bdatepicker(b-input-id="bdatepicker")
+                        bdatepicker(b-input-id="bdatepicker", b-model="resultModel", b-source="demoData")
                     .form-group
                         label.control-label(for="inp_2") Data
                         input#inp_2(type="text")
@@ -49,6 +49,10 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='demo', lang='en')
                         label.control-label(for="inp_4") Data
                         input#inp_4(type="text")
                     button(type="submit") Ok
+                    .result
+                        | This is the result:
+                        | &nbsp;
+                        span(ng-bind="resultModel")
                 .lorem
                     |Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
                     | totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
