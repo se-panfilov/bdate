@@ -1,17 +1,20 @@
-angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', '$document', function($filter, bDataFactory, $document) {
+angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', '$document', '$interval', function($filter, bDataFactory, $document, $interval) {
   return {
     restrict: 'E',
     replace: true,
     templateUrl: 'bdate.html',
     scope: {
-      source: '=',
+      bModel: '=',
+      bSource: '=',
       bRootId: '@?',
       bInputId: '@?',
       bPopupId: '@?'
     },
-    controller: function() {
-      return bDataFactory.makeDataQuery();
-    },
+    controller: ['$scope', function($scope) {
+      return scope.$watch('date.model', function() {
+        return bDataFactory.setData($scope.bSource);
+      });
+    }],
     link: function(scope, elem) {
       var processClick;
       scope.date = {
@@ -25,7 +28,8 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
         }
         dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime();
         formattedDate = $filter('date')(dateTime, bDataFactory.data.format);
-        return scope.date.viewed = formattedDate;
+        scope.date.viewed = formattedDate;
+        return scope.bModel = scope.date.viewed;
       });
       processClick = function(event) {
         var clickedElem, isOpen, isOutsideClick, popupElem;
@@ -56,92 +60,14 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
 }]);
 
 angular.module('bdate.data', []).factory('bDataFactory', function() {
-  var exports, sourceData;
-  sourceData = {
-    format: 'dd-MM-yyyy',
-    today: {
-      date: 1432537266825,
-      year: 2015,
-      month: 5,
-      day: 25,
-      day_of_week: 1
-    },
-    years: {
-      2013: {
-        1: {
-          days_total: 31,
-          start_day: 2
-        }
-      },
-      2014: {
-        5: {
-          days_total: 31,
-          start_day: 4
-        },
-        6: {
-          days_total: 30,
-          start_day: 7
-        },
-        7: {
-          days_total: 31,
-          start_day: 2
-        },
-        8: {
-          days_total: 31,
-          start_day: 5
-        },
-        9: {
-          days_total: 30,
-          start_day: 1
-        },
-        10: {
-          days_total: 31,
-          start_day: 3
-        }
-      },
-      2015: {
-        2: {
-          days_total: 28,
-          start_day: 7
-        },
-        3: {
-          days_total: 31,
-          start_day: 5
-        },
-        4: {
-          days_total: 30,
-          start_day: 3
-        },
-        5: {
-          days_total: 31,
-          start_day: 5
-        }
-      },
-      2016: {
-        1: {
-          days_total: 31,
-          start_day: 5
-        }
-      },
-      2017: {
-        1: {
-          days_total: 31,
-          start_day: 7
-        },
-        2: {
-          days_total: 28,
-          start_day: 3
-        }
-      }
-    }
-  };
+  var exports;
   return exports = {
     data: null,
+    isDataReady: function() {
+      return !!exports.data;
+    },
     setData: function(source) {
       return exports.data = source;
-    },
-    makeDataQuery: function() {
-      return exports.setData(sourceData);
     }
   };
 });
@@ -735,5 +661,5 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
   };
 }]);
 
-angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div id={{bRootId}} class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed ng-click=popup.togglePopup() readonly=readonly class=b_input><button type=button ng-click=popup.togglePopup() class=b_datepicker_button>H</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
+angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div id={{bRootId}} class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed ng-click=popup.togglePopup() ng-class=\"{b_datepicker_in_progress: !isDataReady}\" readonly=readonly class=b_input><button type=button ng-click=popup.togglePopup() class=b_datepicker_button>H</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
 $templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day &amp;&amp; date.month == dateModel.month &amp;&amp; date.year == dateModel.year}\" class=b_popup_day_btn></button></td></tr></table><div class=b_popup_today>Сегодня<button type=button ng-bind=\"data.today.date | date:data.format\" ng-click=popup.selectDate(bDateUtils.makeDateModel(data.today.date)) class=b_popup_today_btn></button></div></div>");}]);
