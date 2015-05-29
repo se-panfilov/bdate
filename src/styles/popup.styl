@@ -5,6 +5,7 @@ text_color = #373737
 
 .b_popup
   width 235px
+  font-size 1em
   background-color bg_color
   box-shadow 2px 4px 13px -2px #646464
   border 1px solid rgb(171, 171, 171)
@@ -42,12 +43,12 @@ text_color = #373737
       border 1px solid bg_color
       background-color bg_color
   .b_popup_days
-    margin 10px 30px
+    margin 10px 21px
   .b_popup_weeks
-    margin 10px 30px
+    margin 10px 21px
     .b_popup_week
       .b_popup_day
-        width 22px
+        width 25px
         height 23px
         display inline-block
         margin 1px
@@ -59,7 +60,7 @@ text_color = #373737
           background-color white
           outline 0
           display inline-block
-          width 22px
+          width 25px
           height 23px
           text-align center
           padding 0
@@ -77,6 +78,7 @@ text_color = #373737
             &:hover, &:active, &:focus, &:active:focus
               outline 0
           &.b_popup_today_day
+            text-decoration underline
             border-top-right-radius 8px
           &.b_popup_selected_day
             color white
@@ -86,7 +88,7 @@ text_color = #373737
               background-color bg_selected_day_color
   .b_popup_day_of_week
     display inline-block
-    width 22px
+    width 25px
     height 23px
     text-align center
     margin 1px
