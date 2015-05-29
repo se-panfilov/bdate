@@ -34,6 +34,15 @@
     "bootstrap": "~3.3.4"
   },
   "dependencies": {
-    "bdate": "~0.2.2"
-  }
+    "bdate": "~0.2.1"
+  },
+  "_release": "0.2.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.2.2",
+    "commit": "e7b9022ad0b3c90d7c601e08e667b488f78f9bd6"
+  },
+  "_source": "git://github.com/Light241/bdate.git",
+  "_target": "~0.2.2",
+  "_originalSource": "bdate"
 }
