@@ -1,15 +1,13 @@
 b_control_height = 25px
 bg_color = white
-bg_day_color = #2980b9
-bg_holiday_color = #ea6153
 bg_selected_day_color = #0089EC
 text_color = #373737
 
 .b_popup
   width 235px
   background-color bg_color
-  box-shadow: 0 0 15px #646464;
-  border: 1px solid rgb(171, 171, 171);
+  box-shadow 2px 4px 13px -2px #646464
+  border 1px solid rgb(171, 171, 171)
   position absolute
   color text_color
   border-bottom-right-radius 3px
@@ -22,6 +20,8 @@ text_color = #373737
       text-align center
     .b_popup_btn
       min-height b_control_height
+      &:hover, &:active, &:focus, &:active:focus
+        outline 0
     .b_btn_prev_container
       float left
       .b_btn_prev
@@ -38,8 +38,9 @@ text_color = #373737
       display inline-block
       cursor pointer
     .b_popup_btn
-      border 1px solid darken(bg_day_color, 5)
-      background-color bg_day_color
+      color text_color
+      border 1px solid bg_color
+      background-color bg_color
   .b_popup_days
     margin 10px 30px
   .b_popup_weeks
@@ -50,6 +51,8 @@ text_color = #373737
         height 23px
         display inline-block
         margin 1px
+        &.b_popup_today_day_container
+          background-color bg_selected_day_color
         .b_popup_day_btn
           color lighten(text_color, 40)
           border 1px solid white
@@ -74,11 +77,13 @@ text_color = #373737
             &:hover, &:active, &:focus, &:active:focus
               outline 0
           &.b_popup_today_day
-            color red
+            border-top-right-radius 8px
           &.b_popup_selected_day
             color white
             border 1px solid bg_selected_day_color
             background-color bg_selected_day_color
+            &:hover, &:active, &:focus, &:active:focus
+              background-color bg_selected_day_color
   .b_popup_day_of_week
     display inline-block
     width 22px
