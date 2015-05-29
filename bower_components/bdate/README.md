@@ -1,1 +1,0 @@
-Backend-based angular datepicker
