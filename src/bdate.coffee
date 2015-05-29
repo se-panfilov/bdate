@@ -12,9 +12,12 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     bPopupId: '@?'
   controller: ($scope) ->
 
+    $scope.isDataReady = false
+
     $scope.$watch 'bSource', ->
-      if ($scope.bSource and not (angular.equals {}, $scope.bSource))
+      if bDataFactory.isDataValid $scope.bSource
         bDataFactory.setData $scope.bSource
+        $scope.isDataReady = true
     , true
 
   link: (scope, elem) ->
@@ -45,6 +48,7 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       state:
         isOpen: false
       togglePopup: () ->
+        return if not scope.isDataReady
         scope.popup.state.isOpen = not scope.popup.state.isOpen
       hidePopup: () ->
         scope.popup.state.isOpen = false

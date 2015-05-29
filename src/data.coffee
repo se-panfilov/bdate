@@ -7,6 +7,7 @@ angular.module 'bdate.data', []
     isDataReady: ->
       !!exports.data and exports.isDataValid exports.data
     isDataValid: (data) ->
+      return false if not data or (angular.equals {}, data)
       return false if not data.format
       return false if not data.today
       return false if not data.years
