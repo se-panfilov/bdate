@@ -1,4 +1,4 @@
-angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', '$document', '$interval', function($filter, bDataFactory, $document, $interval) {
+angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', '$document', function($filter, bDataFactory, $document) {
   return {
     restrict: 'E',
     replace: true,
@@ -11,9 +11,11 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       bPopupId: '@?'
     },
     controller: ['$scope', function($scope) {
-      return scope.$watch('date.model', function() {
-        return bDataFactory.setData($scope.bSource);
-      });
+      return $scope.$watch('bSource', function() {
+        if ($scope.bSource && !(angular.equals({}, $scope.bSource))) {
+          return bDataFactory.setData($scope.bSource);
+        }
+      }, true);
     }],
     link: function(scope, elem) {
       var processClick;
@@ -59,22 +61,45 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
   };
 }]);
 
-angular.module('bdate.data', []).factory('bDataFactory', function() {
+angular.module('bdate.data', []).factory('bDataFactory', ['MESSAGES', function(MESSAGES) {
   var exports;
   return exports = {
     data: null,
     isDataReady: function() {
-      return !!exports.data;
+      return !!exports.data && exports.isDataValid(exports.data);
+    },
+    isDataValid: function(data) {
+      if (!data.format) {
+        return false;
+      }
+      if (!data.today) {
+        return false;
+      }
+      if (!data.years) {
+        return false;
+      }
+      if (!Object.keys(data.years)[0]) {
+        return false;
+      }
+      if (!Object.keys(Object.keys(data.years)[0])[0]) {
+        return false;
+      }
+      return true;
     },
     setData: function(source) {
+      if (!exports.isDataValid(source)) {
+        console.error(MESSAGES.sourceDataNotValid);
+        return false;
+      }
       return exports.data = source;
     }
   };
-});
+}]);
 
 angular.module('bdate', ['bdate.datepicker']).constant('MESSAGES', {
   invalidParams: 'Invalid params',
-  errorOnChangeMonthOrYear: 'cannot change month or year'
+  errorOnChangeMonthOrYear: 'cannot change month or year',
+  sourceDataNotValid: 'source data(json)is not valid'
 });
 
 angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).directive('bdatePopup', ['bDateUtils', 'bDataFactory', 'MESSAGES', function(bDateUtils, bDataFactory, MESSAGES) {
@@ -277,9 +302,18 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
         }
       };
       (function() {
-        scope.data.init(bDataFactory.data);
+        if (bDataFactory.isDataReady(bDataFactory.data)) {
+          scope.data.init(bDataFactory.data);
+        }
         return scope.bDateUtils = bDateUtils;
       })();
+      scope.$watch((function() {
+        return bDataFactory.data;
+      }), (function() {
+        if (bDataFactory.isDataReady(bDataFactory.data)) {
+          return scope.data.init(bDataFactory.data);
+        }
+      }), true);
       return scope.$watch('popupState.isOpen', function() {
         if (scope.popupState.isOpen && (scope.dateModel && !angular.equals({}, scope.dateModel))) {
           scope.data.setDateModel(scope.dateModel);

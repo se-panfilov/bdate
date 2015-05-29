@@ -155,8 +155,16 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
     #init
     do ->
-      scope.data.init(bDataFactory.data)
+      if bDataFactory.isDataReady bDataFactory.data
+        scope.data.init(bDataFactory.data)
       scope.bDateUtils = bDateUtils
+
+    scope.$watch (->
+      bDataFactory.data
+    ), (->
+      if bDataFactory.isDataReady(bDataFactory.data)
+        scope.data.init bDataFactory.data
+      ), true
 
     scope.$watch 'popupState.isOpen', ->
       if scope.popupState.isOpen and (scope.dateModel and not angular.equals {}, scope.dateModel)

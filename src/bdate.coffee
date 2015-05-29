@@ -1,6 +1,6 @@
 angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']
 
-.directive 'bdatepicker', ($filter, bDataFactory, $document, $interval) ->
+.directive 'bdatepicker', ($filter, bDataFactory, $document) ->
   restrict: 'E'
   replace: true
   templateUrl: 'bdate.html'
@@ -12,35 +12,10 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     bPopupId: '@?'
   controller: ($scope) ->
 
-#    source =
-#      stopFetSourceInterval: (intId) ->
-#        $interval.cancel intId
-#        intId = null
-#      getSourceDataInInterval: ->
-#        minute = 60000
-#
-#        retry = 0
-#        retriesStep = 100
-#        retriesLimit = minute / 3
-#
-#        getSourceInt = $interval (->
-#          console.log retry
-#          if $scope.bSource
-#            bDataFactory.setData $scope.bSource
-#            source.stopFetSourceInterval getSourceInt
-#
-#          if retry >= retriesLimit
-#            source.stopFetSourceInterval getSourceInt
-#
-#          retry += retriesStep
-#        ), retriesStep
-#    getSourceData: ->
-#      if $scope.bSource
-#        bDataFactory.setData $scope.bSource
-#      else
-
-    scope.$watch 'date.model', ->
-      bDataFactory.setData $scope.bSource
+    $scope.$watch 'bSource', ->
+      if ($scope.bSource and not (angular.equals {}, $scope.bSource))
+        bDataFactory.setData $scope.bSource
+    , true
 
   link: (scope, elem) ->
     scope.date =
