@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var jade = require('gulp-jade');
-var jshint = require('gulp-jshint');
 var stylus = require('gulp-stylus');
 var nib = require('nib');
 var connect = require('gulp-connect');

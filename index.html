@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="msapplication-square70x70logo" content="img/ico/smalltile.png">
     <meta name="application-name" content="bdate">
+    <base href="/bdate/">
     <link rel="shortcut icon" href="img/ico/favicon.ico">
     <link rel="icon" href="img/ico/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="img/ico/favicon.ico" type="image/x-icon">
@@ -55,7 +56,7 @@
           </div>
           <div class="form-group">
             <label for="bdatepicker" class="control-label">Date</label>
-            <bdatepicker b-input-id="bdatepicker"></bdatepicker>
+            <bdatepicker b-input-id="bdatepicker" b-model="resultModel" b-source="demoData"></bdatepicker>
           </div>
           <div class="form-group">
             <label for="inp_2" class="control-label">Data</label>
@@ -70,6 +71,10 @@
             <input id="inp_4" type="text">
           </div>
           <button type="submit">Ok</button>
+          <div class="result">
+            This is the result:
+            &nbsp;<span ng-bind="resultModel"></span>
+          </div>
         </form>
         <div class="lorem">
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
