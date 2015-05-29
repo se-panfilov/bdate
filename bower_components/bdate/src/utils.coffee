@@ -53,7 +53,8 @@ angular.module 'bdate.utils', ['bdate.data']
           return false if not bDataFactory.data.years[yearNum]
           !!bDataFactory.data.years[yearNum][monthNum]
         isPrevMonthExist: (yearNum, curMonthNum) ->
-          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          return false if not yearNum or not curMonthNum
+#          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
           curMonthNum = +curMonthNum
 
@@ -94,7 +95,8 @@ angular.module 'bdate.utils', ['bdate.data']
             else
               return null
         isNextMonthExist: (yearNum, curMonthNum) ->
-          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          return false if not yearNum or not curMonthNum
+#          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
           curMonthNum = +curMonthNum
 

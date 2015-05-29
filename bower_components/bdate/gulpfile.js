@@ -14,6 +14,7 @@ var minifyCss = require('gulp-minify-css');
 var coffee = require('gulp-coffee');
 var templateCache = require('gulp-angular-templatecache');
 var mergeStream = require('merge-stream');
+var cssBase64 = require('gulp-css-base64');
 
 var src = {
     styles: ['src/styles/**/*.styl'],
@@ -78,6 +79,9 @@ gulp.task('stylus', function () {
     return gulp.src(src.styles, {base: 'src'})
         .pipe(concat('bdate.styl'))
         .pipe(stylus({use: [nib()], compress: true}))
+        .pipe(cssBase64({
+            baseDir: "img"
+        }))
         .on('error', console.log)
         .pipe(minifyCss())
         .pipe(gulp.dest(dest.dist));

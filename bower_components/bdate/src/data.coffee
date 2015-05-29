@@ -1,68 +1,22 @@
 angular.module 'bdate.data', []
 
-.factory 'bDataFactory', () ->
-
-  #TODO this is a mock
-  sourceData =
-    format: 'dd-MM-yyyy'
-    today:
-      date: 1432537266825
-      year: 2015
-      month: 5
-      day: 25
-      day_of_week: 1
-    years:
-      2013:
-        1:
-          days_total: 31
-          start_day: 2
-      2014:
-        5:
-          days_total: 31
-          start_day: 4
-        6:
-          days_total: 30
-          start_day: 7
-        7:
-          days_total: 31
-          start_day: 2
-        8:
-          days_total: 31
-          start_day: 5
-        9:
-          days_total: 30
-          start_day: 1
-        10:
-          days_total: 31
-          start_day: 3
-      2015:
-        2:
-          days_total: 28
-          start_day: 7
-        3:
-          days_total: 31
-          start_day: 5
-        4:
-          days_total: 30
-          start_day: 3
-        5:
-          days_total: 31
-          start_day: 5
-      2016:
-        1:
-          days_total: 31
-          start_day: 5
-      2017:
-        1:
-          days_total: 31
-          start_day: 7
-        2:
-          days_total: 28
-          start_day: 3
+.factory 'bDataFactory', (MESSAGES) ->
 
   return exports =
     data: null
+    isDataReady: ->
+      !!exports.data and exports.isDataValid exports.data
+    isDataValid: (data) ->
+      return false if not data or (angular.equals {}, data)
+      return false if not data.format
+      return false if not data.today
+      return false if not data.years
+      return false if not Object.keys(data.years)[0]
+      return false if not Object.keys(Object.keys(data.years)[0])[0]
+      return true
     setData: (source) ->
+      if not exports.isDataValid source
+        console.error MESSAGES.sourceDataNotValid
+        return false
+
       exports.data = source
-    makeDataQuery: ->
-      exports.setData sourceData

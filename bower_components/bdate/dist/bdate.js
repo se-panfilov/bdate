@@ -1,18 +1,26 @@
-angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', function($filter, bDataFactory) {
+angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']).directive('bdatepicker', ['$filter', 'bDataFactory', '$document', function($filter, bDataFactory, $document) {
   return {
     restrict: 'E',
     replace: true,
     templateUrl: 'bdate.html',
     scope: {
-      source: '=',
+      bModel: '=',
+      bSource: '=',
       bRootId: '@?',
       bInputId: '@?',
       bPopupId: '@?'
     },
-    controller: function() {
-      return bDataFactory.makeDataQuery();
-    },
-    link: function(scope) {
+    controller: ['$scope', function($scope) {
+      $scope.isDataReady = false;
+      return $scope.$watch('bSource', function() {
+        if (bDataFactory.isDataValid($scope.bSource)) {
+          bDataFactory.setData($scope.bSource);
+          return $scope.isDataReady = true;
+        }
+      }, true);
+    }],
+    link: function(scope, elem) {
+      var processClick;
       scope.date = {
         viewed: '',
         model: {}
@@ -24,114 +32,82 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
         }
         dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime();
         formattedDate = $filter('date')(dateTime, bDataFactory.data.format);
-        return scope.date.viewed = formattedDate;
+        scope.date.viewed = formattedDate;
+        return scope.bModel = scope.date.viewed;
       });
-      scope.popup = {
-        state: {
-          isOpen: false
+      processClick = function(event) {
+        var clickedElem, isOpen, isOutsideClick, popupElem;
+        isOpen = scope.popup.state.isOpen;
+        clickedElem = event.target;
+        popupElem = elem;
+        isOutsideClick = (popupElem !== clickedElem) && !(popupElem[0].contains(clickedElem));
+        if (isOpen && isOutsideClick) {
+          return scope.$apply(function() {
+            return scope.popup.hidePopup();
+          });
         }
       };
-      return scope.togglePopup = function() {
-        return scope.popup.state.isOpen = !scope.popup.state.isOpen;
+      $document.on('click', processClick);
+      return scope.popup = {
+        state: {
+          isOpen: false
+        },
+        togglePopup: function() {
+          if (!scope.isDataReady) {
+            return;
+          }
+          return scope.popup.state.isOpen = !scope.popup.state.isOpen;
+        },
+        hidePopup: function() {
+          return scope.popup.state.isOpen = false;
+        }
       };
     }
   };
 }]);
 
-angular.module('bdate.data', []).factory('bDataFactory', function() {
-  var exports, sourceData;
-  sourceData = {
-    format: 'dd-MM-yyyy',
-    today: {
-      date: 1432537266825,
-      year: 2015,
-      month: 5,
-      day: 25,
-      day_of_week: 1
-    },
-    years: {
-      2013: {
-        1: {
-          days_total: 31,
-          start_day: 2
-        }
-      },
-      2014: {
-        5: {
-          days_total: 31,
-          start_day: 4
-        },
-        6: {
-          days_total: 30,
-          start_day: 7
-        },
-        7: {
-          days_total: 31,
-          start_day: 2
-        },
-        8: {
-          days_total: 31,
-          start_day: 5
-        },
-        9: {
-          days_total: 30,
-          start_day: 1
-        },
-        10: {
-          days_total: 31,
-          start_day: 3
-        }
-      },
-      2015: {
-        2: {
-          days_total: 28,
-          start_day: 7
-        },
-        3: {
-          days_total: 31,
-          start_day: 5
-        },
-        4: {
-          days_total: 30,
-          start_day: 3
-        },
-        5: {
-          days_total: 31,
-          start_day: 5
-        }
-      },
-      2016: {
-        1: {
-          days_total: 31,
-          start_day: 5
-        }
-      },
-      2017: {
-        1: {
-          days_total: 31,
-          start_day: 7
-        },
-        2: {
-          days_total: 28,
-          start_day: 3
-        }
-      }
-    }
-  };
+angular.module('bdate.data', []).factory('bDataFactory', ['MESSAGES', function(MESSAGES) {
+  var exports;
   return exports = {
     data: null,
-    setData: function(source) {
-      return exports.data = source;
+    isDataReady: function() {
+      return !!exports.data && exports.isDataValid(exports.data);
     },
-    makeDataQuery: function() {
-      return exports.setData(sourceData);
+    isDataValid: function(data) {
+      if (!data || (angular.equals({}, data))) {
+        return false;
+      }
+      if (!data.format) {
+        return false;
+      }
+      if (!data.today) {
+        return false;
+      }
+      if (!data.years) {
+        return false;
+      }
+      if (!Object.keys(data.years)[0]) {
+        return false;
+      }
+      if (!Object.keys(Object.keys(data.years)[0])[0]) {
+        return false;
+      }
+      return true;
+    },
+    setData: function(source) {
+      if (!exports.isDataValid(source)) {
+        console.error(MESSAGES.sourceDataNotValid);
+        return false;
+      }
+      return exports.data = source;
     }
   };
-});
+}]);
 
 angular.module('bdate', ['bdate.datepicker']).constant('MESSAGES', {
   invalidParams: 'Invalid params',
-  errorOnChangeMonthOrYear: 'cannot change month or year'
+  errorOnChangeMonthOrYear: 'cannot change month or year',
+  sourceDataNotValid: 'source data(json)is not valid'
 });
 
 angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).directive('bdatePopup', ['bDateUtils', 'bDataFactory', 'MESSAGES', function(bDateUtils, bDataFactory, MESSAGES) {
@@ -334,9 +310,18 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
         }
       };
       (function() {
-        scope.data.init(bDataFactory.data);
+        if (bDataFactory.isDataReady(bDataFactory.data)) {
+          scope.data.init(bDataFactory.data);
+        }
         return scope.bDateUtils = bDateUtils;
       })();
+      scope.$watch((function() {
+        return bDataFactory.data;
+      }), (function() {
+        if (bDataFactory.isDataReady(bDataFactory.data)) {
+          return scope.data.init(bDataFactory.data);
+        }
+      }), true);
       return scope.$watch('popupState.isOpen', function() {
         if (scope.popupState.isOpen && (scope.dateModel && !angular.equals({}, scope.dateModel))) {
           scope.data.setDateModel(scope.dateModel);
@@ -467,7 +452,7 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
         isPrevMonthExist: function(yearNum, curMonthNum) {
           var isFirstMonth, isFirstYear, lastMonthOfPrevYearNum, prevMonthNum, prevYearNum;
           if (!yearNum || !curMonthNum) {
-            return console.error(MESSAGES.invalidParams);
+            return false;
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;
@@ -528,7 +513,7 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
         isNextMonthExist: function(yearNum, curMonthNum) {
           var firstMonthOfNextYearNum, isLastMonth, isLastYear, nextMonthNum, nextYearNum;
           if (!yearNum || !curMonthNum) {
-            return console.error(MESSAGES.invalidParams);
+            return false;
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;
@@ -718,5 +703,5 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
   };
 }]);
 
-angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div id={{bRootId}} class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed ng-click=togglePopup() readonly=readonly class=b_input><button type=button ng-click=togglePopup() class=b_datepicker_button>H</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
-$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\"><<</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\"><</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">></button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">>></button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day &amp;&amp; date.month == dateModel.month &amp;&amp; date.year == dateModel.year}\" class=b_popup_day_btn></button></td></tr></table><div class=b_popup_today>Сегодня<button type=button ng-bind=\"data.today.date | date:data.format\" ng-click=popup.selectDate(bDateUtils.makeDateModel(data.today.date)) class=b_popup_today_btn></button></div></div>");}]);
+angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div id={{bRootId}} ng-class=\"{b_datepicker_in_progress: !isDataReady}\" class=b_datepicker_root><input type=text id={{bInputId}} ng-model=date.viewed ng-click=popup.togglePopup() ng-disabled=!isDataReady readonly=readonly class=b_datepicker_input><button type=button ng-click=popup.togglePopup() ng-disabled=!isDataReady class=b_datepicker_button>&nbsp;</button><bdate-popup id={{bPopupId}} popup-state=popup.state date-model=date.model></bdate-popup></div>");
+$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\">&#9664;&#9664;</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\">&#9664;</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">&#9654;</button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">&#9654;&#9654;</button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" ng-class=\"{b_popup_today_day_container: date.isToday}\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day &amp;&amp; date.month == dateModel.month &amp;&amp; date.year == dateModel.year}\" class=b_popup_day_btn></button></td></tr></table><div class=b_popup_today>Сегодня<button type=button ng-bind=\"data.today.date | date:data.format\" ng-click=popup.selectDate(bDateUtils.makeDateModel(data.today.date)) class=b_popup_today_btn></button></div></div>");}]);
