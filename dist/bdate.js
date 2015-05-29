@@ -444,7 +444,7 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
         isPrevMonthExist: function(yearNum, curMonthNum) {
           var isFirstMonth, isFirstYear, lastMonthOfPrevYearNum, prevMonthNum, prevYearNum;
           if (!yearNum || !curMonthNum) {
-            return console.error(MESSAGES.invalidParams);
+            return false;
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;
@@ -505,7 +505,7 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
         isNextMonthExist: function(yearNum, curMonthNum) {
           var firstMonthOfNextYearNum, isLastMonth, isLastYear, nextMonthNum, nextYearNum;
           if (!yearNum || !curMonthNum) {
-            return console.error(MESSAGES.invalidParams);
+            return false;
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;

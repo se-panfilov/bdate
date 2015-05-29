@@ -79,6 +79,12 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
             isOtherMonth: true
           i++
         return result
+#      isNextMonthExist: (yearNum, monthNum) ->
+#        return if not scope.data.isDateModelReady
+#        bDateUtils.sourceCheckers.month.isNextMonthExist yearNum, monthNum
+#      isPrevMonthExist: (yearNum, monthNum) ->
+#        return if not scope.data.isDateModelReady
+#        bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum
       _getNextMonthTailDaysArr: (yearNum, monthNum, startDay, daysCount, daysArr) ->
         result = []
         daysInWeek = 7
