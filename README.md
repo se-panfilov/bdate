@@ -8,3 +8,7 @@ bDate
 
 Backend-based angular datepicker
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
