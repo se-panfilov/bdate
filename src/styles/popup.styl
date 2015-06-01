@@ -4,7 +4,7 @@ bg_selected_day_color = #0089EC
 text_color = #373737
 
 .b_popup
-  width 235px
+  width 265px
   font-size 1em
   background-color bg_color
   box-shadow 2px 4px 13px -2px #646464
@@ -16,8 +16,10 @@ text_color = #373737
   z-index 10
   .b_popup_controls
     text-align center
-    height b_control_height
+    min-height b_control_height
+    height auto
     margin-bottom 5px
+    overflow hidden
     *
       text-align center
     .b_popup_btn
@@ -44,9 +46,9 @@ text_color = #373737
       border 1px solid bg_color
       background-color bg_color
   .b_popup_days
-    margin 10px 21px
+    margin 10px 37px
   .b_popup_weeks
-    margin 10px 21px
+    margin 10px 37px
     .b_popup_week
       .b_popup_day
         width 25px
@@ -75,6 +77,7 @@ text_color = #373737
               outline 0
             &:active
               background-color #ebebeb
+              text-decoration underline
               outline 0
             &:hover, &:active, &:focus, &:active:focus
               outline 0
@@ -83,6 +86,7 @@ text_color = #373737
             border-top-right-radius 8px
           &.b_popup_selected_day
             color white
+            text-decoration underline
             border 1px solid bg_selected_day_color
             background-color bg_selected_day_color
             &:hover, &:active, &:focus, &:active:focus
