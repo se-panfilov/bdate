@@ -36,25 +36,49 @@ angular.module 'bdate.utils', ['bdate.data']
         i++
       return result
     getMonthName: (number)->
-      return monthObj[number].name
+      return exports.month[number].name
     makeDateModel: (datetime) ->
-      #TODO fix select today
+#TODO fix select today
       date = new Date(datetime)
-      day = date.getUTCDate()
-      monthObj = date.getMonth() + 1
+      day = date.getDate()
+      #TODO It's not clear what use to - .getDate() or .getUtcDate()?
+      #day = date.getUTCDate()
+      month = date.getMonth() + 1
       year = date.getFullYear()
-      return {day: day, month: monthObj, year: year}
+      return {day: day, month: month, year: year}
+    stringToDate: (dateStr, format, delimiter) ->
+      formatLowerCase = format.toLowerCase()
+      formatItems = formatLowerCase.split delimiter
+      dateItems = dateStr.split delimiter
+      monthIndex = formatItems.indexOf 'mm'
+      dayIndex = formatItems.indexOf 'dd'
+      yearIndex = formatItems.indexOf 'yyyy'
+
+      year = +dateItems[yearIndex]
+      month = +dateItems[monthIndex] - 1
+      day = +dateItems[dayIndex]
+
+      return false if month > 12
+      return false if day > 31
+
+      return new Date year, month, day
+    isValidDate: (date)->
+      if not angular.isDate
+        date = new Date date
+
+      return false if isNaN date.getTime()
     sourceCheckers:
       month:
         isMonthExist: (yearNum, monthNum) ->
           return console.error MESSAGES.invalidParams if not yearNum or not monthNum
           yearNum = +yearNum
           monthNum = +monthNum
+          return false if not bDataFactory.isDataReady()
           return false if not bDataFactory.data.years[yearNum]
           !!bDataFactory.data.years[yearNum][monthNum]
         isPrevMonthExist: (yearNum, curMonthNum) ->
           return false if not yearNum or not curMonthNum
-#          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          #          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
           curMonthNum = +curMonthNum
 
@@ -96,7 +120,7 @@ angular.module 'bdate.utils', ['bdate.data']
               return null
         isNextMonthExist: (yearNum, curMonthNum) ->
           return false if not yearNum or not curMonthNum
-#          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          #          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
           curMonthNum = +curMonthNum
 
@@ -138,19 +162,24 @@ angular.module 'bdate.utils', ['bdate.data']
               return null
         getMonth: (yearNum, monthNum) ->
           return console.error MESSAGES.invalidParams if not yearNum or not monthNum
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           bDataFactory.data.years[yearNum][monthNum]
         isFirstMonth: (yearNum, monthNum) ->
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           yearNum = +yearNum
           monthNum = +monthNum
           monthNum is +Object.keys(bDataFactory.data.years[yearNum])[0]
         getFirstMonth: (yearNum) ->
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           yearNum = +yearNum
           +Object.keys(bDataFactory.data.years[yearNum])[0]
         isLastMonth: (yearNum, monthNum) ->
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           yearNum = +yearNum
           monthNum = +monthNum
           monthNum is +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
         getLastMonth: (yearNum) ->
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           yearNum = +yearNum
           +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
         getNextAvailableMonth: (isForward, yearNum, monthNum) ->
@@ -188,20 +217,25 @@ angular.module 'bdate.utils', ['bdate.data']
       year:
         isYearExist: (yearNum) ->
           return console.error MESSAGES.invalidParams if not yearNum
+          return false if not bDataFactory.isDataReady()
           yearNum = +yearNum
           !!bDataFactory.data.years[yearNum]
         getYear: (yearNum) ->
           return console.error MESSAGES.invalidParams if not yearNum
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           bDataFactory.data.years[yearNum]
         isFirstYear: (yearNum) ->
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data.years)[0]
         getFirstYear: ->
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           +Object.keys(bDataFactory.data.years)[0]
         isLastYear: (yearNum) ->
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1]
         getLastYear: ->
+          return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady()
           +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1]
         getNextAvailableYear: (isForward, yearNum, monthNum) ->
           yearNum = +yearNum

@@ -1,6 +1,6 @@
 angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']
 
-.directive 'bdatepicker', ($filter, bDataFactory, $document) ->
+.directive 'bdatepicker', ($filter, bDataFactory, bDateUtils, $document) ->
   restrict: 'E'
   replace: true
   templateUrl: 'bdate.html'
@@ -11,7 +11,6 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     bInputId: '@?'
     bPopupId: '@?'
   controller: ($scope) ->
-
     $scope.isDataReady = false
 
     $scope.$watch 'bSource', ->
@@ -25,10 +24,30 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       viewed: ''
       model: {}
 
+    doNotUpdateModelTwice = false;
+    
+    scope.$watch 'bModel', (newVal, oldVal) ->
+      isSameDate = scope.bModel is scope.date.viewed
+      isEmptyModel = scope.bModel is '' or scope.bModel is ' ' or not scope.bModel
+      return false if isSameDate or isEmptyModel
+
+      bModelDate = bDateUtils.stringToDate scope.bModel, bDataFactory.data.format, bDataFactory.data.delimiter
+      return false if not angular.isDate bModelDate
+
+      scope.date.viewed = scope.bModel
+      doNotUpdateModelTwice = true
+      scope.date.model =
+        day: bModelDate.getDate()
+        month: bModelDate.getMonth() + 1
+        year: bModelDate.getFullYear()
+
     scope.$watch 'date.model', ->
       return if angular.equals {}, scope.date.model
+      if doNotUpdateModelTwice
+        return doNotUpdateModelTwice = false
+
       dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime()
-      formattedDate = $filter('date')(dateTime, bDataFactory.data.format)
+      formattedDate = $filter('date') dateTime, bDataFactory.data.format
       scope.date.viewed = formattedDate
       scope.bModel = scope.date.viewed
 
