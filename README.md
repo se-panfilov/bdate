@@ -17,19 +17,45 @@ Backend-driven Angularjs datepicker
 </div>
 ```
 
-Required:
+**Required**:
 
 `b-model` - Object where selected date will be store (also may be used as init value)
 
 `b-source` - Object (json) where we take available date ranges
 
-Optional:
+**Optional**:
 
 `b-input-id` - Provides id for directive's input element
 
 `b-root-id` - Provides id for directive's root element
 
 `b-popup-id` - Provides id for directive's popup element
+
+**Expected json format**:
+
+```json
+
+{
+    "format": "dd-MM-yyyy",
+    "delimiter": "-",
+    "today": {
+        "date": 1432537266825,
+        "year": 2015,
+        "month": 5,
+        "day": 25,
+        "day_of_week": 1
+    },
+    "years": {
+        "2015": {
+            "2": {
+                "days_total": 28,
+                "start_day": 7
+            } 
+        }
+    }
+}
+```
+
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
