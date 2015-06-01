@@ -15,7 +15,8 @@ Backend-driven Angularjs datepicker
   <label for="bdatepicker">Date</label>
   <bdatepicker b-input-id="bdatepicker" b-model="resultModel" b-source="demoData"></bdatepicker>
 </div>
-`
+```
+
 Required:
 `b-model` - Object where selected date will be store (also may be used as init value)
 `b-source` - Object (json) where we take available date ranges
