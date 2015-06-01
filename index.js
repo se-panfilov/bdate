@@ -4,11 +4,11 @@ angular.module('app', [
     'bdate'
 ])
 
-    .controller('IndexPageCtrl', function ($scope) {
+    .controller('IndexPageCtrl', function ($scope, $timeout) {
 
         $scope.demoData = {};
 
-        $timeout(function () {
+        $timeout(function(){
             $scope.demoData = {
                 "format": "dd-MM-yyyy",
                 "delimiter": "-",
