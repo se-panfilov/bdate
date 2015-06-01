@@ -10,7 +10,7 @@ bDate
 Backend-driven Angularjs datepicker
 -------------
 
-```
+```html
 <div>
   <label for="bdatepicker">Date</label>
   <bdatepicker b-input-id="bdatepicker" b-model="resultModel" b-source="demoData"></bdatepicker>
