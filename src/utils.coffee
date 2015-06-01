@@ -36,16 +36,16 @@ angular.module 'bdate.utils', ['bdate.data']
         i++
       return result
     getMonthName: (number)->
-      return monthObj[number].name
+      return exports.month[number].name
     makeDateModel: (datetime) ->
 #TODO fix select today
       date = new Date(datetime)
       day = date.getDate()
       #TODO It's not clear what use to - .getDate() or .getUtcDate()?
       #day = date.getUTCDate()
-      monthObj = date.getMonth() + 1
+      month = date.getMonth() + 1
       year = date.getFullYear()
-      return {day: day, month: monthObj, year: year}
+      return {day: day, month: month, year: year}
     stringToDate: (dateStr, format, delimiter) ->
       formatLowerCase = format.toLowerCase()
       formatItems = formatLowerCase.split delimiter

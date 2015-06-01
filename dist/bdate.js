@@ -449,17 +449,17 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
       return result;
     },
     getMonthName: function(number) {
-      return monthObj[number].name;
+      return exports.month[number].name;
     },
     makeDateModel: function(datetime) {
-      var date, day, year;
+      var date, day, month, year;
       date = new Date(datetime);
       day = date.getDate();
-      monthObj = date.getMonth() + 1;
+      month = date.getMonth() + 1;
       year = date.getFullYear();
       return {
         day: day,
-        month: monthObj,
+        month: month,
         year: year
       };
     },
