@@ -38,12 +38,35 @@ angular.module 'bdate.utils', ['bdate.data']
     getMonthName: (number)->
       return monthObj[number].name
     makeDateModel: (datetime) ->
-      #TODO fix select today
+#TODO fix select today
       date = new Date(datetime)
-      day = date.getUTCDate()
+      day = date.getDate()
+      #TODO It's not clear what use to - .getDate() or .getUtcDate()?
+      #day = date.getUTCDate()
       monthObj = date.getMonth() + 1
       year = date.getFullYear()
       return {day: day, month: monthObj, year: year}
+    stringToDate: (dateStr, format, delimiter) ->
+      formatLowerCase = format.toLowerCase()
+      formatItems = formatLowerCase.split delimiter
+      dateItems = dateStr.split delimiter
+      monthIndex = formatItems.indexOf 'mm'
+      dayIndex = formatItems.indexOf 'dd'
+      yearIndex = formatItems.indexOf 'yyyy'
+
+      year = +dateItems[yearIndex]
+      month = +dateItems[monthIndex] - 1
+      day = +dateItems[dayIndex]
+
+      return false if month > 12
+      return false if day > 31
+
+      return new Date year, month, day
+    isValidDate: (date)->
+      if not angular.isDate
+        date = new Date date
+
+      return false if isNaN date.getTime()
     sourceCheckers:
       month:
         isMonthExist: (yearNum, monthNum) ->
@@ -54,7 +77,7 @@ angular.module 'bdate.utils', ['bdate.data']
           !!bDataFactory.data.years[yearNum][monthNum]
         isPrevMonthExist: (yearNum, curMonthNum) ->
           return false if not yearNum or not curMonthNum
-#          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          #          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
           curMonthNum = +curMonthNum
 
@@ -96,7 +119,7 @@ angular.module 'bdate.utils', ['bdate.data']
               return null
         isNextMonthExist: (yearNum, curMonthNum) ->
           return false if not yearNum or not curMonthNum
-#          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
+          #          return console.error MESSAGES.invalidParams if not yearNum or not curMonthNum
           yearNum = +yearNum
           curMonthNum = +curMonthNum
 
