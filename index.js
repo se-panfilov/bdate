@@ -8,6 +8,7 @@ angular.module('demo', [
 
         $scope.demoData = {
             "format": "dd-MM-yyyy",
+            "delimiter": "-",
             "today": {
                 "date": 1432537266825,
                 "year": 2015,
@@ -84,6 +85,6 @@ angular.module('demo', [
                 }
             }
         };
-        $scope.resultModel = null;
+        $scope.resultModel = '';
     })
 ;
