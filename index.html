@@ -62,8 +62,8 @@
               <bdatepicker b-input-id="bdatepicker" b-model="resultModel" b-source="demoData"></bdatepicker>
             </div>
             <div class="input-group">
-              <label for="inp_2" class="control-label">Data</label>
-              <input id="inp_2" type="text" class="form-control">
+              <label for="inp_2" class="control-label">Data {{resultModel}}</label>
+              <input id="inp_2" type="text" ng-model="resultModel" class="form-control">
             </div>
             <div class="input-group">
               <label for="inp_3" class="control-label">Data</label>

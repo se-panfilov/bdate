@@ -74,8 +74,8 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='app', lang='en-us')
                             label.control-label(for="bdatepicker") Date
                             bdatepicker(b-input-id="bdatepicker", b-model="resultModel", b-source="demoData")
                         .input-group
-                            label.control-label(for="inp_2") Data
-                            input#inp_2.form-control(type="text")
+                            label.control-label(for="inp_2") Data {{resultModel}}
+                            input#inp_2.form-control(type="text", ng-model="resultModel")
                         .input-group
                             label.control-label(for="inp_3") Data
                             input#inp_3.form-control(type="text")
