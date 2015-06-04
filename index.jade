@@ -20,47 +20,56 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='demo', lang='en')
     body
         #content_view.container
             #demo_page(ng-controller="DemoPageCtrl")
-                .lorem
-                    | Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                    | totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                    | dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-                    | sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-                    | quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
-                    | non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                    | Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                    | nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui
-                    | in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum
-                    |fugiat quo voluptas nulla pariatur
-                | bdatepicker demo
-                form#demo_form(name="demo_form")
-                    .input-group
-                        label.control-label(for="inp_1") Data
-                        input#inp_1.form-control(type="text")
-                    .input-group
-                        label.control-label(for="bdatepicker") Date
-                        bdatepicker(b-input-id="bdatepicker", b-model="resultModel", b-source="demoData")
-                    .input-group
-                        label.control-label(for="inp_2") Data {{resultModel}}
-                        input#inp_2.form-control(type="text", ng-model="resultModel")
-                    .input-group
-                        label.control-label(for="inp_3") Data
-                        input#inp_3.form-control(type="text")
-                    .input-group
-                        label.control-label(for="inp_4") Data
-                        input#inp_4.form-control(type="text")
-                    button(type="submit") Ok
-                    .result
-                        | This is the result:
-                        | &nbsp;
-                        span(ng-bind="resultModel")
-                .lorem
-                    | Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-                    | totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-                    | dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-                    | sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
-                    | quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
-                    | non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-                    | Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                    | nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui
-                    | in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum
-                    |fugiat quo voluptas nulla pariatur
+                section#common_case
+                    hgroup
+                        h1 Common case
+                        h3 Simple form and simple datepicker
+                    .case_description
+                        | This is common case. Data provided with "demoData" object and result saves to the "resultModel" object.
+                    form#demo_simple_form(name="demo_simple_form")
+                        .form-group
+                            label.control-label(for="bdatepicker_1") Date
+                            bdatepicker(b-input-id="bdatepicker_1", b-model="resultModel", b-source="demoData")
+                        button.btn.btn-info(type="submit")
+                            | The result is
+                            | &nbsp;
+                            span(ng-bind="resultModel")
+                section#wait_for_data_case
+                    hgroup
+                        h1 Wait for remote data case
+                        h3 Datepicker wait for remote data
+                    .case_description
+                        | In this case datepicker waits for remote data (which will be loaded at 2 sec).
+                        | Data provided with "delayedDemoData" object and result saves to the "resultDelayedModel" object.
+                    form#demo_remote_form(name="demo_remote_form")
+                        .form-group
+                            label.control-label(for="bdatepicker_2") Date
+                            bdatepicker(b-input-id="bdatepicker_2", b-model="resultDelayedModel", b-source="delayedDemoData")
+                        button.btn.btn-info(type="submit")
+                            | The result is
+                            | &nbsp;
+                            span(ng-bind="resultDelayedModel")
+                section#linked_data_case
+                    hgroup
+                        h1 Wait for remote data case
+                        h3 Datepicker wait for remote data
+                    .case_description
+                        | In this case two datepickers and one simple text input use same model.
+                        | Data provided with "demoData" object and result saves to the "resultLinkedModel" object.
+                    form#demo_linked_form(name="demo_linked_form")
+                        .form-group
+                            label.control-label(for="bdatepicker_3") Linked Date 1
+                            bdatepicker(b-input-id="bdatepicker_3", b-model="resultLinkedModel", b-source="demoData")
+                        .form-group
+                            label.control-label(for="bdatepicker_4") Linked Date 2
+                            bdatepicker(b-input-id="bdatepicker_4", b-model="resultLinkedModel", b-source="demoData")
+                        .form-group
+                            label.control-label(for="inp_2") Linked Date 3
+                            input#inp_2.form-control(type="text", ng-model="resultLinkedModel")
+                        .form-group
+                            label.control-label(for="inp_4") Not linked
+                            input#inp_4.form-control(type="text")
+                        button.btn.btn-info(type="submit")
+                            | The result is
+                            | &nbsp;
+                            span(ng-bind="resultLinkedModel")
