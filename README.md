@@ -118,10 +118,17 @@ There is do nothing with timezones - server say what is today and etc.
 }
 ```
 
-`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one tipe of delimiter (here - `-`), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' );
+`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one tipe of delimiter (here is "`-`"), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' );
 
+`delimiter` - delimiter for `format` (in example is "`-`")
 
+`today` - This is today date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in seconds).
 
+`years` - Object with aviabe ranges. You should provide every year which should be able to be selected. 
+
+Each year should contain list of aviable monthes (**monthes start from 1**, not 0, it's clear?).
+
+Each month contain total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
