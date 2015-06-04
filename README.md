@@ -4,12 +4,9 @@
 [![devDependency Status](https://david-dm.org/Light241/bdate/dev-status.svg?branch=master)](https://david-dm.org/Light241/bdate#info=devDependencies)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/Light241/bdate/blob/master/LICENSE)
 
-bDate
+bDate - Backend-driven Angularjs datepicker
 =============
 | [Demo][1] | 
-
-Backend-driven Angularjs datepicker
--------------
 
 #What is this?
 This is angularjs datepicker (like [angular-ui datepicker][2]) but with one serious difference:
@@ -20,8 +17,54 @@ There is many reasons. Mostly because sometimes you may want to set aviable diap
 For example: you may set only aug and sept of 2014, and jan of 2015.
 There is do nothing with timezones - server say what is today and etc.
 
+#Installation
+
+* download
+
+    with bower:
+    
+    ```shell
+    bower install bdate --save
+    ```
+    
+    or with npm:
+    
+    ```shell
+    npm  install bdate --save
+    ```
+    
+    or download directly (please use latest [release][3] version).
+
+* add `.js` and `.css` files
+    
+    ```html
+     <link href=bdate/dist/bdate.css rel=stylesheet media=all>
+     <script src=bdate/dist/bdate.js type=text/javascript></script>
+    ```
+    (don't forget to include angular.js before)
+
+* add dependency to project:
+    
+    ```js
+    angular.module('app', [
+        'bdate'
+    ]);
+    ```
+* add directive to html:
+    
+    ```html
+    <bdatepicker b-model="resultModel" b-source="demoData"></bdatepicker>
+    ```
+    
+    `b-model` and `b-source` should be defined in controller's js.
+    
+    `b-source` - is where from we get aviable data
+    
+    `b-model` - where we save the results of select. Btw, you can use `b-model` as initial value
+
 #Features
 - 14kb for js (with injected html templates) and 6kb for css;
+- No dependencies (only angularjs);
 - Date data setup once and strict. If data provided throug ajax-query, datepicker will wait until it loaded;
 - No extra options (just pick a date);
 - Easy to custom - you may provide custom id and class(in progres now) for each element of each directive (if you have multiple ones).
@@ -84,3 +127,4 @@ There is do nothing with timezones - server say what is today and etc.
 
 [1]: http://light241.github.io/bdate/
 [2]: https://angular-ui.github.io/bootstrap/#/datepicker
+[3]: https://github.com/Light241/bdate/releases
