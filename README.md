@@ -11,18 +11,36 @@ bDate
 Backend-driven Angularjs datepicker
 -------------
 
+#What is this?
+This is angularjs datepicker (like [angular-ui datepicker][2]) but with one serious difference:
+bDate Datepicker **didn't** count any date on client side, it **works only with provided (json) data**.
+
+##But why?
+There is many reasons. Mostly because sometimes you may want to set aviable diapasons of dates from the backend.
+For example: you may set only aug and sept of 2014, and jan of 2015.
+There is do nothing with timezones - server say what is today and etc.
+
+#Features
+- 14kb for js (with injected html templates) and 6kb for css;
+- Date data setup once and strict. If data provided throug ajax-query, datepicker will wait until it loaded;
+- No extra options (just pick a date);
+- Easy to custom - you may provide custom id and class(in progres now) for each element of each directive (if you have multiple ones).
+- Able to set date model externally;
+
+#Example
+
 ```html
-<div>
-  <label for="bdatepicker">Date</label>
-  <bdatepicker b-input-id="bdatepicker" b-model="resultModel" b-source="demoData"></bdatepicker>
-</div>
+<label for="bdatepicker">Date</label>
+<bdatepicker b-input-id="bdatepicker" b-model="resultModel" b-source="demoData"></bdatepicker>
 ```
+
+`bdatepicker` - name of the directive;
 
 **Required**:
 
 `b-model` - Object where selected date will be store (also may be used as init value)
 
-`b-source` - Object (json) where we take available date ranges
+`b-source` - Object (json) where we take available dates
 
 **Optional**:
 
@@ -37,7 +55,7 @@ Backend-driven Angularjs datepicker
 ```json
 
 {
-    "format": "dd-MM-yyyy",
+    "format": "dd-mm-yyyy",
     "delimiter": "-",
     "today": {
         "date": 1432537266825,
@@ -57,7 +75,12 @@ Backend-driven Angularjs datepicker
 }
 ```
 
+`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one tipe of delimiter (here - `-`), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' );
+
+
+
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 [1]: http://light241.github.io/bdate/
+[2]: https://angular-ui.github.io/bootstrap/#/datepicker
