@@ -10,6 +10,10 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     bRootId: '@?'
     bInputId: '@?'
     bPopupId: '@?'
+    bRootClasses: '@?'
+    bInputClasses: '@?'
+    bButtonClasses: '@?'
+    bPopupClasses: '@?'
   controller: ($scope) ->
     $scope.isDataReady = false
 
