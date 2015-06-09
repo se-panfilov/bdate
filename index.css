@@ -5,3 +5,15 @@
 .demo_form {
     text-align: center;
 }
+
+.custom_input_1 {
+    background-color: #79A2D0 !important;
+}
+
+.custom_input_2 {
+    color: #FFF;
+}
+
+.custom_root {
+    padding: 15px;
+}
