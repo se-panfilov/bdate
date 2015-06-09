@@ -120,7 +120,7 @@ There is many reasons. Mostly because sometimes you may want to set available ra
 
 `delimiter` - delimiter for `format` (in example is "`-`")
 
-`today` - This is today date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in seconds).
+`today` - This is today date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in ms).
 
 `years` - Object with aviabe ranges. You should provide every year which should be able to be selected. 
 

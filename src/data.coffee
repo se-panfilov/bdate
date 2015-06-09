@@ -20,4 +20,6 @@ angular.module 'bdate.data', []
         console.error MESSAGES.sourceDataNotValid
         return false
 
-      exports.data = source
+      exports.data = JSON.parse(JSON.stringify(source));
+      exports.data.today.date = (exports.data.today.date * 1000) #convert sec to ms
+      exports.data
