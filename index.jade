@@ -113,3 +113,22 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='app', lang='en-us')
                             |  by
                             a(href='https://twitter.com/jasonlong') Jason Long
                             | .
+                 section#custom_classes_case
+                    hgroup
+                        h1 Custom element classes
+                        h3 Simple form and simple datepicker
+                    .case_description
+                        | This is common case with custom classes provided for each elements
+                    form#demo_custom_classes_form(name="demo_custom_classes_form")
+                        .form-group
+                            label.control-label(for="bdatepicker_5") Colored input
+                            bdatepicker(b-input-id="bdatepicker_5", b-input-classes="custom_input_1 custom_input_2", b-model="resultModel", b-source="demoData")
+                        .form-group
+                            label.control-label(for="bdatepicker_6") Colored button
+                            bdatepicker(b-input-id="bdatepicker_6", b-button-classes="custom_input_1 custom_input_2", b-model="resultModel", b-source="demoData")
+                        .form-group
+                            label.control-label(for="bdatepicker_7") Colored root
+                            bdatepicker(b-input-id="bdatepicker_7", b-root-classes="custom_input_1 custom_input_2 custom_root", b-model="resultModel", b-source="demoData")
+                        .form-group
+                            label.control-label(for="bdatepicker_8") Colored popup
+                            bdatepicker(b-input-id="bdatepicker_8", b-popup-classes="custom_input_1", b-model="resultModel", b-source="demoData")

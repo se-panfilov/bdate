@@ -10,11 +10,11 @@ angular.module('app', [
             "format": "dd-MM-yyyy",
             "delimiter": "-",
             "today": {
-                "date": 1432537266825,
+                "date": 1433817417,
                 "year": 2015,
-                "month": 5,
-                "day": 25,
-                "day_of_week": 1
+                "month": 6,
+                "day": 9,
+                "day_of_week": 2
             },
             "years": {
                 "2013": {

@@ -13,9 +13,7 @@ This is angularjs datepicker (like [angular-ui datepicker][2]) but with one seri
 bDate Datepicker **didn't** count any date on client side, it **works only with provided (json) data**.
 
 ##But why?
-There is many reasons. Mostly because sometimes you may want to set aviable diapasons of dates from the backend.
-For example: you may set only aug and sept of 2014, and jan of 2015.
-There is do nothing with timezones - server say what is today and etc.
+There is many reasons. Mostly because sometimes you may want to set available ranges of dates from the backend. For example: you may set only aug and sept of 2014, and jan of 2015. There is do nothing with timezones - server say what is today and etc.
 
 #Installation
 
@@ -58,7 +56,7 @@ There is do nothing with timezones - server say what is today and etc.
     
     `b-model` and `b-source` should be defined in controller's js.
     
-    `b-source` - is where from we get aviable data
+    `b-source` - is where from we get available data
     
     `b-model` - where we save the results of select. Btw, you can use `b-model` as initial value
 
@@ -67,7 +65,7 @@ There is do nothing with timezones - server say what is today and etc.
 - No dependencies (only angularjs);
 - Date data setup once and strict. If data provided throug ajax-query, datepicker will wait until it loaded;
 - No extra options (just pick a date);
-- Easy to custom - you may provide custom id and class(in progres now) for each element of each directive (if you have multiple ones).
+- Easy to custom - you may provide custom id and class (in progress right now) for each element of each directive (if you have multiple ones);
 - Able to set date model externally;
 
 #Example
@@ -118,15 +116,15 @@ There is do nothing with timezones - server say what is today and etc.
 }
 ```
 
-`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one tipe of delimiter (here is "`-`"), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' );
+`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one type of delimiter (here is "`-`"), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' );
 
 `delimiter` - delimiter for `format` (in example is "`-`")
 
-`today` - This is today date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in seconds).
+`today` - This is today date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in ms).
 
 `years` - Object with aviabe ranges. You should provide every year which should be able to be selected. 
 
-Each year should contain list of aviable monthes (**monthes start from 1**, not 0, it's clear?).
+Each year should contain list of available monthes (**monthes start from 1**, not 0, it's clear?).
 
 Each month contain total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
 
