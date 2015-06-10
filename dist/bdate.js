@@ -267,10 +267,11 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
           i = daysArr.length;
           while (i < (expectedWeeksCount * daysInWeek)) {
             daysArr.push({
-              day: i - (daysCount + startDay - 2),
-              month: nextMonthDate.month,
-              year: nextMonthDate.year,
-              isOtherMonth: true
+              day: isNextMonthExist ? i - (daysCount + startDay - 2) : "",
+              month: isNextMonthExist ? nextMonthDate.month : null,
+              year: isNextMonthExist ? nextMonthDate.year : null,
+              isOtherMonth: true,
+              isLocked: !isNextMonthExist
             });
             i++;
           }

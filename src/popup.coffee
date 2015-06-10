@@ -73,8 +73,8 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         i = 0
         while i < startDay - 1
           result.unshift
-            day:  if isPrevMonthExist then prevMonthDaysCount - i else ""
-            month: if isPrevMonthExist then  prevMonthDate.month else null
+            day: if isPrevMonthExist then prevMonthDaysCount - i else ""
+            month: if isPrevMonthExist then prevMonthDate.month else null
             year: if isPrevMonthExist then prevMonthDate.year else null
             isOtherMonth: true
             isLocked: !isPrevMonthExist
@@ -98,10 +98,11 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         i = daysArr.length
         while i < (expectedWeeksCount * daysInWeek)
           daysArr.push
-            day: i - (daysCount + startDay - 2)
-            month: nextMonthDate.month
-            year: nextMonthDate.year
+            day: if isNextMonthExist then i - (daysCount + startDay - 2) else ""
+            month: if isNextMonthExist then nextMonthDate.month else null
+            year: if isNextMonthExist then nextMonthDate.year else null
             isOtherMonth: true
+            isLocked: !isNextMonthExist
           i++
         return result
       _getMonthDaysArr: (yearNum, monthNum, daysCount) ->
@@ -165,7 +166,7 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
     ), (->
       if bDataFactory.isDataReady(bDataFactory.data)
         scope.data.init bDataFactory.data
-      ), true
+    ), true
 
     scope.$watch 'popupState.isOpen', ->
       if scope.popupState.isOpen and (scope.dateModel and not angular.equals {}, scope.dateModel)
