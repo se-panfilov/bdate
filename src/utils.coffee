@@ -38,7 +38,6 @@ angular.module 'bdate.utils', ['bdate.data']
     getMonthName: (number)->
       return exports.month[number].name
     makeDateModel: (datetime) ->
-#TODO fix select today
       date = new Date(datetime)
       day = date.getDate()
       #TODO It's not clear what use to - .getDate() or .getUtcDate()?

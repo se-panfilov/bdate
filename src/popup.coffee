@@ -28,7 +28,7 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         return console.error MESSAGES.invalidParams if not yearNum or not monthNum
         yearNum = +yearNum
         monthNum = +monthNum
-        #TODO (S.Panfilov) check after add "+"
+
         scope.data.viewedDate =
           year:
             first: +Object.keys(bDataFactory.data.years)[0]
