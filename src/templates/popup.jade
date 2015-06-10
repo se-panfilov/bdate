@@ -16,7 +16,7 @@
     table.b_popup_weeks
         tr.b_popup_week
             td.b_popup_day(ng-repeat="date in data.viewedDate.days track by $index", ng-class="{b_popup_today_day_container: date.isToday}")
-                button.b_popup_day_btn(type="button", ng-bind="date.day", ng-click="popup.selectDate(date)", ng-class="{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day && date.month == dateModel.month && date.year == dateModel.year}")
+                button.b_popup_day_btn(type="button", ng-bind="date.day", ng-click="popup.selectDate(date)", ng-disabled="date.isLocked", ng-class="{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day && date.month == dateModel.month && date.year == dateModel.year, b_popup_locked_day: date.isLocked}")
     .b_popup_today(ng-show="bDateUtils.isMonthExist(data.today.year, data.today.month)")
         | Сегодня
         button.b_popup_today_btn(type="button", ng-bind="data.today.date | date:data.format", ng-click="popup.selectDate(bDateUtils.makeDateModel(data.today.date))")

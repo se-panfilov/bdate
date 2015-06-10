@@ -15,6 +15,11 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     bButtonClasses: '@?'
     bPopupClasses: '@?'
   controller: ($scope) ->
+
+    #TODO (S.Panfilov) BUGS:
+    #1. Days of prev month contains digits below "0"
+    #2. DataFactory overwrite source data for each directive (all directive used one source, nm what ws set before, only last one has mean)
+
     $scope.isDataReady = false
 
     $scope.$watch 'bSource', ->
