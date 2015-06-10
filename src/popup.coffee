@@ -28,23 +28,23 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         return console.error MESSAGES.invalidParams if not yearNum or not monthNum
         yearNum = +yearNum
         monthNum = +monthNum
-
+        #TODO (S.Panfilov) check after add "+"
         scope.data.viewedDate =
           year:
-            first: Object.keys(bDataFactory.data.years)[0]
-            last: Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1]
-            number: yearNum
-            count: Object.keys(bDataFactory.data.years).length
+            first: +Object.keys(bDataFactory.data.years)[0]
+            last: +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1]
+            number: +yearNum
+            count: +Object.keys(bDataFactory.data.years).length
           month:
-            first: Object.keys(bDataFactory.data.years[yearNum])[0]
-            last: Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
-            daysTotal: bDataFactory.data.years[yearNum][monthNum].days_total
-            startDay: bDataFactory.data.years[yearNum][monthNum].start_day
-            number: monthNum
+            first: +Object.keys(bDataFactory.data.years[yearNum])[0]
+            last: +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
+            daysTotal: +bDataFactory.data.years[yearNum][monthNum].days_total
+            startDay: +bDataFactory.data.years[yearNum][monthNum].start_day
+            number: +monthNum
             name: bDateUtils.getMonthName monthNum
-            count: Object.keys(bDataFactory.data.years[yearNum]).length
+            count: +Object.keys(bDataFactory.data.years[yearNum]).length
           day:
-            number: dayNum
+            number: +dayNum
 
         scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.year, scope.data.viewedDate.month
       daysOfWeek:
