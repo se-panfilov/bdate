@@ -1,6 +1,6 @@
 angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']
 
-.directive 'bdatepicker', ($filter, bDataFactory, bDateUtils, $document) ->
+.directive 'bdatepicker', ($filter, bDataFactory, bDateUtils, $document, $interval) ->
   restrict: 'E'
   replace: true
   templateUrl: 'bdate.html'
@@ -15,9 +15,8 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     bButtonClasses: '@?'
     bPopupClasses: '@?'
   controller: ($scope) ->
-
     _generateRandomId = ->
-      #TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
+#TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
       Math.random().toString(36).substring(12)
 
     $scope.dateStoreId = _generateRandomId();
@@ -36,8 +35,8 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       model: {}
 
     doNotUpdateModelTwice = false;
-    
-    scope.$watch 'bModel', (newVal, oldVal) ->
+
+    setModelFromExternal = ->
       isSameDate = scope.bModel is scope.date.viewed
       isEmptyModel = scope.bModel is '' or scope.bModel is ' ' or not scope.bModel
       return false if isSameDate or isEmptyModel
@@ -51,6 +50,17 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
         day: bModelDate.getDate()
         month: bModelDate.getMonth() + 1
         year: bModelDate.getFullYear()
+
+    externalLoadInterval = $interval (->
+      if scope.isDataReady
+        setModelFromExternal()
+        $interval.cancel(externalLoadInterval);
+        externalLoadInterval = undefined
+    ), 60
+
+    scope.$watch 'bModel', (newVal, oldVal) ->
+      return if newVal is oldVal
+      setModelFromExternal()
 
     scope.$watch 'date.model', ->
       return if angular.equals {}, scope.date.model
