@@ -15,10 +15,15 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       bPopupClasses: '@?'
     },
     controller: ['$scope', function($scope) {
+      var _generateRandomId;
+      _generateRandomId = function() {
+        return Math.random().toString(36).substring(12);
+      };
+      $scope.dataStoreId = _generateRandomId();
       $scope.isDataReady = false;
       return $scope.$watch('bSource', function() {
         if (bDataFactory.isDataValid($scope.bSource)) {
-          bDataFactory.setData($scope.bSource);
+          bDataFactory.setData($scope.bSource, $scope.dataStoreId);
           return $scope.isDataReady = true;
         }
       }, true);
@@ -96,9 +101,12 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
 angular.module('bdate.data', []).factory('bDataFactory', ['MESSAGES', function(MESSAGES) {
   var exports;
   return exports = {
-    data: null,
-    isDataReady: function() {
-      return !!exports.data && exports.isDataValid(exports.data);
+    data: {},
+    isDataReady: function(storeId) {
+      if (!storeId) {
+        return console.error(MESSAGES.invalidParams);
+      }
+      return !!exports.data[storeId] && exports.isDataValid(exports.data);
     },
     isDataValid: function(data) {
       if (!data || (angular.equals({}, data))) {
@@ -124,14 +132,14 @@ angular.module('bdate.data', []).factory('bDataFactory', ['MESSAGES', function(M
       }
       return true;
     },
-    setData: function(source) {
+    setData: function(source, storeId) {
       if (!exports.isDataValid(source)) {
         console.error(MESSAGES.sourceDataNotValid);
         return false;
       }
-      exports.data = JSON.parse(JSON.stringify(source));
-      exports.data.today.date = exports.data.today.date * 1000;
-      return exports.data;
+      exports.data[storeId] = JSON.parse(JSON.stringify(source));
+      exports.data[storeId].today.date = exports.data.today.date * 1000;
+      return exports.data[storeId];
     }
   };
 }]);
@@ -150,9 +158,11 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
     templateUrl: 'popup.html',
     scope: {
       popupState: '=',
-      dateModel: '='
+      dateModel: '=',
+      dataStoreId: '@'
     },
     link: function(scope) {
+      console.log(scope.dataStoreId);
       scope.popup = {
         hidePopup: function() {
           return scope.popupState.isOpen = false;
@@ -228,10 +238,10 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
             month: null,
             year: null
           };
-          isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist(yearNum, monthNum);
+          isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist(yearNum, monthNum, scope.dataStoreId);
           prevMonthDaysCount = 0;
           if (isPrevMonthExist) {
-            prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj(yearNum, monthNum);
+            prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj(yearNum, monthNum, scope.dataStoreId);
             prevMonthDaysCount = new Date(prevMonthDate.year, prevMonthDate.month, 0).getDate();
           }
           i = 0;
@@ -260,9 +270,9 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
             month: null,
             year: null
           };
-          isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist(yearNum, monthNum);
+          isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist(yearNum, monthNum, scope.dataStoreId);
           if (isNextMonthExist) {
-            nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj(yearNum, monthNum);
+            nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj(yearNum, monthNum, scope.dataStoreId);
           }
           i = daysArr.length;
           while (i < (expectedWeeksCount * daysInWeek)) {
@@ -318,14 +328,14 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
         },
         goNextMonth: function(isForward) {
           var nextObj;
-          nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number);
+          nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number, scope.dataStoreId);
           if (nextObj) {
             return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
         },
         goNextYear: function(isForward) {
           var nextObj;
-          nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number);
+          nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear(isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number, scope.dataStoreId);
           if (nextObj) {
             return scope.data.setViewedDate(nextObj.year, nextObj.month);
           }
@@ -336,16 +346,16 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
           scope.data.setToday(dateSource.today);
           if (scope.dateModel && !angular.equals({}, scope.dateModel)) {
             return scope.data.setViewedDate(scope.dateModel.year, scope.dateModel.month, scope.dateModel.day);
-          } else if (bDateUtils.sourceCheckers.month.isMonthExist(dateSource.today.year, dateSource.today.month)) {
+          } else if (bDateUtils.sourceCheckers.month.isMonthExist(dateSource.today.year, dateSource.today.month, scope.dataStoreId)) {
             return scope.data.setViewedDate(dateSource.today.year, dateSource.today.month);
           } else {
-            firstYear = bDateUtils.sourceCheckers.year.getFirstYear();
-            return scope.data.setViewedDate(firstYear, bDateUtils.sourceCheckers.month.getFirstMonth(firstYear));
+            firstYear = bDateUtils.sourceCheckers.year.getFirstYear(scope.dataStoreId);
+            return scope.data.setViewedDate(firstYear, bDateUtils.sourceCheckers.month.getFirstMonth(firstYear, scope.dataStoreId));
           }
         }
       };
       (function() {
-        if (bDataFactory.isDataReady(bDataFactory.data)) {
+        if (bDataFactory.isDataReady(bDataFactory.data, scope.dataStoreId)) {
           scope.data.init(bDataFactory.data);
         }
         return scope.bDateUtils = bDateUtils;
@@ -353,7 +363,7 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
       scope.$watch((function() {
         return bDataFactory.data;
       }), (function() {
-        if (bDataFactory.isDataReady(bDataFactory.data)) {
+        if (bDataFactory.isDataReady(scope.dataStoreId)) {
           return scope.data.init(bDataFactory.data);
         }
       }), true);
@@ -500,56 +510,56 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
     },
     sourceCheckers: {
       month: {
-        isMonthExist: function(yearNum, monthNum) {
+        isMonthExist: function(yearNum, monthNum, storeId) {
           if (!yearNum || !monthNum) {
             return console.error(MESSAGES.invalidParams);
           }
           yearNum = +yearNum;
           monthNum = +monthNum;
-          if (!bDataFactory.isDataReady()) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return false;
           }
-          if (!bDataFactory.data.years[yearNum]) {
+          if (!bDataFactory.data[storeId].years[yearNum]) {
             return false;
           }
-          return !!bDataFactory.data.years[yearNum][monthNum];
+          return !!bDataFactory.data[storeId].years[yearNum][monthNum];
         },
-        isPrevMonthExist: function(yearNum, curMonthNum) {
+        isPrevMonthExist: function(yearNum, curMonthNum, storeId) {
           var isFirstMonth, isFirstYear, lastMonthOfPrevYearNum, prevMonthNum, prevYearNum;
           if (!yearNum || !curMonthNum) {
             return false;
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;
-          if (!exports.sourceCheckers.month.isMonthExist(yearNum, curMonthNum)) {
+          if (!exports.sourceCheckers.month.isMonthExist(yearNum, curMonthNum, storeId)) {
             return false;
           }
-          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, curMonthNum);
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, curMonthNum, storeId);
           if (!isFirstMonth) {
             prevMonthNum = curMonthNum - 1;
-            return exports.sourceCheckers.month.isMonthExist(yearNum, prevMonthNum);
+            return exports.sourceCheckers.month.isMonthExist(yearNum, prevMonthNum, storeId);
           } else {
-            isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum);
+            isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum, storeId);
             if (!isFirstYear) {
               prevYearNum = yearNum - 1;
-              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth(prevYearNum);
-              return exports.sourceCheckers.month.isMonthExist(prevYearNum, lastMonthOfPrevYearNum);
+              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth(prevYearNum, storeId);
+              return exports.sourceCheckers.month.isMonthExist(prevYearNum, lastMonthOfPrevYearNum, storeId);
             } else {
               return false;
             }
           }
         },
-        getPrevMonthObj: function(yearNum, curMonthNum) {
+        getPrevMonthObj: function(yearNum, curMonthNum, storeId) {
           var isFirstMonth, isFirstYear, lastMonthOfPrevYearNum, prevMonthNum, prevYearNum;
           if (!yearNum || !curMonthNum) {
             return console.error(MESSAGES.invalidParams);
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;
-          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, curMonthNum);
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, curMonthNum, storeId);
           if (!isFirstMonth) {
             prevMonthNum = curMonthNum - 1;
-            if (exports.sourceCheckers.month.isMonthExist(yearNum, prevMonthNum)) {
+            if (exports.sourceCheckers.month.isMonthExist(yearNum, prevMonthNum, storeId)) {
               return {
                 year: yearNum,
                 month: prevMonthNum
@@ -558,11 +568,11 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
               return null;
             }
           } else {
-            isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum);
+            isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum, storeId);
             if (!isFirstYear) {
               prevYearNum = yearNum - 1;
-              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth(prevYearNum);
-              if (exports.sourceCheckers.month.isMonthExist(prevYearNum, lastMonthOfPrevYearNum)) {
+              lastMonthOfPrevYearNum = exports.sourceCheckers.month.getLastMonth(prevYearNum, storeId);
+              if (exports.sourceCheckers.month.isMonthExist(prevYearNum, lastMonthOfPrevYearNum, storeId)) {
                 return {
                   year: prevYearNum,
                   month: lastMonthOfPrevYearNum
@@ -575,42 +585,42 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
             }
           }
         },
-        isNextMonthExist: function(yearNum, curMonthNum) {
+        isNextMonthExist: function(yearNum, curMonthNum, storeId) {
           var firstMonthOfNextYearNum, isLastMonth, isLastYear, nextMonthNum, nextYearNum;
           if (!yearNum || !curMonthNum) {
             return false;
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;
-          if (!exports.sourceCheckers.month.isMonthExist(yearNum, curMonthNum)) {
+          if (!exports.sourceCheckers.month.isMonthExist(yearNum, curMonthNum, storeId)) {
             return false;
           }
-          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, curMonthNum);
+          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, curMonthNum, storeId);
           if (!isLastMonth) {
             nextMonthNum = curMonthNum + 1;
-            return exports.sourceCheckers.month.isMonthExist(yearNum, nextMonthNum);
+            return exports.sourceCheckers.month.isMonthExist(yearNum, nextMonthNum, storeId);
           } else {
-            isLastYear = exports.sourceCheckers.year.isLastYear(yearNum);
+            isLastYear = exports.sourceCheckers.year.isLastYear(yearNum, storeId);
             if (!isLastYear) {
               nextYearNum = yearNum + 1;
-              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
-              return exports.sourceCheckers.month.isMonthExist(nextYearNum, firstMonthOfNextYearNum);
+              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum, storeId);
+              return exports.sourceCheckers.month.isMonthExist(nextYearNum, firstMonthOfNextYearNum, storeId);
             } else {
               return false;
             }
           }
         },
-        getNextMonthObj: function(yearNum, curMonthNum) {
+        getNextMonthObj: function(yearNum, curMonthNum, storeId) {
           var firstMonthOfNextYearNum, isLastMonth, isLastYear, nextMonthNum, nextYearNum;
           if (!yearNum || !curMonthNum) {
             return console.error(MESSAGES.invalidParams);
           }
           yearNum = +yearNum;
           curMonthNum = +curMonthNum;
-          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, curMonthNum);
+          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, curMonthNum, storeId);
           if (!isLastMonth) {
             nextMonthNum = curMonthNum + 1;
-            if (exports.sourceCheckers.month.isMonthExist(yearNum, nextMonthNum)) {
+            if (exports.sourceCheckers.month.isMonthExist(yearNum, nextMonthNum, storeId)) {
               return {
                 year: yearNum,
                 month: nextMonthNum
@@ -619,11 +629,11 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
               return null;
             }
           } else {
-            isLastYear = exports.sourceCheckers.year.isLastYear(yearNum);
+            isLastYear = exports.sourceCheckers.year.isLastYear(yearNum, storeId);
             if (!isLastYear) {
               nextYearNum = yearNum + 1;
-              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
-              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, firstMonthOfNextYearNum)) {
+              firstMonthOfNextYearNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum, storeId);
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, firstMonthOfNextYearNum, storeId)) {
                 return {
                   year: nextYearNum,
                   month: firstMonthOfNextYearNum
@@ -636,51 +646,51 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
             }
           }
         },
-        getMonth: function(yearNum, monthNum) {
+        getMonth: function(yearNum, monthNum, storeId) {
           if (!yearNum || !monthNum) {
             return console.error(MESSAGES.invalidParams);
           }
-          if (!bDataFactory.isDataReady()) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return console.error(MESSAGES.dateNotReady);
           }
-          return bDataFactory.data.years[yearNum][monthNum];
+          return bDataFactory.data[storeId].years[yearNum][monthNum];
         },
-        isFirstMonth: function(yearNum, monthNum) {
-          if (!bDataFactory.isDataReady()) {
-            return console.error(MESSAGES.dateNotReady);
-          }
-          yearNum = +yearNum;
-          monthNum = +monthNum;
-          return monthNum === +Object.keys(bDataFactory.data.years[yearNum])[0];
-        },
-        getFirstMonth: function(yearNum) {
-          if (!bDataFactory.isDataReady()) {
-            return console.error(MESSAGES.dateNotReady);
-          }
-          yearNum = +yearNum;
-          return +Object.keys(bDataFactory.data.years[yearNum])[0];
-        },
-        isLastMonth: function(yearNum, monthNum) {
-          if (!bDataFactory.isDataReady()) {
+        isFirstMonth: function(yearNum, monthNum, storeId) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return console.error(MESSAGES.dateNotReady);
           }
           yearNum = +yearNum;
           monthNum = +monthNum;
-          return monthNum === +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1];
+          return monthNum === +Object.keys(bDataFactory.data[storeId].years[yearNum])[0];
         },
-        getLastMonth: function(yearNum) {
-          if (!bDataFactory.isDataReady()) {
+        getFirstMonth: function(yearNum, storeId) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return console.error(MESSAGES.dateNotReady);
           }
           yearNum = +yearNum;
-          return +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1];
+          return +Object.keys(bDataFactory.data[storeId].years[yearNum])[0];
         },
-        getNextAvailableMonth: function(isForward, yearNum, monthNum) {
+        isLastMonth: function(yearNum, monthNum, storeId) {
+          if (!bDataFactory.isDataReady(storeId)) {
+            return console.error(MESSAGES.dateNotReady);
+          }
+          yearNum = +yearNum;
+          monthNum = +monthNum;
+          return monthNum === +Object.keys(bDataFactory.data[storeId].years[yearNum])[Object.keys(bDataFactory.data[storeId].years[yearNum]).length - 1];
+        },
+        getLastMonth: function(yearNum, storeId) {
+          if (!bDataFactory.isDataReady(storeId)) {
+            return console.error(MESSAGES.dateNotReady);
+          }
+          yearNum = +yearNum;
+          return +Object.keys(bDataFactory.data[storeId].years[yearNum])[Object.keys(bDataFactory.data[storeId].years[yearNum]).length - 1];
+        },
+        getNextAvailableMonth: function(isForward, yearNum, monthNum, storeId) {
           var isFirstMonth, isLastMonth, nextMonthNum, nextYearNum, result;
           yearNum = +yearNum;
           monthNum = +monthNum;
-          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, monthNum);
-          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, monthNum);
+          isFirstMonth = exports.sourceCheckers.month.isFirstMonth(yearNum, monthNum, storeId);
+          isLastMonth = exports.sourceCheckers.month.isLastMonth(yearNum, monthNum, storeId);
           nextYearNum = yearNum;
           nextMonthNum = monthNum;
           if (isForward) {
@@ -688,8 +698,8 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
               nextMonthNum = monthNum + 1;
             } else {
               nextYearNum = yearNum + 1;
-              if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
-                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+              if (exports.sourceCheckers.year.isYearExist(nextYearNum, storeId)) {
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum, storeId);
               } else {
                 console.error(MESSAGES.errorOnChangeMonthOrYear);
                 return false;
@@ -700,8 +710,8 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
               nextMonthNum = monthNum - 1;
             } else {
               nextYearNum = yearNum - 1;
-              if (exports.sourceCheckers.year.isYearExist(nextYearNum)) {
-                nextMonthNum = exports.sourceCheckers.month.getLastMonth(nextYearNum);
+              if (exports.sourceCheckers.year.isYearExist(nextYearNum, storeId)) {
+                nextMonthNum = exports.sourceCheckers.month.getLastMonth(nextYearNum, storeId);
               } else {
                 console.error(MESSAGES.errorOnChangeMonthOrYear);
                 return false;
@@ -715,63 +725,63 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
         }
       },
       year: {
-        isYearExist: function(yearNum) {
+        isYearExist: function(yearNum, storeId) {
           if (!yearNum) {
             return console.error(MESSAGES.invalidParams);
           }
-          if (!bDataFactory.isDataReady()) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return false;
           }
           yearNum = +yearNum;
-          return !!bDataFactory.data.years[yearNum];
+          return !!bDataFactory.data[storeId].years[yearNum];
         },
-        getYear: function(yearNum) {
+        getYear: function(yearNum, storeId) {
           if (!yearNum) {
             return console.error(MESSAGES.invalidParams);
           }
-          if (!bDataFactory.isDataReady()) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return console.error(MESSAGES.dateNotReady);
           }
-          return bDataFactory.data.years[yearNum];
+          return bDataFactory.data[storeId].years[yearNum];
         },
-        isFirstYear: function(yearNum) {
+        isFirstYear: function(yearNum, storeId) {
           yearNum = +yearNum;
-          return yearNum === +Object.keys(bDataFactory.data.years)[0];
+          return yearNum === +Object.keys(bDataFactory.data[storeId].years)[0];
         },
-        getFirstYear: function() {
-          if (!bDataFactory.isDataReady()) {
+        getFirstYear: function(storeId) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return console.error(MESSAGES.dateNotReady);
           }
-          return +Object.keys(bDataFactory.data.years)[0];
+          return +Object.keys(bDataFactory.data[storeId].years)[0];
         },
-        isLastYear: function(yearNum) {
-          if (!bDataFactory.isDataReady()) {
+        isLastYear: function(yearNum, storeId) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return console.error(MESSAGES.dateNotReady);
           }
           yearNum = +yearNum;
-          return yearNum === +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1];
+          return yearNum === +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1];
         },
-        getLastYear: function() {
-          if (!bDataFactory.isDataReady()) {
+        getLastYear: function(storeId) {
+          if (!bDataFactory.isDataReady(storeId)) {
             return console.error(MESSAGES.dateNotReady);
           }
-          return +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1];
+          return +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1];
         },
-        getNextAvailableYear: function(isForward, yearNum, monthNum) {
+        getNextAvailableYear: function(isForward, yearNum, monthNum, storeId) {
           var isFirstYear, isLastYear, nextMonthNum, nextYearNum, result;
           yearNum = +yearNum;
           monthNum = +monthNum;
-          isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum);
-          isLastYear = exports.sourceCheckers.year.isLastYear(yearNum);
+          isFirstYear = exports.sourceCheckers.year.isFirstYear(yearNum, storeId);
+          isLastYear = exports.sourceCheckers.year.isLastYear(yearNum, storeId);
           nextYearNum = yearNum;
           nextMonthNum = monthNum;
           if (isForward) {
             if (!isLastYear) {
               nextYearNum = yearNum + 1;
-              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum)) {
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum, storeId)) {
                 nextMonthNum = monthNum;
               } else {
-                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum, storeId);
               }
             } else {
               return false;
@@ -779,10 +789,10 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
           } else if (!isForward) {
             if (!isFirstYear) {
               nextYearNum = yearNum - 1;
-              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum)) {
+              if (exports.sourceCheckers.month.isMonthExist(nextYearNum, monthNum, storeId)) {
                 nextMonthNum = monthNum;
               } else {
-                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum);
+                nextMonthNum = exports.sourceCheckers.month.getFirstMonth(nextYearNum, storeId);
               }
             } else {
               return false;
@@ -798,5 +808,5 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
   };
 }]);
 
-angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div id={{::bRootId}} ng-class=\"{b_datepicker_in_progress: !isDataReady}\" class=\"b_datepicker_root {{::bRootClasses}}\"><input type=text id={{::bInputId}} ng-model=date.viewed ng-click=popup.togglePopup() ng-disabled=!isDataReady readonly=readonly class=\"b_datepicker_input {{::bInputClasses}}\"><button type=button ng-click=popup.togglePopup() ng-disabled=!isDataReady class=\"b_datepicker_button {{::bButtonClasses}}\">&nbsp;</button><bdate-popup id={{::bPopupId}} popup-state=popup.state date-model=date.model class={{::bPopupClasses}}></bdate-popup></div>");
-$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1)\" class=\"b_popup_btn b_btn_prev\">&#9664;&#9664;</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_prev\">&#9664;</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number)\" class=\"b_popup_btn b_btn_next\">&#9654;</button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1)\" class=\"b_popup_btn b_btn_next\">&#9654;&#9654;</button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" ng-class=\"{b_popup_today_day_container: date.isToday}\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-disabled=date.isLocked ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day &amp;&amp; date.month == dateModel.month &amp;&amp; date.year == dateModel.year, b_popup_locked_day: date.isLocked}\" class=b_popup_day_btn></button></td></tr></table><div ng-show=\"bDateUtils.isMonthExist(data.today.year, data.today.month)\" class=b_popup_today>Сегодня<button type=button ng-bind=\"data.today.date | date:data.format\" ng-click=popup.selectDate(bDateUtils.makeDateModel(data.today.date)) class=b_popup_today_btn></button></div></div>");}]);
+angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div id={{::bRootId}} ng-class=\"{b_datepicker_in_progress: !isDataReady}\" class=\"b_datepicker_root {{::bRootClasses}}\"><input type=text id={{::bInputId}} ng-model=date.viewed ng-click=popup.togglePopup() ng-disabled=!isDataReady readonly=readonly class=\"b_datepicker_input {{::bInputClasses}}\"><button type=button ng-click=popup.togglePopup() ng-disabled=!isDataReady class=\"b_datepicker_button {{::bButtonClasses}}\">&nbsp;</button><bdate-popup id={{::bPopupId}} popup-state=popup.state date-model=date.model data-store-id=::dataStoreId class={{::bPopupClasses}}></bdate-popup></div>");
+$templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=data.goNextYear(false) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1, dataStoreId)\" class=\"b_popup_btn b_btn_prev\">&#9664;&#9664;</button><button type=button ng-click=data.goNextMonth(false) ng-disabled=\"!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number, dataStoreId)\" class=\"b_popup_btn b_btn_prev\">&#9664;</button></div><div ng-bind=data.viewedDate.month.name class=b_popup_month></div>&nbsp;<div ng-bind=data.viewedDate.year.number class=b_popup_year></div><div class=b_btn_next_container><button type=button ng-click=data.goNextMonth(true) ng-disabled=\"!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number, dataStoreId)\" class=\"b_popup_btn b_btn_next\">&#9654;</button><button type=button ng-click=data.goNextYear(true) ng-disabled=\"!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1, dataStoreId)\" class=\"b_popup_btn b_btn_next\">&#9654;&#9654;</button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::data.daysOfWeek.getShorts()\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in data.viewedDate.days track by $index\" ng-class=\"{b_popup_today_day_container: date.isToday}\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-disabled=date.isLocked ng-class=\"{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day &amp;&amp; date.month == dateModel.month &amp;&amp; date.year == dateModel.year, b_popup_locked_day: date.isLocked}\" class=b_popup_day_btn></button></td></tr></table><div ng-show=\"bDateUtils.isMonthExist(data.today.year, data.today.month, dataStoreId)\" class=b_popup_today>Сегодня<button type=button ng-bind=\"data.today.date | date:data.format\" ng-click=popup.selectDate(bDateUtils.makeDateModel(data.today.date)) class=b_popup_today_btn></button></div></div>");}]);

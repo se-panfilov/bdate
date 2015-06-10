@@ -7,7 +7,12 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
   scope:
     popupState: '='
     dateModel: '='
+    dataStoreId: '@'
   link: (scope) ->
+
+    #TODO (S.Panfilov) test debug
+    console.log scope.dataStoreId
+
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
@@ -64,10 +69,10 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
           month: null
           year: null
 
-        isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum
+        isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum, scope.dataStoreId
         prevMonthDaysCount = 0
         if isPrevMonthExist
-          prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj yearNum, monthNum
+          prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj yearNum, monthNum, scope.dataStoreId
           prevMonthDaysCount = new Date(prevMonthDate.year, prevMonthDate.month, 0).getDate()
 
         i = 0
@@ -91,9 +96,9 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
           month: null
           year: null
 
-        isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist yearNum, monthNum
+        isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist yearNum, monthNum, scope.dataStoreId
         if isNextMonthExist
-          nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj yearNum, monthNum
+          nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj yearNum, monthNum, scope.dataStoreId
 
         i = daysArr.length
         while i < (expectedWeeksCount * daysInWeek)
@@ -136,11 +141,11 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         return result
       goNextMonth: (isForward) ->
-        nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
+        nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number, scope.dataStoreId
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
       goNextYear: (isForward) ->
-        nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
+        nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number, scope.dataStoreId
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
       init: (dateSource) ->
@@ -149,22 +154,22 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         if scope.dateModel and not angular.equals {}, scope.dateModel
           scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day
-        else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month
+        else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month, scope.dataStoreId
           scope.data.setViewedDate dateSource.today.year, dateSource.today.month
         else
-          firstYear = bDateUtils.sourceCheckers.year.getFirstYear()
-          scope.data.setViewedDate firstYear, bDateUtils.sourceCheckers.month.getFirstMonth firstYear
+          firstYear = bDateUtils.sourceCheckers.year.getFirstYear scope.dataStoreId
+          scope.data.setViewedDate firstYear, bDateUtils.sourceCheckers.month.getFirstMonth firstYear, scope.dataStoreId
 
     #init
     do ->
-      if bDataFactory.isDataReady bDataFactory.data
+      if bDataFactory.isDataReady bDataFactory.data, scope.dataStoreId
         scope.data.init(bDataFactory.data)
       scope.bDateUtils = bDateUtils
 
     scope.$watch (->
       bDataFactory.data
     ), (->
-      if bDataFactory.isDataReady(bDataFactory.data)
+      if bDataFactory.isDataReady(scope.dataStoreId)
         scope.data.init bDataFactory.data
     ), true
 

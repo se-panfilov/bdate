@@ -16,15 +16,17 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     bPopupClasses: '@?'
   controller: ($scope) ->
 
-    #TODO (S.Panfilov) BUGS:
-    #1. Days of prev month contains digits below "0"
-    #2. DataFactory overwrite source data for each directive (all directive used one source, nm what ws set before, only last one has mean)
+    _generateRandomId = ->
+      #TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
+      Math.random().toString(36).substring(12)
+
+    $scope.dataStoreId = _generateRandomId();
 
     $scope.isDataReady = false
 
     $scope.$watch 'bSource', ->
       if bDataFactory.isDataValid $scope.bSource
-        bDataFactory.setData $scope.bSource
+        bDataFactory.setData $scope.bSource, $scope.dataStoreId
         $scope.isDataReady = true
     , true
 
