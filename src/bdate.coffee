@@ -20,13 +20,13 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       #TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
       Math.random().toString(36).substring(12)
 
-    $scope.dataStoreId = _generateRandomId();
+    $scope.dateStoreId = _generateRandomId();
 
     $scope.isDataReady = false
 
     $scope.$watch 'bSource', ->
       if bDataFactory.isDataValid $scope.bSource
-        bDataFactory.setData $scope.bSource, $scope.dataStoreId
+        bDataFactory.setData $scope.bSource, $scope.dateStoreId
         $scope.isDataReady = true
     , true
 

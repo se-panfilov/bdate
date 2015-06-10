@@ -1,14 +1,14 @@
 .b_popup(ng-show="popupState.isOpen")
     .b_popup_controls
         .b_btn_prev_container
-            button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextYear(false)", ng-disabled="!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1, dataStoreId)") &#9664;&#9664;
-            button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextMonth(false)", ng-disabled="!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number, dataStoreId)") &#9664;
+            button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextYear(false)", ng-disabled="!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number - 1, dateStoreId)") &#9664;&#9664;
+            button.b_popup_btn.b_btn_prev(type="button", ng-click="data.goNextMonth(false)", ng-disabled="!bDateUtils.sourceCheckers.month.isPrevMonthExist(data.viewedDate.year.number, data.viewedDate.month.number, dateStoreId)") &#9664;
         .b_popup_month(ng-bind="data.viewedDate.month.name")
         | &nbsp;
         .b_popup_year(ng-bind="data.viewedDate.year.number")
         .b_btn_next_container
-            button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextMonth(true)", ng-disabled="!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number, dataStoreId)") &#9654;
-            button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextYear(true)", ng-disabled="!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1, dataStoreId)") &#9654;&#9654;
+            button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextMonth(true)", ng-disabled="!bDateUtils.sourceCheckers.month.isNextMonthExist(data.viewedDate.year.number, data.viewedDate.month.number, dateStoreId)") &#9654;
+            button.b_popup_btn.b_btn_next(type="button", ng-click="data.goNextYear(true)", ng-disabled="!bDateUtils.sourceCheckers.year.isYearExist(data.viewedDate.year.number + 1, dateStoreId)") &#9654;&#9654;
     table.b_popup_days
         tr
             td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::data.daysOfWeek.getShorts()")
@@ -17,6 +17,6 @@
         tr.b_popup_week
             td.b_popup_day(ng-repeat="date in data.viewedDate.days track by $index", ng-class="{b_popup_today_day_container: date.isToday}")
                 button.b_popup_day_btn(type="button", ng-bind="date.day", ng-click="popup.selectDate(date)", ng-disabled="date.isLocked", ng-class="{b_popup_cur_month_day: !date.isOtherMonth, b_popup_today_day: date.isToday, b_popup_selected_day: date.day == dateModel.day && date.month == dateModel.month && date.year == dateModel.year, b_popup_locked_day: date.isLocked}")
-    .b_popup_today(ng-show="bDateUtils.isMonthExist(data.today.year, data.today.month, dataStoreId)")
+    .b_popup_today(ng-show="bDateUtils.isMonthExist(data.today.year, data.today.month, dateStoreId)")
         | Сегодня
         button.b_popup_today_btn(type="button", ng-bind="data.today.date | date:data.format", ng-click="popup.selectDate(bDateUtils.makeDateModel(data.today.date))")

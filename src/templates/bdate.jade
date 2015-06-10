@@ -1,4 +1,4 @@
 .b_datepicker_root(id="{{::bRootId}}", class="{{::bRootClasses}}", ng-class="{b_datepicker_in_progress: !isDataReady}")
     input.b_datepicker_input(type="text", id="{{::bInputId}}", class="{{::bInputClasses}}", ng-model="date.viewed", ng-click="popup.togglePopup()", ng-disabled="!isDataReady", readonly="readonly")
     button.b_datepicker_button(type="button", class="{{::bButtonClasses}}", ng-click="popup.togglePopup()", ng-disabled="!isDataReady") &nbsp;
-    bdate-popup(id="{{::bPopupId}}", class="{{::bPopupClasses}}", popup-state="popup.state",  date-model="date.model", data-store-id="::dataStoreId")
+    bdate-popup(id="{{::bPopupId}}", class="{{::bPopupClasses}}", popup-state="popup.state",  date-model="date.model", date-store-id="{{::dateStoreId}}")
