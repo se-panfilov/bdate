@@ -13,7 +13,7 @@ This is angularjs datepicker (like [angular-ui datepicker][2]) but with one seri
 bDate Datepicker **didn't** count any date on client side, it **works only with provided (json) data**.
 
 ##But why?
-There is many reasons. Mostly because sometimes you may want to set available ranges of dates from the backend. For example: you may set only aug and sept of 2014, and jan of 2015. There is do nothing with timezones - server say what is today and etc.
+There are many reasons. Mostly because sometimes you may want to set available ranges of dates from the backend. For example: you may set only aug and sept of 2014, and jan of 2015. There is do nothing with timezones - server say what is today and etc.
 
 #Installation
 
@@ -63,7 +63,7 @@ There is many reasons. Mostly because sometimes you may want to set available ra
 #Features
 - 14kb for js (with injected html templates) and 6kb for css;
 - No dependencies (only angularjs);
-- Date data setup once and strict. If data provided throug ajax-query, datepicker will wait until it loaded;
+- Date data setup once and strict. If thr data provided through ajax-query, datepicker will wait until it loaded;
 - No extra options (just pick a date);
 - Easy to custom - you may provide custom id and class (in progress right now) for each element of each directive (if you have multiple ones);
 - Able to set date model externally;
@@ -79,17 +79,17 @@ There is many reasons. Mostly because sometimes you may want to set available ra
 
 **Required**:
 
-`b-model` - Object where selected date will be store (also may be used as init value)
+`b-model` - Object where selected date will be stored (also may be used as init value)
 
 `b-source` - Object (json) where we take available dates
 
 **Optional**:
 
-`b-input-id` - Provides id for directive's input element
+`b-input-id` - Provides id for the directive's input element
 
-`b-root-id` - Provides id for directive's root element
+`b-root-id` - Provides id for the directive's root element
 
-`b-popup-id` - Provides id for directive's popup element
+`b-popup-id` - Provides id for the directive's popup element
 
 **Expected json format**:
 
@@ -117,17 +117,17 @@ There is many reasons. Mostly because sometimes you may want to set available ra
 ```
 
 `format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one type of delimiter (here is "`-`"), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' ).
-*format is case sensetive* - `mm` - is minutes but `MM` - is months (because on angular js politic);
+*format is case sensetive* - `mm` - is minutes, but `MM` - is months (because on angular js politic);
 
 `delimiter` - delimiter for `format` (in example is "`-`")
 
-`today` - This is today date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in ms).
+`today` - This is today's date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in ms).
 
-`years` - Object with aviabe ranges. You should provide every year which should be able to be selected. 
+`years` - Object with available ranges. You should provide every year, which should be able to be selected. 
 
-Each year should contain list of available monthes (**monthes start from 1**, not 0, it's clear?).
+Each year should contain a list of available monthes (**monthes start from 1**, not 0, it's clear?).
 
-Each month contain total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
+Each month contains total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
