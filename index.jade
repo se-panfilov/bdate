@@ -80,14 +80,14 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='app', lang='en-us')
                             h3 Datepicker wait for remote data
                         .case_description
                             | In this case two datepickers and one simple text input use same model.
-                            | Data provided with "demoData" object and result saves to the "resultLinkedModel" object.
+                            | Data provided with "bigDemoData" object and result saves to the "resultLinkedModel" object.
                         form#demo_linked_form(name="demo_linked_form")
                             .form-group
                                 label.control-label(for="bdatepicker_3") Linked Date 1
-                                bdatepicker(b-input-id="bdatepicker_3", b-model="resultLinkedModel", b-source="demoData")
+                                bdatepicker(b-input-id="bdatepicker_3", b-model="resultLinkedModel", b-source="bigDemoData")
                             .form-group
                                 label.control-label(for="bdatepicker_4") Linked Date 2
-                                bdatepicker(b-input-id="bdatepicker_4", b-model="resultLinkedModel", b-source="demoData")
+                                bdatepicker(b-input-id="bdatepicker_4", b-model="resultLinkedModel", b-source="bigDemoData")
                             .form-group
                                 label.control-label(for="inp_2") Linked Date 3
                                 input#inp_2.form-control(type="text", ng-model="resultLinkedModel")

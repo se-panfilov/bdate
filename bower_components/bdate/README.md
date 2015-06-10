@@ -116,7 +116,8 @@ There is many reasons. Mostly because sometimes you may want to set available ra
 }
 ```
 
-`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one type of delimiter (here is "`-`"), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' );
+`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one type of delimiter (here is "`-`"), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' ).
+*format is case sensetive* - `mm` - is minutes but `MM` - is months (because on angular js politic);
 
 `delimiter` - delimiter for `format` (in example is "`-`")
 

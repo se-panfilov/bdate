@@ -7,7 +7,9 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
   scope:
     popupState: '='
     dateModel: '='
+    dateStoreId: '@?'
   link: (scope) ->
+
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
@@ -31,20 +33,20 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         scope.data.viewedDate =
           year:
-            first: Object.keys(bDataFactory.data.years)[0]
-            last: Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1]
-            number: yearNum
-            count: Object.keys(bDataFactory.data.years).length
+            first: +Object.keys(bDataFactory.data[scope.dateStoreId].years)[0]
+            last: +Object.keys(bDataFactory.data[scope.dateStoreId].years)[Object.keys(bDataFactory.data[scope.dateStoreId].years).length - 1]
+            number: +yearNum
+            count: +Object.keys(bDataFactory.data[scope.dateStoreId].years).length
           month:
-            first: Object.keys(bDataFactory.data.years[yearNum])[0]
-            last: Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
-            daysTotal: bDataFactory.data.years[yearNum][monthNum].days_total
-            startDay: bDataFactory.data.years[yearNum][monthNum].start_day
-            number: monthNum
+            first: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum])[0]
+            last: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum])[Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum]).length - 1]
+            daysTotal: +bDataFactory.data[scope.dateStoreId].years[yearNum][monthNum].days_total
+            startDay: +bDataFactory.data[scope.dateStoreId].years[yearNum][monthNum].start_day
+            number: +monthNum
             name: bDateUtils.getMonthName monthNum
-            count: Object.keys(bDataFactory.data.years[yearNum]).length
+            count: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum]).length
           day:
-            number: dayNum
+            number: +dayNum
 
         scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.year, scope.data.viewedDate.month
       daysOfWeek:
@@ -64,27 +66,22 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
           month: null
           year: null
 
-        isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum
+        isPrevMonthExist = bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum, scope.dateStoreId
         prevMonthDaysCount = 0
         if isPrevMonthExist
-          prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj yearNum, monthNum
+          prevMonthDate = bDateUtils.sourceCheckers.month.getPrevMonthObj yearNum, monthNum, scope.dateStoreId
           prevMonthDaysCount = new Date(prevMonthDate.year, prevMonthDate.month, 0).getDate()
 
         i = 0
         while i < startDay - 1
           result.unshift
-            day: prevMonthDaysCount - i
-            month: prevMonthDate.month
-            year: prevMonthDate.year
+            day: if isPrevMonthExist then prevMonthDaysCount - i else ""
+            month: if isPrevMonthExist then prevMonthDate.month else null
+            year: if isPrevMonthExist then prevMonthDate.year else null
             isOtherMonth: true
+            isLocked: !isPrevMonthExist
           i++
         return result
-#      isNextMonthExist: (yearNum, monthNum) ->
-#        return if not scope.data.isDateModelReady
-#        bDateUtils.sourceCheckers.month.isNextMonthExist yearNum, monthNum
-#      isPrevMonthExist: (yearNum, monthNum) ->
-#        return if not scope.data.isDateModelReady
-#        bDateUtils.sourceCheckers.month.isPrevMonthExist yearNum, monthNum
       _getNextMonthTailDaysArr: (yearNum, monthNum, startDay, daysCount, daysArr) ->
         result = []
         daysInWeek = 7
@@ -96,17 +93,18 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
           month: null
           year: null
 
-        isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist yearNum, monthNum
+        isNextMonthExist = bDateUtils.sourceCheckers.month.isNextMonthExist yearNum, monthNum, scope.dateStoreId
         if isNextMonthExist
-          nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj yearNum, monthNum
+          nextMonthDate = bDateUtils.sourceCheckers.month.getNextMonthObj yearNum, monthNum, scope.dateStoreId
 
         i = daysArr.length
         while i < (expectedWeeksCount * daysInWeek)
           daysArr.push
-            day: i - (daysCount + startDay - 2)
-            month: nextMonthDate.month
-            year: nextMonthDate.year
+            day: if isNextMonthExist then i - (daysCount + startDay - 2) else ""
+            month: if isNextMonthExist then nextMonthDate.month else null
+            year: if isNextMonthExist then nextMonthDate.year else null
             isOtherMonth: true
+            isLocked: !isNextMonthExist
           i++
         return result
       _getMonthDaysArr: (yearNum, monthNum, daysCount) ->
@@ -140,11 +138,11 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         return result
       goNextMonth: (isForward) ->
-        nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
+        nextObj = bDateUtils.sourceCheckers.month.getNextAvailableMonth isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number, scope.dateStoreId
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
       goNextYear: (isForward) ->
-        nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number
+        nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number, scope.dateStoreId
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
       init: (dateSource) ->
@@ -153,24 +151,24 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         if scope.dateModel and not angular.equals {}, scope.dateModel
           scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day
-        else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month
+        else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month, scope.dateStoreId
           scope.data.setViewedDate dateSource.today.year, dateSource.today.month
         else
-          firstYear = bDateUtils.sourceCheckers.year.getFirstYear()
-          scope.data.setViewedDate firstYear, bDateUtils.sourceCheckers.month.getFirstMonth firstYear
+          firstYear = bDateUtils.sourceCheckers.year.getFirstYear scope.dateStoreId
+          scope.data.setViewedDate firstYear, bDateUtils.sourceCheckers.month.getFirstMonth firstYear, scope.dateStoreId
 
     #init
     do ->
-      if bDataFactory.isDataReady bDataFactory.data
-        scope.data.init(bDataFactory.data)
+      if bDataFactory.isDataReady scope.dateStoreId
+        scope.data.init(bDataFactory.data[scope.dateStoreId])
       scope.bDateUtils = bDateUtils
 
     scope.$watch (->
-      bDataFactory.data
+      bDataFactory.data[scope.dateStoreId]
     ), (->
-      if bDataFactory.isDataReady(bDataFactory.data)
-        scope.data.init bDataFactory.data
-      ), true
+      if bDataFactory.isDataReady(scope.dateStoreId)
+        scope.data.init bDataFactory.data[scope.dateStoreId]
+    ), true
 
     scope.$watch 'popupState.isOpen', ->
       if scope.popupState.isOpen and (scope.dateModel and not angular.equals {}, scope.dateModel)

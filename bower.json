@@ -34,6 +34,6 @@
     "bootstrap": "~3.3.4"
   },
   "dependencies": {
-    "bdate": "~0.3.3"
+    "bdate": "~0.4.0"
   }
 }
