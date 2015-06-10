@@ -42,7 +42,7 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       isEmptyModel = scope.bModel is '' or scope.bModel is ' ' or not scope.bModel
       return false if isSameDate or isEmptyModel
 
-      bModelDate = bDateUtils.stringToDate scope.bModel, bDataFactory.data.format, bDataFactory.data.delimiter
+      bModelDate = bDateUtils.stringToDate scope.bModel, bDataFactory.data[scope.dateStoreId].format, bDataFactory.data[scope.dateStoreId].delimiter
       return false if not angular.isDate bModelDate
 
       scope.date.viewed = scope.bModel
@@ -58,7 +58,7 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
         return doNotUpdateModelTwice = false
 
       dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime()
-      formattedDate = $filter('date') dateTime, bDataFactory.data.format
+      formattedDate = $filter('date') dateTime, bDataFactory.data[scope.dateStoreId].format
       scope.date.viewed = formattedDate
       scope.bModel = scope.date.viewed
 

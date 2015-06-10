@@ -7,7 +7,7 @@ angular.module 'bdate.data', []
     isDataReady: (storeId)->
       return console.error MESSAGES.invalidParams if not storeId
 
-      !!exports.data[storeId] and exports.isDataValid exports.data
+      !!exports.data[storeId] and exports.isDataValid exports.data[storeId]
     isDataValid: (data) ->
       return false if not data or (angular.equals {}, data)
       return false if not data.format

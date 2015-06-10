@@ -10,10 +10,6 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
     dateStoreId: '@?'
   link: (scope) ->
 
-    #TODO (S.Panfilov) test debug
-    scope.$watch 'dateStoreId', ->
-      console.log scope.dateStoreId
-
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
@@ -37,18 +33,18 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         scope.data.viewedDate =
           year:
-            first: +Object.keys(bDataFactory.data.years)[0]
-            last: +Object.keys(bDataFactory.data.years)[Object.keys(bDataFactory.data.years).length - 1]
+            first: +Object.keys(bDataFactory.data[scope.dateStoreId].years)[0]
+            last: +Object.keys(bDataFactory.data[scope.dateStoreId].years)[Object.keys(bDataFactory.data[scope.dateStoreId].years).length - 1]
             number: +yearNum
-            count: +Object.keys(bDataFactory.data.years).length
+            count: +Object.keys(bDataFactory.data[scope.dateStoreId].years).length
           month:
-            first: +Object.keys(bDataFactory.data.years[yearNum])[0]
-            last: +Object.keys(bDataFactory.data.years[yearNum])[Object.keys(bDataFactory.data.years[yearNum]).length - 1]
-            daysTotal: +bDataFactory.data.years[yearNum][monthNum].days_total
-            startDay: +bDataFactory.data.years[yearNum][monthNum].start_day
+            first: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum])[0]
+            last: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum])[Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum]).length - 1]
+            daysTotal: +bDataFactory.data[scope.dateStoreId].years[yearNum][monthNum].days_total
+            startDay: +bDataFactory.data[scope.dateStoreId].years[yearNum][monthNum].start_day
             number: +monthNum
             name: bDateUtils.getMonthName monthNum
-            count: +Object.keys(bDataFactory.data.years[yearNum]).length
+            count: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum]).length
           day:
             number: +dayNum
 
@@ -163,15 +159,15 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
     #init
     do ->
-      if bDataFactory.isDataReady bDataFactory.data, scope.dateStoreId
-        scope.data.init(bDataFactory.data)
+      if bDataFactory.isDataReady scope.dateStoreId
+        scope.data.init(bDataFactory.data[scope.dateStoreId])
       scope.bDateUtils = bDateUtils
 
     scope.$watch (->
-      bDataFactory.data
+      bDataFactory.data[scope.dateStoreId]
     ), (->
       if bDataFactory.isDataReady(scope.dateStoreId)
-        scope.data.init bDataFactory.data
+        scope.data.init bDataFactory.data[scope.dateStoreId]
     ), true
 
     scope.$watch 'popupState.isOpen', ->
