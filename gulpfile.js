@@ -15,6 +15,7 @@ var coffee = require('gulp-coffee');
 var templateCache = require('gulp-angular-templatecache');
 var mergeStream = require('merge-stream');
 var cssBase64 = require('gulp-css-base64');
+var coffeelint = require('gulp-coffeelint');
 
 var src = {
     styles: ['src/styles/**/*.styl'],
@@ -29,6 +30,14 @@ var dest = {
     src: 'src',
     templates: 'src/templates'
 };
+
+gulp.task('lint', function () {
+    gulp.src(src.coffee)
+        .pipe(coffeelint({
+            max_line_length: false
+        }))
+        .pipe(coffeelint.reporter())
+});
 
 function makeJade() {
     return gulp.src(src.jade)

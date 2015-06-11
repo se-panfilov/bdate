@@ -1,4 +1,8 @@
-angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.templates']
+angular.module 'bdate.datepicker', [
+  'bdate.popup',
+  'bdate.data',
+  'bdate.templates'
+]
 
 .directive 'bdatepicker', ($filter, bDataFactory, bDateUtils, $document, $interval) ->
   restrict: 'E'
@@ -19,7 +23,7 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
 #TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
       Math.random().toString(36).substring(12)
 
-    $scope.dateStoreId = _generateRandomId();
+    $scope.dateStoreId = _generateRandomId()
 
     $scope.isDataReady = false
 
@@ -34,7 +38,7 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       viewed: ''
       model: {}
 
-    doNotUpdateModelTwice = false;
+    doNotUpdateModelTwice = false
 
     setModelFromExternal = ->
       isSameDate = scope.bModel is scope.date.viewed
@@ -54,7 +58,7 @@ angular.module 'bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
     externalLoadInterval = $interval (->
       if scope.isDataReady
         setModelFromExternal()
-        $interval.cancel(externalLoadInterval);
+        $interval.cancel(externalLoadInterval)
         externalLoadInterval = undefined
     ), 60
 
