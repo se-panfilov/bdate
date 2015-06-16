@@ -391,80 +391,83 @@ angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).
   };
 }]);
 
-angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES', 'bDataFactory', function(MESSAGES, bDataFactory) {
-  var daysOfWeekList, exports, monthObj;
+angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES', 'bDataFactory', 'i18ng', function(MESSAGES, bDataFactory, i18ng) {
+  var daysOfWeekList, exports, gettext, monthObj;
+  gettext = function(text) {
+    return i18ng.t(text);
+  };
   daysOfWeekList = [
     {
-      name: 'Понедельник',
-      short: 'Пн'
+      name: gettext('Понедельник'),
+      short: gettext('Пн')
     }, {
-      name: 'Вторник',
-      short: 'Вт'
+      name: gettext('Вторник'),
+      short: gettext('Вт')
     }, {
-      name: 'Среда',
-      short: 'Ср'
+      name: gettext('Среда'),
+      short: gettext('Ср')
     }, {
-      name: 'Четверг',
-      short: 'Чт'
+      name: gettext('Четверг'),
+      short: gettext('Чт')
     }, {
-      name: 'Пятница',
-      short: 'Пт'
+      name: gettext('Пятница'),
+      short: gettext('Пт')
     }, {
-      name: 'Суббота',
-      short: 'Сб'
+      name: gettext('Суббота'),
+      short: gettext('Сб')
     }, {
-      name: 'Воскресенье',
-      short: 'Вс'
+      name: gettext('Воскресенье'),
+      short: gettext('Вс')
     }
   ];
   monthObj = {
     1: {
-      name: 'Январь',
-      short: 'Янв'
+      name: gettext('Январь'),
+      short: gettext('Янв')
     },
     2: {
-      name: 'Февраль',
-      short: 'Фев'
+      name: gettext('Февраль'),
+      short: gettext('Фев')
     },
     3: {
-      name: 'Март',
-      short: 'Март'
+      name: gettext('Март'),
+      short: gettext('Мар')
     },
     4: {
-      name: 'Апрель',
-      short: 'Май'
+      name: gettext('Апрель'),
+      short: gettext('Апр')
     },
     5: {
-      name: 'Май',
-      short: 'Май'
+      name: gettext('Май'),
+      short: gettext('Май')
     },
     6: {
-      name: 'Июнь',
-      short: 'Июнь'
+      name: gettext('Июнь'),
+      short: gettext('Июн')
     },
     7: {
-      name: 'Июль',
-      short: 'Июль'
+      name: gettext('Июль'),
+      short: gettext('Июл')
     },
     8: {
-      name: 'Август',
-      short: 'Авг'
+      name: gettext('Август'),
+      short: gettext('Авг')
     },
     9: {
-      name: 'Сентябрь',
-      short: 'Сент'
+      name: gettext('Сентябрь'),
+      short: gettext('Сент')
     },
     10: {
-      name: 'Октябрь',
-      short: 'Окт'
+      name: gettext('Октябрь'),
+      short: gettext('Окт')
     },
     11: {
-      name: 'Ноябрь',
-      short: 'Ноя'
+      name: gettext('Ноябрь'),
+      short: gettext('Ноя')
     },
     12: {
-      name: 'Декабрь',
-      short: 'Дек'
+      name: gettext('Декабрь'),
+      short: gettext('Дек')
     }
   };
   return exports = {
@@ -475,13 +478,13 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
       i = 0;
       result = [];
       while (i < daysOfWeekList.length) {
-        result.push(daysOfWeekList[i].short);
+        result.push(gettext(daysOfWeekList[i].short));
         i++;
       }
       return result;
     },
     getMonthName: function(number) {
-      return exports.month[number].name;
+      return gettext(exports.month[number].name);
     },
     makeDateModel: function(datetime) {
       var date, day, month, year;

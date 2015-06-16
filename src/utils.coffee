@@ -1,29 +1,33 @@
 angular.module 'bdate.utils', ['bdate.data']
 
-.factory 'bDateUtils', (MESSAGES, bDataFactory) ->
+.factory 'bDateUtils', (MESSAGES, bDataFactory, i18ng) ->
+
+  gettext = (text) ->
+    return i18ng.t(text)
+
   daysOfWeekList = [
-    {name: 'Понедельник', short: 'Пн'}
-    {name: 'Вторник', short: 'Вт'}
-    {name: 'Среда', short: 'Ср'}
-    {name: 'Четверг', short: 'Чт'}
-    {name: 'Пятница', short: 'Пт'}
-    {name: 'Суббота', short: 'Сб'}
-    {name: 'Воскресенье', short: 'Вс'}
+    {name: gettext('Понедельник'), short: gettext('Пн')}
+    {name: gettext('Вторник'), short: gettext('Вт')}
+    {name: gettext('Среда'), short: gettext('Ср')}
+    {name: gettext('Четверг'), short: gettext('Чт')}
+    {name: gettext('Пятница'), short: gettext('Пт')}
+    {name: gettext('Суббота'), short: gettext('Сб')}
+    {name: gettext('Воскресенье'), short: gettext('Вс')}
   ]
 
   monthObj =
-    1: {name: 'Январь', short: 'Янв'}
-    2: {name: 'Февраль', short: 'Фев'}
-    3: {name: 'Март', short: 'Март'}
-    4: {name: 'Апрель', short: 'Май'}
-    5: {name: 'Май', short: 'Май'}
-    6: {name: 'Июнь', short: 'Июнь'}
-    7: {name: 'Июль', short: 'Июль'}
-    8: {name: 'Август', short: 'Авг'}
-    9: {name: 'Сентябрь', short: 'Сент'}
-    10: {name: 'Октябрь', short: 'Окт'}
-    11: {name: 'Ноябрь', short: 'Ноя'}
-    12: {name: 'Декабрь', short: 'Дек'}
+    1: {name: gettext('Январь'), short: gettext('Янв')}
+    2: {name: gettext('Февраль'), short: gettext('Фев')}
+    3: {name: gettext('Март'), short: gettext('Мар')}
+    4: {name: gettext('Апрель'), short: gettext('Апр')}
+    5: {name: gettext('Май'), short: gettext('Май')}
+    6: {name: gettext('Июнь'), short: gettext('Июн')}
+    7: {name: gettext('Июль'), short: gettext('Июл')}
+    8: {name: gettext('Август'), short: gettext('Авг')}
+    9: {name: gettext('Сентябрь'), short: gettext('Сент')}
+    10: {name: gettext('Октябрь'), short: gettext('Окт')}
+    11: {name: gettext('Ноябрь'), short: gettext('Ноя')}
+    12: {name: gettext('Декабрь'), short: gettext('Дек')}
 
   return exports =
     daysOfWeek: daysOfWeekList
@@ -32,11 +36,11 @@ angular.module 'bdate.utils', ['bdate.data']
       i = 0
       result = []
       while i < daysOfWeekList.length
-        result.push daysOfWeekList[i].short
+        result.push gettext(daysOfWeekList[i].short)
         i++
       return result
     getMonthName: (number)->
-      return exports.month[number].name
+      return gettext(exports.month[number].name)
     makeDateModel: (datetime) ->
       date = new Date(datetime)
       day = date.getDate()

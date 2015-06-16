@@ -1,0 +1,199 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2015-06-17 02:14+0300\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2015-06-16 23:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.1\n"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:398
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Понедельник"
+msgstr "Понедельник"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:399
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Пн"
+msgstr "Пн"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:401
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Вторник"
+msgstr "Вторник"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:402
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Вт"
+msgstr "Вт"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:404
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Среда"
+msgstr "Среда"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:405
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Ср"
+msgstr "Ср"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:407
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Четверг"
+msgstr "Четверг"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:408
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Чт"
+msgstr "Чт"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:410
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Пятница"
+msgstr "Пятница"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:411
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Пт"
+msgstr "Пт"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:413
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Суббота"
+msgstr "Суббота"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:414
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Сб"
+msgstr "Сб"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:416
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Воскресенье"
+msgstr "Воскресенье"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:417
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Вс"
+msgstr "Вс"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:422
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Январь"
+msgstr "Январь"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:423
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Янв"
+msgstr "Янв"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:426
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Февраль"
+msgstr "Февраль"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:427
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Фев"
+msgstr "Фев"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:430
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Март"
+msgstr "Март"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:431
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Мар"
+msgstr "Мар"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:434
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Апрель"
+msgstr "Апрель"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:435
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Апр"
+msgstr "Апр"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:438
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:439
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Май"
+msgstr "Май"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:442
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Июнь"
+msgstr "Июнь"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:443
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Июн"
+msgstr "Июн"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:446
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Июль"
+msgstr "Июль"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:447
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Июл"
+msgstr "Июл"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:450
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Август"
+msgstr "Август"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:451
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Авг"
+msgstr "Авг"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:454
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Сентябрь"
+msgstr "Сентябрь"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:455
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Сент"
+msgstr "Сент"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:458
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Октябрь"
+msgstr "Октябрь"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:459
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Окт"
+msgstr "Окт"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:462
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Ноябрь"
+msgstr "Ноябрь"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:463
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Ноя"
+msgstr "Ноя"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:466
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Декабрь"
+msgstr "Декабрь"
+
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.js:467
+#: /Users/ioganegambaputi/work/getride/static/libs/bdate/dist/bdate.min.js:1
+msgid "Дек"
+msgstr "Дек"
