@@ -18,6 +18,8 @@ angular.module 'bdate.datepicker', [
     bInputClasses: '@?'
     bButtonClasses: '@?'
     bPopupClasses: '@?'
+    bMonthNames: '@?'
+    bDaysNames: '@?'
   controller: ($scope) ->
     _generateRandomId = ->
 #TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it

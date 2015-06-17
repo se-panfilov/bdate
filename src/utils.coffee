@@ -1,46 +1,17 @@
 angular.module 'bdate.utils', ['bdate.data']
 
-.factory 'bDateUtils', (MESSAGES, bDataFactory, i18ng) ->
-
-  gettext = (text) ->
-    return i18ng.t(text)
-
-  daysOfWeekList = [
-    {name: gettext('Monday'), short: gettext('Mon')}
-    {name: gettext('Tuesday'), short: gettext('Tue')}
-    {name: gettext('Wednesday'), short: gettext('Wed')}
-    {name: gettext('Thursday'), short: gettext('Th')}
-    {name: gettext('Friday'), short: gettext('Fri')}
-    {name: gettext('Saturday'), short: gettext('Sat')}
-    {name: gettext('Sunday'), short: gettext('Sun')}
-  ]
-
-  monthObj =
-    1: {name: gettext('January'), short: gettext('Jan')}
-    2: {name: gettext('February'), short: gettext('Feb')}
-    3: {name: gettext('March'), short: gettext('Mar')}
-    4: {name: gettext('April'), short: gettext('Apr')}
-    5: {name: gettext('May'), short: gettext('May')}
-    6: {name: gettext('June'), short: gettext('Jun')}
-    7: {name: gettext('July'), short: gettext('July')}
-    8: {name: gettext('August'), short: gettext('Aug')}
-    9: {name: gettext('September'), short: gettext('Sep')}
-    10: {name: gettext('October'), short: gettext('Oct')}
-    11: {name: gettext('November'), short: gettext('Nov')}
-    12: {name: gettext('December'), short: gettext('Dec')}
+.factory 'bDateUtils', (MESSAGES, bDataFactory) ->
 
   return exports =
-    daysOfWeek: daysOfWeekList
-    month: monthObj
-    getDaysOfWeekShorts: ->
+    getDaysOfWeekShorts: -> #TODO (S.Panfilov) rename func
       i = 0
       result = []
-      while i < daysOfWeekList.length
-        result.push gettext(daysOfWeekList[i].short)
+      while i < bDataFactory.daysNames.length
+        result.push bDataFactory.daysNames[i].short
         i++
       return result
     getMonthName: (number)->
-      return gettext(exports.month[number].name)
+      return bDataFactory.monthNames[number].name
     makeDateModel: (datetime) ->
       date = new Date(datetime)
       day = date.getDate()

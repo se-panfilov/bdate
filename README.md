@@ -134,7 +134,6 @@ Each month contains total days count - `days_total` (because of february) and da
 
  - [Node.js][4] with [npm][5] 
  - [gulp][6] ( `npm install --global gulp` )
- - [i18next-conv][7] ( `npm install i18next-conv -g` )
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
@@ -144,4 +143,3 @@ Each month contains total days count - `days_total` (because of february) and da
 [4]: https://nodejs.org/
 [5]: https://www.npmjs.com/
 [6]: http://gulpjs.com/
-[7]: https://github.com/i18next/i18next-gettext-converter
