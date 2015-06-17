@@ -55,6 +55,9 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='app', lang='en-us')
                             .form-group
                                 label.control-label(for="bdatepicker_1") Date
                                 bdatepicker(b-input-id="bdatepicker_1", b-model="resultModel", b-source="demoData")
+                            .form-group
+                                label.control-label(for="bdatepicker_1_2") Localization
+                                bdatepicker(b-input-id="bdatepicker_1_2", b-model="resultModel", b-source="demoData", b-month-names="localizedMonth", b-days-names="localizedDays")
                             button.btn.btn-info(type="submit")
                                 | The result is
                                 | &nbsp;

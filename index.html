@@ -57,6 +57,10 @@
                 <label for="bdatepicker_1" class="control-label">Date</label>
                 <bdatepicker b-input-id="bdatepicker_1" b-model="resultModel" b-source="demoData"></bdatepicker>
               </div>
+              <div class="form-group">
+                <label for="bdatepicker_1_2" class="control-label">Localization</label>
+                <bdatepicker b-input-id="bdatepicker_1_2" b-model="resultModel" b-source="demoData" b-month-names="localizedMonth" b-days-names="localizedDays"></bdatepicker>
+              </div>
               <button type="submit" class="btn btn-info">
                 The result is
                 &nbsp;<span ng-bind="resultModel"></span>
