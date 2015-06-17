@@ -1,0 +1,125 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2015-06-17 02:14+0300\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2015-06-16 23:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.1\n"
+
+
+msgid "Понедельник"
+msgstr "Понедельник"
+
+msgid "Пн"
+msgstr "Пн"
+
+msgid "Вторник"
+msgstr "Вторник"
+
+msgid "Вт"
+msgstr "Вт"
+
+msgid "Среда"
+msgstr "Среда"
+
+msgid "Ср"
+msgstr "Ср"
+
+msgid "Четверг"
+msgstr "Четверг"
+
+msgid "Чт"
+msgstr "Чт"
+
+msgid "Пятница"
+msgstr "Пятница"
+
+msgid "Пт"
+msgstr "Пт"
+
+msgid "Суббота"
+msgstr "Суббота"
+
+msgid "Сб"
+msgstr "Сб"
+
+msgid "Воскресенье"
+msgstr "Воскресенье"
+
+msgid "Вс"
+msgstr "Вс"
+
+msgid "Январь"
+msgstr "Январь"
+
+msgid "Янв"
+msgstr "Янв"
+
+msgid "Февраль"
+msgstr "Февраль"
+
+msgid "Фев"
+msgstr "Фев"
+
+msgid "Март"
+msgstr "Март"
+
+msgid "Мар"
+msgstr "Мар"
+
+msgid "Апрель"
+msgstr "Апрель"
+
+msgid "Апр"
+msgstr "Апр"
+
+msgid "Май"
+msgstr "Май"
+
+msgid "Июнь"
+msgstr "Июнь"
+
+msgid "Июн"
+msgstr "Июн"
+
+msgid "Июль"
+msgstr "Июль"
+
+msgid "Июл"
+msgstr "Июл"
+
+msgid "Август"
+msgstr "Август"
+
+msgid "Авг"
+msgstr "Авг"
+
+msgid "Сентябрь"
+msgstr "Сентябрь"
+
+msgid "Сент"
+msgstr "Сент"
+
+msgid "Октябрь"
+msgstr "Октябрь"
+
+msgid "Окт"
+msgstr "Окт"
+
+msgid "Ноябрь"
+msgstr "Ноябрь"
+
+msgid "Ноя"
+msgstr "Ноя"
+
+msgid "Декабрь"
+msgstr "Декабрь"
+
+msgid "Дек"
+msgstr "Дек"
