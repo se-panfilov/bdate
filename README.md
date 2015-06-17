@@ -171,8 +171,9 @@ $scope.localizedDays = [
 ];
 ```
 
-#Global dependencies
-(for develop)
+#Developing
+
+Global dependencies:
 
  - [Node.js][4] with [npm][5] 
  - [gulp][6] ( `npm install --global gulp` )
