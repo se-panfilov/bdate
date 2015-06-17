@@ -13,8 +13,8 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       bInputClasses: '@?',
       bButtonClasses: '@?',
       bPopupClasses: '@?',
-      bMonthNames: '@?',
-      bDaysNames: '@?'
+      bMonthNames: '=?',
+      bDaysNames: '=?'
     },
     controller: ['$scope', function($scope) {
       var _generateRandomId, setLocalizedData;
@@ -225,7 +225,7 @@ angular.module('bdate.data', []).factory('bDataFactory', ['MESSAGES', function(M
       }
     },
     setMonthNames: function(monthNamesObj) {
-      if (!exports.isDaysNamesValid(monthNamesObj)) {
+      if (!exports.isMonthNamesValid(monthNamesObj)) {
         console.error(MESSAGES.monthNameNotValid);
         return false;
       }
@@ -235,13 +235,13 @@ angular.module('bdate.data', []).factory('bDataFactory', ['MESSAGES', function(M
       if (angular.isArray(monthNamesObj) && !angular.isObject(monthNamesObj)) {
         return false;
       }
-      if (monthNamesObj.length !== 12) {
+      if (Object.keys(monthNamesObj).length !== 12) {
         return false;
       }
-      if (!monthNamesObj[0].name) {
+      if (!monthNamesObj[1].name) {
         return false;
       }
-      if (!monthNamesObj[0].short) {
+      if (!monthNamesObj[1].short) {
         return false;
       }
       return true;
@@ -293,8 +293,8 @@ angular.module('bdate', ['bdate.datepicker']).constant('MESSAGES', {
   errorOnChangeMonthOrYear: 'cannot change month or year',
   sourceDataNotValid: 'source data(json)is not valid',
   dateNotReady: 'source data(json)is not ready(null?)',
-  daysNameNotValid: 'days name array not valid',
-  monthNameNotValid: 'month name array not valid'
+  daysNameNotValid: 'days names array not valid',
+  monthNameNotValid: 'month names object not valid'
 });
 
 angular.module('bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']).directive('bdatePopup', ['bDateUtils', 'bDataFactory', 'MESSAGES', function(bDateUtils, bDataFactory, MESSAGES) {

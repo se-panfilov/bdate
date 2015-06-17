@@ -44,9 +44,9 @@ angular.module 'bdate.data', []
       exports.monthNames = monthNamesObj
     isMonthNamesValid: (monthNamesObj) ->
       return false if angular.isArray(monthNamesObj) and not angular.isObject(monthNamesObj)
-      return false if monthNamesObj.length isnt 12
-      return false if not monthNamesObj[0].name
-      return false if not monthNamesObj[0].short
+      return false if Object.keys(monthNamesObj).length isnt 12
+      return false if not monthNamesObj[1].name
+      return false if not monthNamesObj[1].short
       return true
     isDataReady: (storeId)->
       return console.error MESSAGES.invalidParams if not storeId
