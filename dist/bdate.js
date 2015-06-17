@@ -398,76 +398,76 @@ angular.module('bdate.utils', ['bdate.data']).factory('bDateUtils', ['MESSAGES',
   };
   daysOfWeekList = [
     {
-      name: gettext('Понедельник'),
-      short: gettext('Пн')
+      name: gettext('Monday'),
+      short: gettext('Mon')
     }, {
-      name: gettext('Вторник'),
-      short: gettext('Вт')
+      name: gettext('Tuesday'),
+      short: gettext('Tue')
     }, {
-      name: gettext('Среда'),
-      short: gettext('Ср')
+      name: gettext('Wednesday'),
+      short: gettext('Wed')
     }, {
-      name: gettext('Четверг'),
-      short: gettext('Чт')
+      name: gettext('Thursday'),
+      short: gettext('Th')
     }, {
-      name: gettext('Пятница'),
-      short: gettext('Пт')
+      name: gettext('Friday'),
+      short: gettext('Fri')
     }, {
-      name: gettext('Суббота'),
-      short: gettext('Сб')
+      name: gettext('Saturday'),
+      short: gettext('Sat')
     }, {
-      name: gettext('Воскресенье'),
-      short: gettext('Вс')
+      name: gettext('Sunday'),
+      short: gettext('Sun')
     }
   ];
   monthObj = {
     1: {
-      name: gettext('Январь'),
-      short: gettext('Янв')
+      name: gettext('January'),
+      short: gettext('Jan')
     },
     2: {
-      name: gettext('Февраль'),
-      short: gettext('Фев')
+      name: gettext('February'),
+      short: gettext('Feb')
     },
     3: {
-      name: gettext('Март'),
-      short: gettext('Мар')
+      name: gettext('March'),
+      short: gettext('Mar')
     },
     4: {
-      name: gettext('Апрель'),
-      short: gettext('Апр')
+      name: gettext('April'),
+      short: gettext('Apr')
     },
     5: {
-      name: gettext('Май'),
-      short: gettext('Май')
+      name: gettext('May'),
+      short: gettext('May')
     },
     6: {
-      name: gettext('Июнь'),
-      short: gettext('Июн')
+      name: gettext('June'),
+      short: gettext('Jun')
     },
     7: {
-      name: gettext('Июль'),
-      short: gettext('Июл')
+      name: gettext('July'),
+      short: gettext('July')
     },
     8: {
-      name: gettext('Август'),
-      short: gettext('Авг')
+      name: gettext('August'),
+      short: gettext('Aug')
     },
     9: {
-      name: gettext('Сентябрь'),
-      short: gettext('Сент')
+      name: gettext('September'),
+      short: gettext('Sep')
     },
     10: {
-      name: gettext('Октябрь'),
-      short: gettext('Окт')
+      name: gettext('October'),
+      short: gettext('Oct')
     },
     11: {
-      name: gettext('Ноябрь'),
-      short: gettext('Ноя')
+      name: gettext('November'),
+      short: gettext('Nov')
     },
     12: {
-      name: gettext('Декабрь'),
-      short: gettext('Дек')
+      name: gettext('December'),
+      short: gettext('Dec')
     }
   };
   return exports = {
