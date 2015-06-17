@@ -12,113 +12,113 @@ msgstr ""
 "Language-Team: \n"
 "X-Generator: Poedit 1.8.1\n"
 
-msgid "Понедельник"
+msgid "Monday"
 msgstr "Monday"
 
-msgid "Пн"
+msgid "Mon"
 msgstr "Mon"
 
-msgid "Вторник"
+msgid "Tuesday"
 msgstr "Tuesday"
 
-msgid "Вт"
+msgid "Tue"
 msgstr "Tue"
 
-msgid "Среда"
-msgstr "Wensday"
+msgid "Wednesday"
+msgstr "Wednesday"
 
-msgid "Ср"
+msgid "Wed"
 msgstr "Wed"
 
-msgid "Четверг"
+msgid "Thursday"
 msgstr "Thursday"
 
-msgid "Чт"
+msgid "Th"
 msgstr "Th"
 
-msgid "Пятница"
+msgid "Friday"
 msgstr "Friday"
 
-msgid "Пт"
+msgid "Fri"
 msgstr "Fri"
 
-msgid "Суббота"
+msgid "Saturday"
 msgstr "Saturday"
 
-msgid "Сб"
+msgid "Sat"
 msgstr "Sat"
 
-msgid "Воскресенье"
+msgid "Sunday"
 msgstr "Sunday"
 
-msgid "Вс"
+msgid "Sun"
 msgstr "Sun"
 
-msgid "Январь"
+msgid "January"
 msgstr "January"
 
-msgid "Янв"
+msgid "Jan"
 msgstr "Jan"
 
-msgid "Февраль"
+msgid "February"
 msgstr "February"
 
-msgid "Фев"
+msgid "Feb"
 msgstr "Feb"
 
-msgid "Март"
+msgid "March"
 msgstr "March"
 
-msgid "Мар"
+msgid "Mar"
 msgstr "Mar"
 
-msgid "Апрель"
+msgid "April"
 msgstr "April"
 
-msgid "Апр"
+msgid "Apr"
 msgstr "Apr"
 
-msgid "Май"
+msgid "May"
 msgstr "May"
 
-msgid "Июнь"
+msgid "June"
 msgstr "June"
 
-msgid "Июн"
+msgid "Jun"
 msgstr "Jun"
 
-msgid "Июль"
+msgid "July"
 msgstr "July"
 
-msgid "Июл"
+msgid "Jul"
 msgstr "Jul"
 
-msgid "Август"
+msgid "August"
 msgstr "August"
 
-msgid "Авг"
+msgid "Aug"
 msgstr "Aug"
 
-msgid "Сентябрь"
+msgid "September"
 msgstr "September"
 
-msgid "Сент"
+msgid "Sep"
 msgstr "Sep"
 
-msgid "Октябрь"
+msgid "October"
 msgstr "October"
 
-msgid "Окт"
+msgid "Oct"
 msgstr "Oct"
 
-msgid "Ноябрь"
+msgid "November"
 msgstr "November"
 
-msgid "Ноя"
+msgid "Nov"
 msgstr "Nov"
 
-msgid "Декабрь"
+msgid "December"
 msgstr "December"
 
-msgid "Дек"
+msgid "Dec"
 msgstr "Dec"

@@ -6,28 +6,28 @@ angular.module 'bdate.utils', ['bdate.data']
     return i18ng.t(text)
 
   daysOfWeekList = [
-    {name: gettext('Понедельник'), short: gettext('Пн')}
-    {name: gettext('Вторник'), short: gettext('Вт')}
-    {name: gettext('Среда'), short: gettext('Ср')}
-    {name: gettext('Четверг'), short: gettext('Чт')}
-    {name: gettext('Пятница'), short: gettext('Пт')}
-    {name: gettext('Суббота'), short: gettext('Сб')}
-    {name: gettext('Воскресенье'), short: gettext('Вс')}
+    {name: gettext('Monday'), short: gettext('Mon')}
+    {name: gettext('Tuesday'), short: gettext('Tue')}
+    {name: gettext('Wednesday'), short: gettext('Wed')}
+    {name: gettext('Thursday'), short: gettext('Th')}
+    {name: gettext('Friday'), short: gettext('Fri')}
+    {name: gettext('Saturday'), short: gettext('Sat')}
+    {name: gettext('Sunday'), short: gettext('Sun')}
   ]
 
   monthObj =
-    1: {name: gettext('Январь'), short: gettext('Янв')}
-    2: {name: gettext('Февраль'), short: gettext('Фев')}
-    3: {name: gettext('Март'), short: gettext('Мар')}
-    4: {name: gettext('Апрель'), short: gettext('Апр')}
-    5: {name: gettext('Май'), short: gettext('Май')}
-    6: {name: gettext('Июнь'), short: gettext('Июн')}
-    7: {name: gettext('Июль'), short: gettext('Июл')}
-    8: {name: gettext('Август'), short: gettext('Авг')}
-    9: {name: gettext('Сентябрь'), short: gettext('Сент')}
-    10: {name: gettext('Октябрь'), short: gettext('Окт')}
-    11: {name: gettext('Ноябрь'), short: gettext('Ноя')}
-    12: {name: gettext('Декабрь'), short: gettext('Дек')}
+    1: {name: gettext('January'), short: gettext('Jan')}
+    2: {name: gettext('February'), short: gettext('Feb')}
+    3: {name: gettext('March'), short: gettext('Mar')}
+    4: {name: gettext('April'), short: gettext('Apr')}
+    5: {name: gettext('May'), short: gettext('May')}
+    6: {name: gettext('June'), short: gettext('Jun')}
+    7: {name: gettext('July'), short: gettext('July')}
+    8: {name: gettext('August'), short: gettext('Aug')}
+    9: {name: gettext('September'), short: gettext('Sep')}
+    10: {name: gettext('October'), short: gettext('Oct')}
+    11: {name: gettext('November'), short: gettext('Nov')}
+    12: {name: gettext('December'), short: gettext('Dec')}
 
   return exports =
     daysOfWeek: daysOfWeekList

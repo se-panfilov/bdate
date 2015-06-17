@@ -1,6 +1,5 @@
 var extract = require('jsxgettext-recursive');
 
-
 var walker_ru = extract({
     'input-dir': './../dist/',
     'output-dir': '.',
@@ -14,7 +13,6 @@ var walker_ru = extract({
 walker_ru.on('end', function () {
     console.log('ru done!');
 });
-
 
 var walker_en = extract({
     'input-dir': './../dist/',
