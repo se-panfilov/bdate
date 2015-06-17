@@ -129,6 +129,48 @@ Each year should contain a list of available monthes (**monthes start from 1**, 
 
 Each month contains total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
 
+#Localization
+
+Default language is english.
+You able to pass month and days names as directives attributes:
+
+```html
+<bdatepicker b-month-names="localizedMonth" b-days-names="localizedDays" b-model="resultModel" b-source="demoData"></bdatepicker>
+```
+
+`b-month-names` - **object** of localized month names. Example:
+
+```js
+$scope.localizedMonth = {
+    1: {name: 'Январь', short: 'Янв'},
+    2: {name: 'Февраль', short: 'Фев'},
+    3: {name: 'Март', short: 'Март'},
+    4: {name: 'Апрель', short: 'Май'},
+    5: {name: 'Май', short: 'Май'},
+    6: {name: 'Июнь', short: 'Июнь'},
+    7: {name: 'Июль', short: 'Июль'},
+    8: {name: 'Август', short: 'Авг'},
+    9: {name: 'Сентябрь', short: 'Сент'},
+    10: {name: 'Октябрь', short: 'Окт'},
+    11: {name: 'Ноябрь', short: 'Ноя'},
+    12: {name: 'Декабрь', short: 'Дек'}
+};
+```
+
+`b-days-names` - **array** of localized days names. Example:
+
+```js
+$scope.localizedDays = [
+    {name: 'Понедельник', short: 'Пн'},
+    {name: 'Вторник', short: 'Вт'},
+    {name: 'Среда', short: 'Ср'},
+    {name: 'Четверг', short: 'Чт'},
+    {name: 'Пятница', short: 'Пт'},
+    {name: 'Суббота', short: 'Сб'},
+    {name: 'Воскресенье', short: 'Вс'}
+];
+```
+
 #Global dependencies
 (for develop)
 
