@@ -1,42 +1,17 @@
 angular.module 'bdate.utils', ['bdate.data']
 
 .factory 'bDateUtils', (MESSAGES, bDataFactory) ->
-  daysOfWeekList = [
-    {name: 'Понедельник', short: 'Пн'}
-    {name: 'Вторник', short: 'Вт'}
-    {name: 'Среда', short: 'Ср'}
-    {name: 'Четверг', short: 'Чт'}
-    {name: 'Пятница', short: 'Пт'}
-    {name: 'Суббота', short: 'Сб'}
-    {name: 'Воскресенье', short: 'Вс'}
-  ]
-
-  monthObj =
-    1: {name: 'Январь', short: 'Янв'}
-    2: {name: 'Февраль', short: 'Фев'}
-    3: {name: 'Март', short: 'Март'}
-    4: {name: 'Апрель', short: 'Май'}
-    5: {name: 'Май', short: 'Май'}
-    6: {name: 'Июнь', short: 'Июнь'}
-    7: {name: 'Июль', short: 'Июль'}
-    8: {name: 'Август', short: 'Авг'}
-    9: {name: 'Сентябрь', short: 'Сент'}
-    10: {name: 'Октябрь', short: 'Окт'}
-    11: {name: 'Ноябрь', short: 'Ноя'}
-    12: {name: 'Декабрь', short: 'Дек'}
 
   return exports =
-    daysOfWeek: daysOfWeekList
-    month: monthObj
-    getDaysOfWeekShorts: ->
+    getDaysOfWeekShorts: -> #TODO (S.Panfilov) rename func
       i = 0
       result = []
-      while i < daysOfWeekList.length
-        result.push daysOfWeekList[i].short
+      while i < bDataFactory.daysNames.length
+        result.push bDataFactory.daysNames[i].short
         i++
       return result
     getMonthName: (number)->
-      return exports.month[number].name
+      return bDataFactory.monthNames[number].name
     makeDateModel: (datetime) ->
       date = new Date(datetime)
       day = date.getDate()
@@ -181,7 +156,7 @@ angular.module 'bdate.utils', ['bdate.data']
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
           +Object.keys(bDataFactory.data[storeId].years[yearNum])[Object.keys(bDataFactory.data[storeId].years[yearNum]).length - 1]
-        getNextAvailableMonth: (isForward, yearNum, monthNum, storeId) -> #TODO (S.Panfilov)
+        getNextAvailableMonth: (isForward, yearNum, monthNum, storeId) ->
           yearNum = +yearNum
           monthNum = +monthNum
           isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, monthNum, storeId
@@ -223,17 +198,17 @@ angular.module 'bdate.utils', ['bdate.data']
           return console.error MESSAGES.invalidParams if not yearNum
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           bDataFactory.data[storeId].years[yearNum]
-        isFirstYear: (yearNum, storeId) -> #TODO (S.Panfilov)
+        isFirstYear: (yearNum, storeId) ->
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data[storeId].years)[0]
-        getFirstYear: (storeId) -> #TODO (S.Panfilov)
+        getFirstYear: (storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           +Object.keys(bDataFactory.data[storeId].years)[0]
-        isLastYear: (yearNum, storeId) -> #TODO (S.Panfilov)
+        isLastYear: (yearNum, storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1]
-        getLastYear: (storeId) -> #TODO (S.Panfilov)
+        getLastYear: (storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1]
         getNextAvailableYear: (isForward, yearNum, monthNum, storeId) ->

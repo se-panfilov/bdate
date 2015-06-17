@@ -1,6 +1,6 @@
 {
   "name": "bdate",
-  "version": "0.4.1",
+  "version": "0.5.2",
   "homepage": "https://github.com/Light241/bdate",
   "authors": [
     "S.Panfilov <se-panfilov@ya.ru>"
@@ -28,13 +28,13 @@
     "test",
     "tests"
   ],
-  "_release": "0.4.1",
+  "_release": "0.5.2",
   "_resolution": {
     "type": "version",
-    "tag": "v0.4.1",
-    "commit": "c87ee5c46b7aaac820051ed50fc787d8a4ba847d"
+    "tag": "v0.5.2",
+    "commit": "2c950d987143384bf40d3671d4ba62c35b766385"
   },
   "_source": "git://github.com/Light241/bdate.git",
-  "_target": "~0.4.1",
+  "_target": "~0.5.2",
   "_originalSource": "bdate"
 }
