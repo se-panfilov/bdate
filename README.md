@@ -129,8 +129,19 @@ Each year should contain a list of available monthes (**monthes start from 1**, 
 
 Each month contains total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
 
+#Global dependencies
+(for develop)
+
+ - [Node.js][4] with [npm][5] 
+ - [gulp][6] ( `npm install --global gulp` )
+ - [i18next-conv][7] ( `npm install i18next-conv -g` )
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-[1]: http://light241.github.io/bdate/
+[1]: https://light241.github.io/bdate/
 [2]: https://angular-ui.github.io/bootstrap/#/datepicker
 [3]: https://github.com/Light241/bdate/releases
+[4]: https://nodejs.org/
+[5]: https://www.npmjs.com/
+[6]: http://gulpjs.com/
+[7]: https://github.com/i18next/i18next-gettext-converter
