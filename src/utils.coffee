@@ -185,7 +185,7 @@ angular.module 'bdate.utils', ['bdate.data']
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
           +Object.keys(bDataFactory.data[storeId].years[yearNum])[Object.keys(bDataFactory.data[storeId].years[yearNum]).length - 1]
-        getNextAvailableMonth: (isForward, yearNum, monthNum, storeId) -> #TODO (S.Panfilov)
+        getNextAvailableMonth: (isForward, yearNum, monthNum, storeId) ->
           yearNum = +yearNum
           monthNum = +monthNum
           isFirstMonth = exports.sourceCheckers.month.isFirstMonth yearNum, monthNum, storeId
@@ -227,17 +227,17 @@ angular.module 'bdate.utils', ['bdate.data']
           return console.error MESSAGES.invalidParams if not yearNum
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           bDataFactory.data[storeId].years[yearNum]
-        isFirstYear: (yearNum, storeId) -> #TODO (S.Panfilov)
+        isFirstYear: (yearNum, storeId) ->
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data[storeId].years)[0]
-        getFirstYear: (storeId) -> #TODO (S.Panfilov)
+        getFirstYear: (storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           +Object.keys(bDataFactory.data[storeId].years)[0]
-        isLastYear: (yearNum, storeId) -> #TODO (S.Panfilov)
+        isLastYear: (yearNum, storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
           yearNum is +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1]
-        getLastYear: (storeId) -> #TODO (S.Panfilov)
+        getLastYear: (storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1]
         getNextAvailableYear: (isForward, yearNum, monthNum, storeId) ->
