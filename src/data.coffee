@@ -38,7 +38,7 @@ angular.module 'bdate.data', []
       11: {name: 'November', short: 'Nov'}
       12: {name: 'December', short: 'Dec'}
     setMonthNames: (monthNamesObj)->
-      if not exports.isDaysNamesValid monthNamesObj
+      if not exports.isMonthNamesValid monthNamesObj
         console.error MESSAGES.monthNameNotValid
         return false
       exports.monthNames = monthNamesObj

@@ -22,11 +22,9 @@ angular.module 'bdate.datepicker', [
     bDaysNames: '@?'
   controller: ($scope) ->
     _generateRandomId = ->
-#TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
-      Math.random().toString(36).substring(12)
+      Math.random().toString(36).substring(12)  #TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
 
     $scope.dateStoreId = _generateRandomId()
-
     $scope.isDataReady = false
 
     $scope.$watch 'bSource', ->
@@ -34,6 +32,16 @@ angular.module 'bdate.datepicker', [
         bDataFactory.setData $scope.bSource, $scope.dateStoreId
         $scope.isDataReady = true
     , true
+
+    setLocalizedData = ->
+      if $scope.bMonthNames
+        bDataFactory.setMonthNames $scope.bMonthNames
+      if $scope.bDaysNames
+        bDataFactory.setDaysNames $scope.bDaysNames
+
+    #init
+    do ->
+      setLocalizedData()
 
   link: (scope, elem) ->
     scope.date =

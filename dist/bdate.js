@@ -17,18 +17,29 @@ angular.module('bdate.datepicker', ['bdate.popup', 'bdate.data', 'bdate.template
       bDaysNames: '@?'
     },
     controller: ['$scope', function($scope) {
-      var _generateRandomId;
+      var _generateRandomId, setLocalizedData;
       _generateRandomId = function() {
         return Math.random().toString(36).substring(12);
       };
       $scope.dateStoreId = _generateRandomId();
       $scope.isDataReady = false;
-      return $scope.$watch('bSource', function() {
+      $scope.$watch('bSource', function() {
         if (bDataFactory.isDataValid($scope.bSource)) {
           bDataFactory.setData($scope.bSource, $scope.dateStoreId);
           return $scope.isDataReady = true;
         }
       }, true);
+      setLocalizedData = function() {
+        if ($scope.bMonthNames) {
+          bDataFactory.setMonthNames($scope.bMonthNames);
+        }
+        if ($scope.bDaysNames) {
+          return bDataFactory.setDaysNames($scope.bDaysNames);
+        }
+      };
+      return (function() {
+        return setLocalizedData();
+      })();
     }],
     link: function(scope, elem) {
       var doNotUpdateModelTwice, externalLoadInterval, processClick, setModelFromExternal;
