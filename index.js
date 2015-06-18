@@ -10,7 +10,7 @@ angular.module('demo', [
             "format": "dd.MM.yyyy",
             "delimiter": ".",
             "today": {
-                "date": 1433817417,
+                "date": 1434615270,
                 "year": 2015,
                 "month": 6,
                 "day": 9,
