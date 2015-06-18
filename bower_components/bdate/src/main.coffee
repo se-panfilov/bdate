@@ -7,3 +7,4 @@ angular.module 'bdate', ['bdate.datepicker']
   dateNotReady: 'source data(json)is not ready(null?)'
   daysNameNotValid: 'days names array not valid'
   monthNameNotValid: 'month names object not valid'
+  yearNotExist: 'year not exist in source data'

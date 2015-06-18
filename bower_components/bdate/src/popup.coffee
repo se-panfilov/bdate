@@ -9,13 +9,50 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
     dateModel: '='
     dateStoreId: '@?'
   link: (scope) ->
-
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
       selectDate: (date) ->
         scope.data.setDateModel date
         scope.popup.hidePopup()
+
+    setInitViewedDate = (dateSource) ->
+      year = null
+      month = null
+      day = null
+
+      if scope.dateModel and not angular.equals {}, scope.dateModel
+        year = scope.dateModel.year
+        month = scope.dateModel.month
+        day = scope.dateModel.day
+      else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month, scope.dateStoreId
+        year = dateSource.today.year
+        month = dateSource.today.month
+      else
+        year = bDateUtils.sourceCheckers.year.getFirstYear scope.dateStoreId
+        month = bDateUtils.sourceCheckers.month.getFirstMonth year, scope.dateStoreId
+
+      scope.data.setViewedDate year, month, day
+      scope.data.yearsList = bDateUtils.getYearsAsFlatArr scope.dateStoreId
+      reloadSelectViewDate(year)
+
+    getPositionInArray = (val, arr) ->
+      i = 0
+      while i < arr.length
+        if +arr[i] is +val
+          return i
+        i++
+
+      console.error MESSAGES.yearNotExist
+      return -1
+
+    scope.$watch 'data.viewedDate.year.number', (year)->
+      return if not year
+      reloadSelectViewDate(year)
+
+    reloadSelectViewDate = (year) ->
+      viewedYearNumberInArr = getPositionInArray year, scope.data.yearsList
+      scope.selectViewedYear = scope.data.yearsList[viewedYearNumberInArr]
 
     scope.data =
       setDateModel: (dateModel) ->
@@ -30,6 +67,7 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         return console.error MESSAGES.invalidParams if not yearNum or not monthNum
         yearNum = +yearNum
         monthNum = +monthNum
+        dayNum = (dayNum) ? +dayNum: 1
 
         scope.data.viewedDate =
           year:
@@ -46,9 +84,10 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
             name: bDateUtils.getMonthName monthNum
             count: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum]).length
           day:
-            number: +dayNum
+            number: dayNum
 
         scope.data.viewedDate.days = scope.data.getDaysArr scope.data.viewedDate.year, scope.data.viewedDate.month
+      yearsList: []
       daysOfWeek:
         get: ->
           bDateUtils.daysOfWeek
@@ -145,17 +184,22 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         nextObj = bDateUtils.sourceCheckers.year.getNextAvailableYear isForward, scope.data.viewedDate.year.number, scope.data.viewedDate.month.number, scope.dateStoreId
         if nextObj
           scope.data.setViewedDate nextObj.year, nextObj.month
+      goToYear: (yearNum) ->
+        return console.error MESSAGES.invalidParams if not yearNum
+        yearNum = +yearNum
+        return console.error MESSAGES.yearNotExist if not bDateUtils.sourceCheckers.year.isYearExist yearNum, scope.dateStoreId
+
+        if bDateUtils.sourceCheckers.month.isMonthExist yearNum, scope.data.viewedDate.month.number, scope.dateStoreId
+          monthNum = +scope.data.viewedDate.month.number
+        else
+          monthNum = +bDateUtils.sourceCheckers.month.getFirstMonth yearNum, scope.dateStoreId
+
+        scope.data.setViewedDate yearNum, monthNum, scope.data.viewedDate.day.number
       init: (dateSource) ->
         scope.data.setFormat dateSource.format
         scope.data.setToday dateSource.today
 
-        if scope.dateModel and not angular.equals {}, scope.dateModel
-          scope.data.setViewedDate scope.dateModel.year, scope.dateModel.month, scope.dateModel.day
-        else if bDateUtils.sourceCheckers.month.isMonthExist dateSource.today.year, dateSource.today.month, scope.dateStoreId
-          scope.data.setViewedDate dateSource.today.year, dateSource.today.month
-        else
-          firstYear = bDateUtils.sourceCheckers.year.getFirstYear scope.dateStoreId
-          scope.data.setViewedDate firstYear, bDateUtils.sourceCheckers.month.getFirstMonth firstYear, scope.dateStoreId
+        setInitViewedDate(dateSource)
 
     #init
     do ->
