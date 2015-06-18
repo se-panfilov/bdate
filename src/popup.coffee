@@ -34,16 +34,25 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
       scope.data.setViewedDate year, month, day
       scope.data.yearsList = bDateUtils.getYearsAsFlatArr scope.dateStoreId
-      viewedYearNumberInArr = getPositionInArray year, scope.data.yearsList
-      scope.selectViewedYear = scope.data.yearsList[viewedYearNumberInArr]
+      reloadSelectViewDate(year)
 
     getPositionInArray = (val, arr) ->
       i = 0
-      while i < arr.length - 1
+      while i < arr.length
         if +arr[i] is +val
           return i
         i++
+
+      console.error MESSAGES.yearNotExist
       return -1
+
+    scope.$watch 'data.viewedDate.year.number', (year)->
+      return if not year
+      reloadSelectViewDate(year)
+
+    reloadSelectViewDate = (year) ->
+      viewedYearNumberInArr = getPositionInArray year, scope.data.yearsList
+      scope.selectViewedYear = scope.data.yearsList[viewedYearNumberInArr]
 
     scope.data =
       setDateModel: (dateModel) ->
