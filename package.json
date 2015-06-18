@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Light241/bdate.git"
+    "url": "https://github.com/se-panfilov/bdate.git"
   },
   "author": "S.Panfilov <se-panfilov@ya.ru>",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/Light241/bdate/issues"
+    "url": "https://github.com/se-panfilov/bdate/issues"
   },
-  "homepage": "https://github.com/Light241/bdate",
+  "homepage": "https://github.com/se-panfilov/bdate",
   "devDependencies": {
     "gulp-concat": "^2.5.2",
     "gulp-concat-css": "^2.2.0",

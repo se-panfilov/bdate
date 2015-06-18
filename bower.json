@@ -1,8 +1,8 @@
 {
   "name": "bdate",
   "private": true,
-  "version": "0.5.2",
-  "homepage": "https://github.com/Light241/bdate",
+  "version": "0.5.3",
+  "homepage": "https://github.com/se-panfilov/bdate",
   "authors": [
     "S.Panfilov <se-panfilov@ya.ru>"
   ],
@@ -10,10 +10,10 @@
   "main": "bdate.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Light241/bdate.git"
+    "url": "git://github.com/se-panfilov/bdate.git"
   },
   "bugs": {
-    "url": "https://github.com/Light241/bdate/issues"
+    "url": "https://github.com/se-panfilov/bdate/issues"
   },
   "keywords": [
     "datepicker",
@@ -34,6 +34,6 @@
     "bootstrap": "~3.3.4"
   },
   "dependencies": {
-    "bdate": "~0.5.2"
+    "bdate": "~0.5.3"
   }
 }

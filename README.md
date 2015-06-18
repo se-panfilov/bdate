@@ -1,8 +1,8 @@
 [![Bower version](https://badge.fury.io/bo/bdate.svg)](http://badge.fury.io/bo/bdate)
 [![npm version](https://badge.fury.io/js/bdate.svg)](http://badge.fury.io/js/bdate)
-[![dependency Status](https://david-dm.org/Light241/bdate/status.svg?branch=master)](https://david-dm.org/Light241/bdate#info=Dependencies)
-[![devDependency Status](https://david-dm.org/Light241/bdate/dev-status.svg?branch=master)](https://david-dm.org/Light241/bdate#info=devDependencies)
-[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/Light241/bdate/blob/master/LICENSE)
+[![dependency Status](https://david-dm.org/se-panfilov/bdate/status.svg?branch=master)](https://david-dm.org/se-panfilov/bdate#info=Dependencies)
+[![devDependency Status](https://david-dm.org/se-panfilov/bdate/dev-status.svg?branch=master)](https://david-dm.org/se-panfilov/bdate#info=devDependencies)
+[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/se-panfilov/bdate/blob/master/LICENSE)
 
 bDate - Backend-driven Angularjs datepicker
 =============
@@ -129,8 +129,8 @@ Each year should contain list of available monthes (**monthes start from 1**, no
 
 Each month contain total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/se-panfilov/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-[1]: http://light241.github.io/bdate/
+[1]: http://se-panfilov.github.io/bdate/
 [2]: https://angular-ui.github.io/bootstrap/#/datepicker
-[3]: https://github.com/Light241/bdate/releases
+[3]: https://github.com/se-panfilov/bdate/releases

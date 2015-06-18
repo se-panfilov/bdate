@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Light241/bdate.git"
+    "url": "https://github.com/se-panfilov/bdate.git"
   },
   "author": "S.Panfilov <se-panfilov@ya.ru>",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/Light241/bdate/issues"
+    "url": "https://github.com/se-panfilov/bdate/issues"
   },
   "keywords": [
     "datepicker",
@@ -22,7 +22,7 @@
     "angularjs",
     "Angular.js"
   ],
-  "homepage": "https://github.com/Light241/bdate",
+  "homepage": "https://github.com/se-panfilov/bdate",
   "devDependencies": {
     "gulp-angular-templatecache": "^1.6.0",
     "gulp-changed": "^1.2.1",

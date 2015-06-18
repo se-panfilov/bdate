@@ -1,8 +1,8 @@
 [![Bower version](https://badge.fury.io/bo/bdate.svg)](http://badge.fury.io/bo/bdate)
 [![npm version](https://badge.fury.io/js/bdate.svg)](http://badge.fury.io/js/bdate)
-[![dependency Status](https://david-dm.org/Light241/bdate/status.svg?branch=master)](https://david-dm.org/Light241/bdate#info=Dependencies)
-[![devDependency Status](https://david-dm.org/Light241/bdate/dev-status.svg?branch=master)](https://david-dm.org/Light241/bdate#info=devDependencies)
-[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/Light241/bdate/blob/master/LICENSE)
+[![dependency Status](https://david-dm.org/se-panfilov/bdate/status.svg?branch=master)](https://david-dm.org/se-panfilov/bdate#info=Dependencies)
+[![devDependency Status](https://david-dm.org/se-panfilov/bdate/dev-status.svg?branch=master)](https://david-dm.org/se-panfilov/bdate#info=devDependencies)
+[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/se-panfilov/bdate/blob/master/LICENSE)
 
 bDate - Backend-driven Angularjs datepicker
 =============
@@ -178,11 +178,11 @@ Global dependencies:
  - [Node.js][4] with [npm][5] 
  - [gulp][6] ( `npm install --global gulp` )
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/Light241/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/se-panfilov/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-[1]: https://light241.github.io/bdate/
+[1]: https://se-panfilov.github.io/bdate/
 [2]: https://angular-ui.github.io/bootstrap/#/datepicker
-[3]: https://github.com/Light241/bdate/releases
+[3]: https://github.com/se-panfilov/bdate/releases
 [4]: https://nodejs.org/
 [5]: https://www.npmjs.com/
 [6]: http://gulpjs.com/
