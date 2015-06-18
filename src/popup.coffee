@@ -9,7 +9,6 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
     dateModel: '='
     dateStoreId: '@?'
   link: (scope) ->
-
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
@@ -31,9 +30,20 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         month = dateSource.today.month
       else
         year = bDateUtils.sourceCheckers.year.getFirstYear scope.dateStoreId
-        month =  bDateUtils.sourceCheckers.month.getFirstMonth year, scope.dateStoreId
+        month = bDateUtils.sourceCheckers.month.getFirstMonth year, scope.dateStoreId
 
       scope.data.setViewedDate year, month, day
+      scope.data.yearsList = bDateUtils.getYearsAsFlatArr scope.dateStoreId
+      viewedYearNumberInArr = getPositionInArray year, scope.data.yearsList
+      scope.selectViewedYear = scope.data.yearsList[viewedYearNumberInArr]
+
+    getPositionInArray = (val, arr) ->
+      i = 0
+      while i < arr.length - 1
+        if +arr[i] is +val
+          return i
+        i++
+      return -1
 
     scope.data =
       setDateModel: (dateModel) ->
@@ -48,7 +58,7 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         return console.error MESSAGES.invalidParams if not yearNum or not monthNum
         yearNum = +yearNum
         monthNum = +monthNum
-        dayNum = (dayNum) ? +dayNum : 1
+        dayNum = (dayNum) ? +dayNum: 1
 
         scope.data.viewedDate =
           year:
@@ -181,7 +191,6 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
         scope.data.setToday dateSource.today
 
         setInitViewedDate(dateSource)
-        scope.data.yearsList = bDateUtils.getYearsAsFlatArr(scope.dateModel.year, scope.dateStoreId)
 
     #init
     do ->

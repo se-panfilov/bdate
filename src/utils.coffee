@@ -12,7 +12,7 @@ angular.module 'bdate.utils', ['bdate.data']
       return result
     getMonthName: (number)->
       return bDataFactory.monthNames[number].name
-    getYearsAsFlatArr: (years, dateStoreId) ->
+    getYearsAsFlatArr: (dateStoreId) ->
       return Object.keys(bDataFactory.data[dateStoreId].years)
     makeDateModel: (datetime) ->
       date = new Date(datetime)
