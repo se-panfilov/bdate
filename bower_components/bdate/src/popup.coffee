@@ -71,13 +71,13 @@ angular.module 'bdate.popup', ['bdate.utils', 'bdate.data', 'bdate.templates']
 
         scope.data.viewedDate =
           year:
-            first: +Object.keys(bDataFactory.data[scope.dateStoreId].years)[0]
-            last: +Object.keys(bDataFactory.data[scope.dateStoreId].years)[Object.keys(bDataFactory.data[scope.dateStoreId].years).length - 1]
+            first: bDateUtils.sourceCheckers.year.getFirstYear scope.dateStoreId
+            last: bDateUtils.sourceCheckers.year.getLastYear scope.dateStoreId
             number: +yearNum
             count: +Object.keys(bDataFactory.data[scope.dateStoreId].years).length
           month:
-            first: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum])[0]
-            last: +Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum])[Object.keys(bDataFactory.data[scope.dateStoreId].years[yearNum]).length - 1]
+            first: bDateUtils.sourceCheckers.month.getFirstMonth yearNum, scope.dateStoreId
+            last: bDateUtils.sourceCheckers.month.getLastMonth yearNum, scope.dateStoreId
             daysTotal: +bDataFactory.data[scope.dateStoreId].years[yearNum][monthNum].days_total
             startDay: +bDataFactory.data[scope.dateStoreId].years[yearNum][monthNum].start_day
             number: +monthNum

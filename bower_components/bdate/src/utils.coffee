@@ -144,20 +144,26 @@ angular.module 'bdate.utils', ['bdate.data']
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
           monthNum = +monthNum
-          monthNum is +Object.keys(bDataFactory.data[storeId].years[yearNum])[0]
+          month = Object.keys(bDataFactory.data[storeId].years[yearNum])
+          first = Math.min.apply(Math, month);
+          monthNum is first
         getFirstMonth: (yearNum, storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
-          +Object.keys(bDataFactory.data[storeId].years[yearNum])[0]
+          month = Object.keys(bDataFactory.data[storeId].years[yearNum])
+          Math.min.apply(Math, month);
         isLastMonth: (yearNum, monthNum, storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
           monthNum = +monthNum
-          monthNum is +Object.keys(bDataFactory.data[storeId].years[yearNum])[Object.keys(bDataFactory.data[storeId].years[yearNum]).length - 1]
+          month = Object.keys(bDataFactory.data[storeId].years[yearNum])
+          last = Math.max.apply(Math, month);
+          monthNum is last
         getLastMonth: (yearNum, storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
-          +Object.keys(bDataFactory.data[storeId].years[yearNum])[Object.keys(bDataFactory.data[storeId].years[yearNum]).length - 1]
+          month = Object.keys(bDataFactory.data[storeId].years[yearNum])
+          Math.max.apply(Math, month);
         getNextAvailableMonth: (isForward, yearNum, monthNum, storeId) ->
           yearNum = +yearNum
           monthNum = +monthNum
@@ -202,17 +208,23 @@ angular.module 'bdate.utils', ['bdate.data']
           bDataFactory.data[storeId].years[yearNum]
         isFirstYear: (yearNum, storeId) ->
           yearNum = +yearNum
-          yearNum is +Object.keys(bDataFactory.data[storeId].years)[0]
+          years = Object.keys(bDataFactory.data[storeId].years)
+          first = Math.min.apply(Math, years);
+          yearNum is first
         getFirstYear: (storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
-          +Object.keys(bDataFactory.data[storeId].years)[0]
+          years = Object.keys(bDataFactory.data[storeId].years)
+          Math.min.apply(Math, years);
         isLastYear: (yearNum, storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
           yearNum = +yearNum
-          yearNum is +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1]
+          years = Object.keys(bDataFactory.data[storeId].years)
+          last = Math.max.apply(Math, years);
+          yearNum is last
         getLastYear: (storeId) ->
           return console.error MESSAGES.dateNotReady if not bDataFactory.isDataReady storeId
-          +Object.keys(bDataFactory.data[storeId].years)[Object.keys(bDataFactory.data[storeId].years).length - 1]
+          years = Object.keys(bDataFactory.data[storeId].years)
+          Math.max.apply(Math, years);
         getNextAvailableYear: (isForward, yearNum, monthNum, storeId) ->
           yearNum = +yearNum
           monthNum = +monthNum
