@@ -1,6 +1,6 @@
 {
   "name": "bdate",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "homepage": "https://github.com/se-panfilov/bdate",
   "authors": [
     "S.Panfilov <se-panfilov@ya.ru>"
@@ -28,13 +28,13 @@
     "test",
     "tests"
   ],
-  "_release": "0.6.0",
+  "_release": "0.6.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.6.0",
-    "commit": "dde3703044c0a6c52f66b7f050db81abec81a9e4"
+    "tag": "v0.6.1",
+    "commit": "563d8134ee46444830a59b05df5426d400d7b097"
   },
   "_source": "git://github.com/se-panfilov/bdate.git",
-  "_target": "~0.6.0",
+  "_target": "~0.6.1",
   "_originalSource": "bdate"
 }
