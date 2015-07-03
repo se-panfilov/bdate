@@ -22,7 +22,7 @@ angular.module 'bdate.datepicker', [
     bDaysNames: '=?'
   controller: ($scope) ->
     _generateRandomId = ->
-      Math.random().toString(36).substring(12)  #TODO (S.Panfilov) this is not super reliable function on big amount of iteration (>1000) - can produce duplicates, better if replace it
+      Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
 
     $scope.dateStoreId = _generateRandomId()
     $scope.isDataReady = false
