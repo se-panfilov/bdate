@@ -31,6 +31,9 @@ angular.module 'bdate.datepicker', [
       if bDataFactory.isDataValid $scope.bSource
         bDataFactory.setData $scope.bSource, $scope.dateStoreId
         $scope.isDataReady = true
+      else if not $scope.bSource and $scope.dateStoreId
+        bDataFactory.dropData $scope.dateStoreId
+        $scope.isDataReady = false
     , true
 
     setLocalizedData = ->
