@@ -904,5 +904,6 @@ angular.module('app', [
         $scope.resultModel = '';
         $scope.resultDelayedModel = '';
         $scope.resultLinkedModel = '';
+        $scope.externalModel = '';
     })
 ;
