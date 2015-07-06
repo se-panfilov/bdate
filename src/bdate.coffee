@@ -31,9 +31,6 @@ angular.module 'bdate.datepicker', [
       if bDataFactory.isDataValid $scope.bSource
         bDataFactory.setData $scope.bSource, $scope.dateStoreId
         $scope.isDataReady = true
-      else if not $scope.bSource and $scope.dateStoreId
-        bDataFactory.dropData $scope.dateStoreId
-        $scope.isDataReady = false
     , true
 
     setLocalizedData = ->
@@ -56,7 +53,13 @@ angular.module 'bdate.datepicker', [
     setModelFromExternal = ->
       isSameDate = scope.bModel is scope.date.viewed
       isEmptyModel = scope.bModel is '' or scope.bModel is ' ' or not scope.bModel
-      return false if isSameDate or isEmptyModel
+      return false if isSameDate
+
+      if isEmptyModel
+#        scope.isDataReady = false
+        scope.date.viewed = null
+        scope.date.model = null
+        return
 
       bModelDate = bDateUtils.stringToDate scope.bModel, bDataFactory.data[scope.dateStoreId].format, bDataFactory.data[scope.dateStoreId].delimiter
       return false if not angular.isDate bModelDate
@@ -84,10 +87,11 @@ angular.module 'bdate.datepicker', [
       if doNotUpdateModelTwice
         return doNotUpdateModelTwice = false
 
-      dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime()
-      formattedDate = $filter('date') dateTime, bDataFactory.data[scope.dateStoreId].format
-      scope.date.viewed = formattedDate
-      scope.bModel = scope.date.viewed
+      if scope.date.model
+        dateTime = new Date(scope.date.model.year, scope.date.model.month - 1, scope.date.model.day).getTime()
+        formattedDate = $filter('date') dateTime, bDataFactory.data[scope.dateStoreId].format
+        scope.date.viewed = formattedDate
+        scope.bModel = scope.date.viewed
 
     processClick = (event) ->
       isOpen = scope.popup.state.isOpen

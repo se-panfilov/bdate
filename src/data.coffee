@@ -69,5 +69,3 @@ angular.module 'bdate.data', []
       exports.data[storeId] = JSON.parse(JSON.stringify(source))
       exports.data[storeId].today.date = (exports.data[storeId].today.date * 1000) #convert secs to ms
       exports.data[storeId]
-    dropData: (storeId) ->
-      exports.data[storeId] = null
