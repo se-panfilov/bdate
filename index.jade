@@ -92,3 +92,19 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='demo', lang='en')
                         .form-group
                             label.control-label(for="bdatepicker_8") Colored popup
                             bdatepicker(b-input-id="bdatepicker_8", b-popup-classes="custom_input_1", b-model="resultModel", b-source="demoData")
+                section#external_case
+                    hgroup
+                        h1 External model change case
+                        h3 Simple form and simple datepicker
+                    .case_description
+                        | This is common case. Data provided with "demoData" object and result saves to the "resultModel" object.
+                    form#demo_simple_form(name="demo_simple_form")
+                        .form-group
+                            label.control-label(for="bdatepicker_9") Date
+                            bdatepicker(b-input-id="bdatepicker_9", b-model="externalModel", b-source="demoData")
+                        button.btn.btn-success(type="button", ng-click="externalModel = null")
+                            | Dropmodel value
+                        button.btn.btn-info(type="submit")
+                            | The result is
+                            | &nbsp;
+                            span(ng-bind="externalModel")

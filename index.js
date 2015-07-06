@@ -902,5 +902,6 @@ angular.module('demo', [
         $scope.resultModel = '';
         $scope.resultDelayedModel = '';
         $scope.resultLinkedModel = '';
+        $scope.externalModel = '';
     })
 ;
