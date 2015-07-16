@@ -63,7 +63,7 @@ There are many reasons. Mostly because sometimes you may want to set available r
 #Features
 - 14kb for js (with injected html templates) and 6kb for css;
 - No dependencies (only angularjs);
-- Date data setup once and strict. If thr data provided through ajax-query, datepicker will wait until it loaded;
+- Date data setup once and strict. If the data provided through ajax-query, datepicker will wait until it loaded;
 - No extra options (just pick a date);
 - Easy to custom - you may provide custom id and class (in progress right now) for each element of each directive (if you have multiple ones);
 - Able to set date model externally;
