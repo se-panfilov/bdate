@@ -1,9 +1,9 @@
 {
   "name": "bdate",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "homepage": "https://github.com/se-panfilov/bdate",
   "authors": [
-    "S.Panfilov <se-panfilov@ya.ru> (https://se-panfilov.github.io)""
+    "S.Panfilov <se-panfilov@ya.ru> (https://se-panfilov.github.io)"
   ],
   "description": "backend-based angular datepicker",
   "main": "bdate.js",
