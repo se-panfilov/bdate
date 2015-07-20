@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html id="ng-app" xmlns:ng="http://angularjs.org" ng-app="app" lang="en-us">
+<html id="ng-app" xmlns:ng="http://angularjs.org" ng-app="app">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -47,19 +47,14 @@
         </div>
         <div class="container">
           <section id="common_case">
-            <hgroup>
-              <h1>Common case</h1>
-              <h3>Simple form and simple datepicker</h3>
-            </hgroup>
+            <h1>Common case</h1>
+            <h3>Simple form and simple datepicker</h3>
             <div class="case_description">This is common case. Data provided with "demoData" object and result saves to the "resultModel" object.</div>
             <form id="demo_simple_form" name="demo_simple_form">
               <div class="form-group">
                 <label for="bdatepicker_1" class="control-label">Date</label>
-                <bdatepicker b-input-id="bdatepicker_1" b-model="resultModel" b-source="demoData"></bdatepicker>
               </div>
-              <!--.form-group-->
-              <!--    label.control-label(for="bdatepicker_1_2") Localization-->
-              <!--    bdatepicker(b-input-id="bdatepicker_1_2", b-model="resultModel", b-source="demoData", b-month-names="localizedMonth", b-days-names="localizedDays")-->
+              <bdatepicker id="bdatepicker_1" b-model="resultModel" b-source="demoData" placeholder="Enter the date"></bdatepicker>
               <button type="submit" class="btn btn-info">
                 The result is
                 &nbsp;<span ng-bind="resultModel"></span>
@@ -67,10 +62,8 @@
             </form>
           </section>
           <section id="wait_for_data_case">
-            <hgroup>
-              <h1>Wait for remote data case</h1>
-              <h3>Datepicker wait for remote data</h3>
-            </hgroup>
+            <h1>Wait for remote data case</h1>
+            <h3>Datepicker wait for remote data</h3>
             <div class="case_description">
               In this case datepicker waits for remote data (which will be loaded at 2 sec).
               Data provided with "delayedDemoData" object and result saves to the "resultDelayedModel" object.
@@ -78,8 +71,8 @@
             <form id="demo_remote_form" name="demo_remote_form">
               <div class="form-group">
                 <label for="bdatepicker_2" class="control-label">Date</label>
-                <bdatepicker b-input-id="bdatepicker_2" b-model="resultDelayedModel" b-source="delayedDemoData"></bdatepicker>
               </div>
+              <bdatepicker id="bdatepicker_2" b-model="resultDelayedModel" b-source="delayedDemoData"></bdatepicker>
               <button type="submit" class="btn btn-info">
                 The result is
                 &nbsp;<span ng-bind="resultDelayedModel"></span>
@@ -87,10 +80,8 @@
             </form>
           </section>
           <section id="linked_data_case">
-            <hgroup>
-              <h1>Wait for remote data case</h1>
-              <h3>Datepicker wait for remote data</h3>
-            </hgroup>
+            <h1>Wait for remote data case</h1>
+            <h3>Datepicker wait for remote data</h3>
             <div class="case_description">
               In this case two datepickers and one simple text input use same model.
               Data provided with "bigDemoData" object and result saves to the "resultLinkedModel" object.
@@ -98,12 +89,12 @@
             <form id="demo_linked_form" name="demo_linked_form">
               <div class="form-group">
                 <label for="bdatepicker_3" class="control-label">Linked Date 1</label>
-                <bdatepicker b-input-id="bdatepicker_3" b-model="resultLinkedModel" b-source="bigDemoData"></bdatepicker>
               </div>
+              <bdatepicker id="bdatepicker_3" b-model="resultLinkedModel" b-source="bigDemoData"></bdatepicker>
               <div class="form-group">
                 <label for="bdatepicker_4" class="control-label">Linked Date 2</label>
-                <bdatepicker b-input-id="bdatepicker_4" b-model="resultLinkedModel" b-source="bigDemoData"></bdatepicker>
               </div>
+              <bdatepicker id="bdatepicker_4" b-model="resultLinkedModel" b-source="bigDemoData"></bdatepicker>
               <div class="form-group">
                 <label for="inp_2" class="control-label">Linked Date 3</label>
                 <input id="inp_2" type="text" ng-model="resultLinkedModel" class="form-control">
@@ -119,31 +110,45 @@
             </form>
           </section>
           <section id="custom_classes_case">
-            <hgroup>
-              <h1>Custom element classes</h1>
-              <h3>Simple form and simple datepicker</h3>
-            </hgroup>
+            <h1>Custom element classes</h1>
+            <h3>Simple form and simple datepicker</h3>
             <div class="case_description">This is common case with custom classes provided for each elements</div>
             <form id="demo_custom_classes_form" name="demo_custom_classes_form">
               <div class="form-group">
                 <label for="bdatepicker_5" class="control-label">Colored input</label>
-                <bdatepicker b-input-id="bdatepicker_5" b-input-classes="custom_input_1 custom_input_2" b-model="resultModel" b-source="demoData"></bdatepicker>
               </div>
+              <bdatepicker id="bdatepicker_5" b-input-classes="custom_input_1 custom_input_2" b-model="resultModel" b-source="demoData"></bdatepicker>
               <div class="form-group">
                 <label for="bdatepicker_6" class="control-label">Colored button</label>
-                <bdatepicker b-input-id="bdatepicker_6" b-button-classes="custom_input_1 custom_input_2" b-model="resultModel" b-source="demoData"></bdatepicker>
               </div>
+              <bdatepicker id="bdatepicker_6" b-button-classes="custom_input_1 custom_input_2" b-model="resultModel" b-source="demoData"></bdatepicker>
               <div class="form-group">
                 <label for="bdatepicker_7" class="control-label">Colored root</label>
-                <bdatepicker b-input-id="bdatepicker_7" b-root-classes="custom_input_1 custom_input_2 custom_root" b-model="resultModel" b-source="demoData"></bdatepicker>
               </div>
+              <bdatepicker id="bdatepicker_7" b-root-classes="custom_input_1 custom_input_2 custom_root" b-model="resultModel" b-source="demoData"></bdatepicker>
               <div class="form-group">
                 <label for="bdatepicker_8" class="control-label">Colored popup</label>
-                <bdatepicker b-input-id="bdatepicker_8" b-popup-classes="custom_input_1" b-model="resultModel" b-source="demoData"></bdatepicker>
               </div>
+              <bdatepicker id="bdatepicker_8" b-popup-classes="custom_input_1" b-model="resultModel" b-source="demoData"></bdatepicker>
             </form>
           </section>
         </div>
+        <section id="external_case">
+          <h1>External model change case</h1>
+          <h3>Simple form and simple datepicker</h3>
+          <div class="case_description">This is common case. Data provided with "demoData" object and result saves to the "resultModel" object.</div>
+          <form id="demo_external_model_form" name="demo_external_model_form">
+            <div class="form-group">
+              <label for="bdatepicker_9" class="control-label">Date</label>
+              <bdatepicker id="bdatepicker_9" b-model="externalModel" b-source="demoData"></bdatepicker>
+            </div>
+            <button type="button" ng-click="externalModel = null" class="btn btn-success">Dropmodel value</button>
+            <button type="submit" class="btn btn-info">
+              The result is
+              &nbsp;<span ng-bind="externalModel"></span>
+            </button>
+          </form>
+        </section>
         <section class="main-content">
           <footer class="site-footer"><span class="site-footer-owner"><a href="https://github.com/se-panfilov/bdate">Bdate</a> is maintained by<a href="https://github.com/se-panfilov">se-panfilov</a>.</span><span class="site-footer-credits">This page was generated by<a href="https://pages.github.com">GitHub Pages</a> using the<a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by<a href="https://twitter.com/jasonlong">Jason Long</a>.</span></footer>
         </section>

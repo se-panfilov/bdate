@@ -1,9 +1,9 @@
 {
   "name": "bdate",
-  "version": "0.6.5",
+  "version": "0.6.9",
   "homepage": "https://github.com/se-panfilov/bdate",
   "authors": [
-    "S.Panfilov <se-panfilov@ya.ru>"
+    "S.Panfilov <se-panfilov@ya.ru> (https://se-panfilov.github.io)"
   ],
   "description": "backend-based angular datepicker",
   "main": "bdate.js",
@@ -28,13 +28,13 @@
     "test",
     "tests"
   ],
-  "_release": "0.6.5",
+  "_release": "0.6.9",
   "_resolution": {
     "type": "version",
-    "tag": "v0.6.5",
-    "commit": "11fe4b4f7df7e26649f70dbbb5f2e11d215d812a"
+    "tag": "v0.6.9",
+    "commit": "6ac6f1e72c05e8ca56bc3d7f31a24a543dad6e7b"
   },
   "_source": "git://github.com/se-panfilov/bdate.git",
-  "_target": "~0.6.5",
+  "_target": "~0.6.9",
   "_originalSource": "bdate"
 }
