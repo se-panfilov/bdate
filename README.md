@@ -85,11 +85,15 @@ There are many reasons. Mostly because sometimes you may want to set available r
 
 **Optional**:
 
-`b-input-id` - Provides id for the directive's input element
+`b-input-classes` - Provides classes for the directive's input element
 
-`b-root-id` - Provides id for the directive's root element
+`b-root-classes` - Provides classes for the directive's root element
 
-`b-popup-id` - Provides id for the directive's popup element
+`b-popup-classes` - Provides classes for the directive's popup element
+
+`placeholder` - Provides a placeholder to the input
+
+`id` - Provides a placeholder to the input
 
 **Expected json format**:
 

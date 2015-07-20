@@ -11,15 +11,13 @@ angular.module 'bdate.datepicker', [
   scope:
     bModel: '='
     bSource: '='
-    bRootId: '@?'
-    bInputId: '@?'
-    bPopupId: '@?'
     bRootClasses: '@?'
     bInputClasses: '@?'
     bButtonClasses: '@?'
     bPopupClasses: '@?'
     bMonthNames: '=?'
     bDaysNames: '=?'
+    placeholder: '@?'
   controller: ($scope) ->
     _generateRandomId = ->
       Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
