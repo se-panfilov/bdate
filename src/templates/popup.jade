@@ -38,18 +38,21 @@
                 | &#9654;
     table.b_popup_days
         tr
-            td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']")
+            td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::dateModel.week")
                 span(ng-bind="::dayOfWeek")
     table.b_popup_weeks
         tr.b_popup_week
-            td.b_popup_day(ng-repeat="day in data.days track by $index", ng-class="{b_popup_today_day_container: popup.isTodayDate(day)}")
+            td.b_popup_day(ng-repeat="day in data.selected.days track by $index", ng-class="{b_popup_today_day_container: day.isToday")
                 button.b_popup_day_btn(
                 type="button",
-                ng-bind="day",
+                ng-bind="day.num",
                 ng-click="popup.selectDate(day)",
-                ng-disabled="popup.isLockedDate(day)",
-                ng-class="{b_popup_cur_month_day: !popup.isLockedDate(day), b_popup_today_day: popup.isTodayDate(day), b_popup_selected_day: popup.isSelectedDay(day), b_popup_locked_day: popup.isLockedDate(day)}"
+                ng-disabled="day.isDisabled",
+                ng-class="{b_popup_cur_month_day: !day.isDisabled, b_popup_today_day: day.isToday, b_popup_selected_day: popup.isSelectedDay(day)}"
                 )
-    //.b_popup_today
-        | Сегодня
-        button.b_popup_today_btn(type="button", ng-bind="data.today.date | date:data.format", ng-click="popup.selectDate(bDateUtils.makeDateModel(data.today.date))")
+    .b_popup_today
+        button.b_popup_today_btn(
+        type="button",
+        ng-bind="popup.getToday() | date:data.format",
+        ng-click="popup.selectDate(popup.getToday())"
+        )

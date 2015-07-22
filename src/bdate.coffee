@@ -5,7 +5,7 @@ angular.module 'bdate', [
 
 .directive 'bdatepicker', ($filter, $document, $interval) ->
   restrict: 'E'
-  replace: true
+  #replace: true
   templateUrl: 'bdate.html'
   scope:
     bModel: '='
@@ -17,7 +17,7 @@ angular.module 'bdate', [
     bMonthNames: '=?'
     bDaysNames: '=?'
     placeholder: '@?'
-    refresh: "=?"
+    bRefresh: "&"
   controller: ($scope) ->
 
     $scope.state =
@@ -37,6 +37,8 @@ angular.module 'bdate', [
       viewed: ''
       model: {}
 
+    do () ->
+      scope.bRefresh()
 
     processClick = (event) ->
       isOpen = scope.popup.state.isOpen
