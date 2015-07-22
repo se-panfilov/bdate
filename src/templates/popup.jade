@@ -11,7 +11,7 @@
             button.b_popup_btn.b_btn_prev(
             type="button",
             ng-click="popup.goPrevMonth()",
-            ng-disabled="popup.isFirstMonth()"
+            ng-disabled="popup.isFirstMonth() && popup.isFirstYear()"
             )
                 | &#9664;
         .b_popup_month(ng-bind="popupSource.selected.month.name")
@@ -26,7 +26,7 @@
             button.b_popup_btn.b_btn_next(
             type="button",
             ng-click="goNextMonth()",
-            ng-disabled="isLastMonth()"
+            ng-disabled="isLastMonth() && isLastYear()"
             )
                 | &#9654;
             button.b_popup_btn.b_btn_next(

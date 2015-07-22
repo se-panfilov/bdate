@@ -11,11 +11,12 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     ng-disabled="!isDataReady",
     readonly="readonly"
     )
-    button.b_datepicker_button(
+    button.b_clear_btn(
     type="button",
     class="{{::bButtonClasses}}",
     ng-click="popup.clear()"
     )
+        | &times;
     button.b_datepicker_button.b_calendar_btn(
     type="button",
     class="{{::bButtonClasses}}",
