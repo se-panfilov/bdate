@@ -14,12 +14,12 @@
             ng-disabled="popup.isFirstMonth()"
             )
                 | &#9664;
-        .b_popup_month(ng-bind="popup.getMonthName()")
+        .b_popup_month(ng-bind="popupSource.selected.month.name")
         | &nbsp;
         select.b_popup_year(
         ng-model="popup.selectViewedYear",
-        ng-options="year for year in data.years",
-        ng-init="popup.selectViewedYear = data.years[0]",
+        ng-options="year for year in popupSource.years",
+        ng-init="popup.selectViewedYear = popupSource.selected.year.num",
         ng-change="popup.goToYear()"
         )
         .b_btn_next_container
@@ -38,11 +38,14 @@
                 | &#9654;
     table.b_popup_days
         tr
-            td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::dateModel.week")
+            td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::popupSource.week")
                 span(ng-bind="::dayOfWeek")
     table.b_popup_weeks
         tr.b_popup_week
-            td.b_popup_day(ng-repeat="day in data.selected.days track by $index", ng-class="{b_popup_today_day_container: day.isToday")
+            td.b_popup_day(
+            ng-repeat="day in popupSource.selected.days track by $index",
+            ng-class="{b_popup_today_day_container: day.isToday}"
+            )
                 button.b_popup_day_btn(
                 type="button",
                 ng-bind="day.num",

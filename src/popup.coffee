@@ -9,14 +9,15 @@ angular.module 'bdate.popup', [
   scope:
     popupState: '='
     popupSource: '='
-    dateModel: '='
   link: (scope) ->
 
+    console.log scope.popupSource
+    
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
       selectDate: (date) ->
-        scope.data.setDateModel date
+        #scope.data.setDateModel date
         scope.popup.hidePopup()
       goPrevYear: () ->
         console.warn 'not implemented yet'
