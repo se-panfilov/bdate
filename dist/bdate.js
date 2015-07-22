@@ -85,7 +85,8 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popupState.isOpen = false;
         },
         selectDate: function(date) {
-          return scope.popupResult = scope.popup.hidePopup();
+          scope.popupResult = date;
+          return scope.popup.hidePopup();
         },
         goPrevYear: function() {
           return console.warn('not implemented yet');
@@ -117,8 +118,8 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
         getToday: function() {
           return console.warn('not implemented yet');
         },
-        isDayInSelectedMonth: function(day) {
-          return console.warn('not implemented yet');
+        isDayInSelectedMonth: function(date) {
+          return (date.month === scope.popupSource.selected.month.num) && date.year === scope.popupSource.selected.year.num;
         }
       };
       return scope.$watch('popupSource', function() {
