@@ -44,7 +44,7 @@
         tr.b_popup_week
             td.b_popup_day(
             ng-repeat="date in popupSource.selected.dates track by $index",
-            ng-class="{b_popup_today_day_container: day.isToday}"
+            ng-class="{b_popup_today_day_container: date.isToday}"
             )
                 button.b_popup_day_btn(
                 type="button",

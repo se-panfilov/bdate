@@ -11,7 +11,6 @@ angular.module 'bdate.popup', [
     popupSource: '='
     popupResult: '='
   link: (scope) ->
-    console.log scope.popupSource
 
     scope.popup =
       hidePopup: ->
@@ -39,14 +38,15 @@ angular.module 'bdate.popup', [
       isLastYear: () ->
         return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.year.isEnd
-      isSelectedDay: (day) ->
-        console.warn 'not implemented yet'
+      isSelectedDay: (date) ->
+        return if not scope.popupResult or not scope.popupResult.day
+        return ((date.day is scope.popupResult.day) and (date.month is scope.popupResult.month) and (date.year is scope.popupResult.year))
       getTodayDateTime: () ->
         return if not scope.popupSource or not scope.popupSource.today
         today = scope.popupSource.today
-        return dateTime = new Date(today.year, today.month - 1, today.day).getTime()
+        return new Date(today.year, today.month - 1, today.day).getTime()
       isDayInSelectedMonth: (date) ->
-        return ((date.month is scope.popupSource.selected.month.num) and date.year is scope.popupSource.selected.year.num)
+        return ((date.month is scope.popupSource.selected.month.num) and (date.year is scope.popupSource.selected.year.num))
 
     scope.$watch 'popupSource', ->
       scope.isDataReady = true
