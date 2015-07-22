@@ -20,6 +20,8 @@ angular.module 'bdate', [
     bRefresh: "&"
   controller: ($scope) ->
 
+    $scope.popupResult = null
+
     $scope.state =
       isDataReady: false
 
@@ -31,8 +33,20 @@ angular.module 'bdate', [
         $scope.isDataReady = true
     , true
 
-    setData = () ->
+    $scope.$watch 'popupResult', (newVal, oldVal) ->
+      return if newVal is oldVal
+      return if not newVal
+      return if angular.equals {}, newVal
+      $scope.bModel = getModelString($scope.popupResult)
 
+    , true
+
+    getModelString = (dmyObj) ->
+      dateTime = new Date(dmyObj.year, dmyObj.month-1, dmyObj.day).getTime()
+      return $filter('date') dateTime, $scope.bSource.format
+
+    setData = () ->
+      console.warn 'not implemented yet'
 
   link: (scope, elem) ->
     scope.date =

@@ -15,7 +15,8 @@ angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepick
       bRefresh: "&"
     },
     controller: ['$scope', function($scope) {
-      var setData;
+      var getModelString, setData;
+      $scope.popupResult = null;
       $scope.state = {
         isDataReady: false
       };
@@ -26,7 +27,26 @@ angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepick
         setData();
         return $scope.isDataReady = true;
       }, true);
-      return setData = function() {};
+      $scope.$watch('popupResult', function(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return;
+        }
+        if (!newVal) {
+          return;
+        }
+        if (angular.equals({}, newVal)) {
+          return;
+        }
+        return $scope.bModel = getModelString($scope.popupResult);
+      }, true);
+      getModelString = function(dmyObj) {
+        var dateTime;
+        dateTime = new Date(dmyObj.year, dmyObj.month - 1, dmyObj.day).getTime();
+        return $filter('date')(dateTime, $scope.bSource.format);
+      };
+      return setData = function() {
+        return console.warn('not implemented yet');
+      };
     }],
     link: function(scope, elem) {
       var processClick;
@@ -129,5 +149,5 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
   };
 });
 
-angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div ng-class=\"{b_datepicker_in_progress: !isDataReady}\" class=\"b_datepicker_root {{::bRootClasses}}\"><input type=text ng-model=date.viewed placeholder={{placeholder}} ng-click=popup.togglePopup() ng-disabled=!isDataReady readonly=readonly class=\"b_datepicker_input {{::bInputClasses}}\"><button type=button ng-click=popup.clear() class=\"b_datepicker_button {{::bButtonClasses}}\"></button><button type=button ng-click=popup.togglePopup() ng-disabled=!isDataReady class=\"b_datepicker_button b_calendar_btn {{::bButtonClasses}}\">&nbsp;</button><bdate-popup popup-state=popup.state popup-source=bSource popup-result=popupResult class={{::bPopupClasses}}></bdate-popup></div>");
+angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div ng-class=\"{b_datepicker_in_progress: !isDataReady}\" class=\"b_datepicker_root {{::bRootClasses}}\"><input type=text ng-model=bModel placeholder={{placeholder}} ng-click=popup.togglePopup() ng-disabled=!isDataReady readonly=readonly class=\"b_datepicker_input {{::bInputClasses}}\"><button type=button ng-click=popup.clear() class=\"b_datepicker_button {{::bButtonClasses}}\"></button><button type=button ng-click=popup.togglePopup() ng-disabled=!isDataReady class=\"b_datepicker_button b_calendar_btn {{::bButtonClasses}}\">&nbsp;</button><bdate-popup popup-state=popup.state popup-source=bSource popup-result=popupResult class={{::bPopupClasses}}></bdate-popup></div>");
 $templateCache.put("popup.html","<div ng-show=popupState.isOpen class=b_popup><div class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=popup.goPrevYear() ng-disabled=popup.isFirstYear() class=\"b_popup_btn b_btn_prev\">&#9664; &#9664;</button><button type=button ng-click=popup.goPrevMonth() ng-disabled=popup.isFirstMonth() class=\"b_popup_btn b_btn_prev\">&#9664;</button></div><div ng-bind=popupSource.selected.month.name class=b_popup_month></div>&nbsp;<select ng-model=popup.selectViewedYear ng-options=\"year for year in popupSource.years\" ng-init=\"popup.selectViewedYear = popupSource.selected.year.num\" ng-change=popup.goToYear() class=b_popup_year></select><div class=b_btn_next_container><button type=button ng-click=goNextMonth() ng-disabled=isLastMonth() class=\"b_popup_btn b_btn_next\">&#9654;</button><button type=button ng-click=goNextYear() ng-disabled=isLastYear() class=\"b_popup_btn b_btn_next\">&#9654; &#9654;</button></div></div><table class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::popupSource.week\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr class=b_popup_week><td ng-repeat=\"date in popupSource.selected.dates track by $index\" ng-class=\"{b_popup_today_day_container: day.isToday}\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-disabled=date.isDisabled ng-class=\"{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(date)}\" class=b_popup_day_btn></button></td></tr></table><div class=b_popup_today><button type=button ng-bind=\"popup.getToday() | date:data.format\" ng-click=popup.selectDate(popup.getToday()) class=b_popup_today_btn></button></div></div>");}]);
