@@ -25,14 +25,14 @@
         .b_btn_next_container
             button.b_popup_btn.b_btn_next(
             type="button",
-            ng-click="goNextMonth()",
-            ng-disabled="isLastMonth() && isLastYear()"
+            ng-click="popup.goNextMonth()",
+            ng-disabled="popup.isLastMonth() && popup.isLastYear()"
             )
                 | &#9654;
             button.b_popup_btn.b_btn_next(
             type="button",
-            ng-click="goNextYear()",
-            ng-disabled="isLastYear()"
+            ng-click="popup.goNextYear()",
+            ng-disabled="popup.isLastYear()"
             )
                 | &#9654;
                 | &#9654;
