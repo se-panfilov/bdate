@@ -9,6 +9,7 @@ angular.module 'bdate.popup', [
   scope:
     popupState: '='
     popupSource: '='
+    popupResult: '='
   link: (scope) ->
 
     console.log scope.popupSource
@@ -17,7 +18,7 @@ angular.module 'bdate.popup', [
       hidePopup: ->
         scope.popupState.isOpen = false
       selectDate: (date) ->
-        #scope.data.setDateModel date
+        scope.popupResult =
         scope.popup.hidePopup()
       goPrevYear: () ->
         console.warn 'not implemented yet'
@@ -26,8 +27,6 @@ angular.module 'bdate.popup', [
       goPrevMonth: () ->
         console.warn 'not implemented yet'
       isFirstMonth: () ->
-        console.warn 'not implemented yet'
-      getMonthName: () ->
         console.warn 'not implemented yet'
       goNextMonth: () ->
         console.warn 'not implemented yet'
@@ -40,6 +39,8 @@ angular.module 'bdate.popup', [
       isSelectedDay: (day) ->
         console.warn 'not implemented yet'
       getToday: () ->
+        console.warn 'not implemented yet'
+      isDayInSelectedMonth: (day) ->
         console.warn 'not implemented yet'
 
     scope.$watch 'popupSource', ->

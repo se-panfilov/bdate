@@ -27,9 +27,11 @@ angular.module 'bdate', [
       date: null
 
     $scope.$watch 'bSource', ->
-        #bDataFactory.setData $scope.bSource, $scope.dateStoreId
+        setData()
         $scope.isDataReady = true
     , true
+
+    setData = () ->
 
 
   link: (scope, elem) ->
