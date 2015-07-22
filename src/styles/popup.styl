@@ -26,6 +26,9 @@ day_button_bg = white
       text-align center
     .b_popup_btn
       min-height b_control_height
+      color text_color
+      &[disabled]
+        color #A0A0A0
       &:hover, &:active, &:focus, &:active:focus
         outline 0
     .b_btn_prev_container
@@ -71,7 +74,10 @@ day_button_bg = white
           height 23px
           text-align center
           padding 0
-          &.b_popup_cur_month_day
+          cursor: pointer
+          &[disabled]
+            cursor not-allowed
+          &.b_popup_day_in_selected_month
             color text_color
             border 1px solid white
             background-color day_button_bg
