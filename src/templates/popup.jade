@@ -53,9 +53,9 @@
                 ng-disabled="date.isDisabled",
                 ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(date)}"
                 )
-    .b_popup_today
+    .b_popup_today(ng-show="popupSource.today")
         button.b_popup_today_btn(
         type="button",
-        ng-bind="popup.getToday() | date:data.format",
-        ng-click="popup.selectDate(popup.getToday())"
+        ng-bind="popup.getTodayDateTime() | date:popupSource.format",
+        ng-click="popup.selectDate(popupSource.today)"
         )
