@@ -112,24 +112,36 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return console.warn('not implemented yet');
         },
         isFirstYear: function() {
+          if (!scope.popupSource || !scope.popupSource.selected) {
+            return;
+          }
           return scope.popupSource.selected.year.isStart;
         },
         goPrevMonth: function() {
           return console.warn('not implemented yet');
         },
         isFirstMonth: function() {
+          if (!scope.popupSource || !scope.popupSource.selected) {
+            return;
+          }
           return scope.popupSource.selected.month.isStart;
         },
         goNextMonth: function() {
           return console.warn('not implemented yet');
         },
         isLastMonth: function() {
+          if (!scope.popupSource || !scope.popupSource.selected) {
+            return;
+          }
           return scope.popupSource.selected.month.isEnd;
         },
         goNextYear: function() {
           return console.warn('not implemented yet');
         },
         isLastYear: function() {
+          if (!scope.popupSource || !scope.popupSource.selected) {
+            return;
+          }
           return scope.popupSource.selected.year.isEnd;
         },
         isSelectedDay: function(day) {
@@ -137,6 +149,9 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
         },
         getTodayDateTime: function() {
           var dateTime, today;
+          if (!scope.popupSource || !scope.popupSource.today) {
+            return;
+          }
           today = scope.popupSource.today;
           return dateTime = new Date(today.year, today.month - 1, today.day).getTime();
         },

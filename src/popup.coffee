@@ -22,22 +22,27 @@ angular.module 'bdate.popup', [
       goPrevYear: () ->
         console.warn 'not implemented yet'
       isFirstYear: () ->
+        return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.year.isStart
       goPrevMonth: () ->
         console.warn 'not implemented yet'
       isFirstMonth: () ->
+        return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.month.isStart
       goNextMonth: () ->
         console.warn 'not implemented yet'
       isLastMonth: () ->
+        return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.month.isEnd
       goNextYear: () ->
         console.warn 'not implemented yet'
       isLastYear: () ->
+        return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.year.isEnd
       isSelectedDay: (day) ->
         console.warn 'not implemented yet'
       getTodayDateTime: () ->
+        return if not scope.popupSource or not scope.popupSource.today
         today = scope.popupSource.today
         return dateTime = new Date(today.year, today.month - 1, today.day).getTime()
       isDayInSelectedMonth: (date) ->
