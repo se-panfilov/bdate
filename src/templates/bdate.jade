@@ -1,4 +1,29 @@
-.b_datepicker_root(class="{{::bRootClasses}}", ng-class="{b_datepicker_in_progress: !isDataReady}")
-    input.b_datepicker_input(type="text", ng-model="date.viewed", placeholder="{{placeholder}}", class="{{::bInputClasses}}", ng-click="popup.togglePopup()", ng-disabled="!isDataReady", readonly="readonly")
-    button.b_datepicker_button(type="button", class="{{::bButtonClasses}}", ng-click="popup.togglePopup()", ng-disabled="!isDataReady") &nbsp;
-    bdate-popup(class="{{::bPopupClasses}}", popup-state="popup.state",  date-model="date.model", date-store-id="{{::dateStoreId}}")
+.b_datepicker_root(
+class="{{::bRootClasses}}",
+ng-class="{b_datepicker_in_progress: !isDataReady}"
+)
+    input.b_datepicker_input(
+    type="text", ng-model="date.viewed",
+    placeholder="{{placeholder}}",
+    class="{{::bInputClasses}}",
+    ng-click="popup.togglePopup()",
+    ng-disabled="!isDataReady",
+    readonly="readonly"
+    )
+    button.b_datepicker_button(
+    type="button",
+    class="{{::bButtonClasses}}",
+    ng-click="popup.clear()"
+    )
+    button.b_datepicker_button.b_calendar_btn(
+    type="button",
+    class="{{::bButtonClasses}}",
+    ng-click="popup.togglePopup()",
+    ng-disabled="!isDataReady"
+    )
+        | &nbsp;
+    bdate-popup(
+    class="{{::bPopupClasses}}",
+    popup-state="popup.state",
+    date-model="date.model"
+    )

@@ -20,7 +20,6 @@ bg_color_in_progress = #D5D5D5
     vertical-align middle
   .b_datepicker_button
     outline none
-    background url('calendar.png')
     background-size 18px
     background-repeat no-repeat
     background-position center
@@ -35,6 +34,8 @@ bg_color_in_progress = #D5D5D5
     border-bottom-left-radius 0
     border-bottom-right-radius 4px
     padding 6px 12px
+    &.b_calendar_btn
+      background-image url('calendar.png')
     &:hover
       color #333
       background-color #ebebeb
