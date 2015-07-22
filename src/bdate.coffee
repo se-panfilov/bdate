@@ -17,7 +17,7 @@ angular.module 'bdate', [
     bMonthNames: '=?'
     bDaysNames: '=?'
     placeholder: '@?'
-    bRefresh: "&"
+    bRefresh: "&?"
   controller: ($scope) ->
 
     $scope.popupResult = null
