@@ -11,7 +11,6 @@ angular.module 'bdate.popup', [
     popupSource: '='
     popupResult: '='
   link: (scope) ->
-
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
@@ -19,22 +18,70 @@ angular.module 'bdate.popup', [
         scope.popupResult = date
         scope.popup.hidePopup()
       goPrevYear: () ->
-        console.warn 'not implemented yet'
+        return if not scope.popupSource.selected or not scope.popupSource.selected.year
+        if scope.popupSource.selected.year.isStart
+          console.error 'error'
+          return false
+        year = scope.popupSource.selected.year - 1
+        month = scope.popupSource.selected.month
+        scope.popup.refreshSelectedData month, year
       isFirstYear: () ->
         return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.year.isStart
       goPrevMonth: () ->
-        console.warn 'not implemented yet'
+        return if not scope.popupSource.selected or not scope.popupSource.selected.year
+        if scope.popupSource.selected.month.isStart and scope.popupSource.selected.year.isStart
+          console.error 'error'
+          return false
+
+        january = 1
+        december = 12
+
+        if month is january
+          year = scope.popupSource.selected.year - 1
+          month = december
+        else if  month is january and scope.popupSource.selected.year.isStart
+          console.error 'error'
+          return false
+        else
+          year = scope.popupSource.selected.year
+          month = scope.popupSource.selected.month - 1
+
+        scope.popup.refreshSelectedData month, year
       isFirstMonth: () ->
         return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.month.isStart
       goNextMonth: () ->
-        console.warn 'not implemented yet'
+        return if not scope.popupSource.selected or not scope.popupSource.selected.year
+        if scope.popupSource.selected.month.isEnd and scope.popupSource.selected.year.isEnd
+          console.error 'error'
+          return false
+
+        january = 1
+        december = 12
+
+        if month is december
+          year = scope.popupSource.selected.year + 1
+          month = january
+        else if  month is january and scope.popupSource.selected.year.isEnd
+          console.error 'error'
+          return false
+        else
+          year = scope.popupSource.selected.year
+          month = scope.popupSource.selected.month + 1
+
+        scope.popup.refreshSelectedData month, year
       isLastMonth: () ->
         return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.month.isEnd
       goNextYear: () ->
-        console.warn 'not implemented yet'
+        return if not scope.popupSource.selected or not scope.popupSource.selected.year
+        if scope.popupSource.selected.year.isEnd
+          console.error 'error'
+          return false
+        year = scope.popupSource.selected.year + 1
+        month = scope.popupSource.selected.month
+        scope.popup.refreshSelectedData month, year
       isLastYear: () ->
         return if not scope.popupSource or not scope.popupSource.selected
         return scope.popupSource.selected.year.isEnd
@@ -47,6 +94,9 @@ angular.module 'bdate.popup', [
         return new Date(today.year, today.month - 1, today.day).getTime()
       isDayInSelectedMonth: (date) ->
         return ((date.month is scope.popupSource.selected.month.num) and (date.year is scope.popupSource.selected.year.num))
+      refreshSelectedData: (month, year) ->
+        console.warn 'not implemented yet'
+
 
     scope.$watch 'popupSource', ->
       scope.isDataReady = true

@@ -108,7 +108,17 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popup.hidePopup();
         },
         goPrevYear: function() {
-          return console.warn('not implemented yet');
+          var month, year;
+          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+            return;
+          }
+          if (scope.popupSource.selected.year.isStart) {
+            console.error('error');
+            return false;
+          }
+          year = scope.popupSource.selected.year - 1;
+          month = scope.popupSource.selected.month;
+          return scope.popup.refreshSelectedData(month, year);
         },
         isFirstYear: function() {
           if (!scope.popupSource || !scope.popupSource.selected) {
@@ -117,7 +127,27 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popupSource.selected.year.isStart;
         },
         goPrevMonth: function() {
-          return console.warn('not implemented yet');
+          var december, january, month, year;
+          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+            return;
+          }
+          if (scope.popupSource.selected.month.isStart && scope.popupSource.selected.year.isStart) {
+            console.error('error');
+            return false;
+          }
+          january = 1;
+          december = 12;
+          if (month === january) {
+            year = scope.popupSource.selected.year - 1;
+            month = december;
+          } else if (month === january && scope.popupSource.selected.year.isStart) {
+            console.error('error');
+            return false;
+          } else {
+            year = scope.popupSource.selected.year;
+            month = scope.popupSource.selected.month - 1;
+          }
+          return scope.popup.refreshSelectedData(month, year);
         },
         isFirstMonth: function() {
           if (!scope.popupSource || !scope.popupSource.selected) {
@@ -126,7 +156,27 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popupSource.selected.month.isStart;
         },
         goNextMonth: function() {
-          return console.warn('not implemented yet');
+          var december, january, month, year;
+          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+            return;
+          }
+          if (scope.popupSource.selected.month.isEnd && scope.popupSource.selected.year.isEnd) {
+            console.error('error');
+            return false;
+          }
+          january = 1;
+          december = 12;
+          if (month === december) {
+            year = scope.popupSource.selected.year + 1;
+            month = january;
+          } else if (month === january && scope.popupSource.selected.year.isEnd) {
+            console.error('error');
+            return false;
+          } else {
+            year = scope.popupSource.selected.year;
+            month = scope.popupSource.selected.month + 1;
+          }
+          return scope.popup.refreshSelectedData(month, year);
         },
         isLastMonth: function() {
           if (!scope.popupSource || !scope.popupSource.selected) {
@@ -135,7 +185,17 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popupSource.selected.month.isEnd;
         },
         goNextYear: function() {
-          return console.warn('not implemented yet');
+          var month, year;
+          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+            return;
+          }
+          if (scope.popupSource.selected.year.isEnd) {
+            console.error('error');
+            return false;
+          }
+          year = scope.popupSource.selected.year + 1;
+          month = scope.popupSource.selected.month;
+          return scope.popup.refreshSelectedData(month, year);
         },
         isLastYear: function() {
           if (!scope.popupSource || !scope.popupSource.selected) {
@@ -159,6 +219,9 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
         },
         isDayInSelectedMonth: function(date) {
           return (date.month === scope.popupSource.selected.month.num) && (date.year === scope.popupSource.selected.year.num);
+        },
+        refreshSelectedData: function(month, year) {
+          return console.warn('not implemented yet');
         }
       };
       return scope.$watch('popupSource', function() {
