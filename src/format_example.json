@@ -1,0 +1,62 @@
+{
+    "years": [2015, 2014, 2013, 2012, 2011, 2010],
+    "week": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+    "today": {
+        "day": 3,
+        "month": 1,
+        "year": 2010
+    },
+    "format": "dd-MM-yyyy",
+    "selected": {
+        "month": {"num": 1, "name": "Январь", "isStart": true, "isEnd": false}, //This is the first month in year
+        "year": {"num": 2010, "isStart": true, "isEnd": false},  //This is the lower year in list
+            "dates": [//should be 5 weeks
+            //First element should be a monday (if current month 1st isn't monday - add monday from prev month tail)
+            //Tail from prev month
+            {"day": 29, "month": 12, "year": 2009, "isDisabled": true},
+            {"day": 30, "month": 12, "year": 2009, "isDisabled": true}, //2009 not in years list, that's why isDisable = true
+            //Current month
+            {"day": 1, "month": 1, "year": 2010},
+            {"day": 2, "month": 1, "year": 2010},
+            {"day": 3, "month": 1, "year": 2010, "isToday": true},
+            {"day": 4, "month": 1, "year": 2010},
+            {"day": 5, "month": 1, "year": 2010},
+            {"day": 6, "month": 1, "year": 2010},
+            {"day": 7, "month": 1, "year": 2010},
+            {"day": 8, "month": 1, "year": 2010},
+            {"day": 9, "month": 1, "year": 2010},
+            {"day": 10, "month": 1, "year": 2010},
+            {"day": 11, "month": 1, "year": 2010},
+            {"day": 12, "month": 1, "year": 2010},
+            {"day": 13, "month": 1, "year": 2010},
+            {"day": 14, "month": 1, "year": 2010},
+            {"day": 15, "month": 1, "year": 2010},
+            {"day": 16, "month": 1, "year": 2010},
+            {"day": 17, "month": 1, "year": 2010},
+            {"day": 18, "month": 1, "year": 2010},
+            {"day": 19, "month": 1, "year": 2010},
+            {"day": 20, "month": 1, "year": 2010},
+            {"day": 21, "month": 1, "year": 2010},
+            {"day": 22, "month": 1, "year": 2010},
+            {"day": 23, "month": 1, "year": 2010},
+            {"day": 24, "month": 1, "year": 2010},
+            {"day": 25, "month": 1, "year": 2010},
+            {"day": 26, "month": 1, "year": 2010},
+            {"day": 27, "month": 1, "year": 2010},
+            {"day": 28, "month": 1, "year": 2010},
+            {"day": 29, "month": 1, "year": 2010},
+            {"day": 30, "month": 1, "year": 2010},
+            {"day": 31, "month": 1, "year": 2010},
+            //Tail from next month (ends-up this week + fifth week)
+            {"day": 1, "month": 2, "year": 2010}, // 02-2010 in list, so isDisabled = false
+            {"day": 2, "month": 2, "year": 2010},
+            {"day": 3, "month": 2, "year": 2010},
+            {"day": 4, "month": 2, "year": 2010},
+            {"day": 5, "month": 2, "year": 2010},
+            {"day": 6, "month": 2, "year": 2010},
+            {"day": 7, "month": 2, "year": 2010},
+            {"day": 8, "month": 2, "year": 2010},
+            {"day": 9, "month": 2, "year": 2010}
+        ]
+    }
+}
