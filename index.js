@@ -7,7 +7,7 @@ angular.module('demo', [
     .controller('DemoPageCtrl', function ($scope, $http) {
 
 
-        $scope.refreshData = function (month, year) {
+        $scope.refreshData = function (m, y) {
             var params = (month && year) ? month + '-' + year : null;
             var url = 'http://localhost:3000/resp/' + params;
 
