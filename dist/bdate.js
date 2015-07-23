@@ -1,4 +1,4 @@
-angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepicker', ['$document', function($document) {
+angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepicker', ['$document', '$filter', function($document, $filter) {
   return {
     restrict: 'E',
     templateUrl: 'bdate.html',
@@ -15,13 +15,17 @@ angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepick
       bRefresh: "&?"
     },
     controller: ['$scope', function($scope) {
+      var getFormattedDate;
       $scope.state = {
         isDataReady: false
       };
       $scope.data = {
         date: null
       };
-      return $scope.$watch('popupResult', function(newVal, oldVal) {
+      $scope.$watch('bSource', function() {
+        return $scope.isDataReady = true;
+      }, true);
+      $scope.$watch('popupResult', function(newVal, oldVal) {
         if (newVal === oldVal) {
           return;
         }
@@ -31,8 +35,13 @@ angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepick
         if (angular.equals({}, newVal)) {
           return;
         }
-        return $scope.bModel = getModelString($scope.popupResult);
+        return $scope.bModel = getFormattedDate($scope.popupResult);
       }, true);
+      return getFormattedDate = function(dmy) {
+        var datetime;
+        datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime();
+        return $filter('date')(datetime, $scope.bSource.format);
+      };
     }],
     link: function(scope, elem) {
       var processClick;

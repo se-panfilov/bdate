@@ -3,9 +3,9 @@ angular.module 'bdate', [
   'bdate.templates'
 ]
 
-.directive 'bdatepicker', ($document) ->
+.directive 'bdatepicker', ($document, $filter) ->
   restrict: 'E'
-  #replace: true
+#replace: true
   templateUrl: 'bdate.html'
   scope:
     bModel: '='
@@ -19,24 +19,26 @@ angular.module 'bdate', [
     placeholder: '@?'
     bRefresh: "&?"
   controller: ($scope) ->
-
     $scope.state =
       isDataReady: false
 
     $scope.data =
       date: null
 
-    #$scope.$watch 'bSource', ->
-        #setData()
-        #$scope.isDataReady = true
-    #, true
+    $scope.$watch 'bSource', ->
+      $scope.isDataReady = true
+    , true
 
     $scope.$watch 'popupResult', (newVal, oldVal) ->
       return if newVal is oldVal
       return if not newVal
       return if angular.equals {}, newVal
-      $scope.bModel = getModelString($scope.popupResult)
+      $scope.bModel = getFormattedDate($scope.popupResult)
     , true
+
+    getFormattedDate = (dmy) ->
+      datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
+      return $filter('date') datetime, $scope.bSource.format
 
   link: (scope, elem) ->
     scope.date =
