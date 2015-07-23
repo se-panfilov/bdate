@@ -226,6 +226,12 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
         isDayInSelectedMonth: function(date) {
           return (date.month === scope.popupSource.selected.month.num) && (date.year === scope.popupSource.selected.year.num);
         },
+        goToYear: function() {
+          var month, year;
+          year = scope.popupSource.selected.year.num;
+          month = scope.popupSource.selected.month.num;
+          return scope.popup.refreshSelectedData(month, year);
+        },
         refreshSelectedData: function(month, year) {
           return scope.popupRefresh({
             m: month,

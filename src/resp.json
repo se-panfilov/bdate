@@ -39,6 +39,12 @@
         },
         "dates": [
           {
+            "day": 28,
+            "month": 12,
+            "year": 2009,
+            "isDisabled": true
+          },
+          {
             "day": 29,
             "month": 12,
             "year": 2009,
@@ -345,7 +351,7 @@
           },
           {
             "day": 12,
-            "month": 1,
+            "month": 2,
             "year": 2010
           },
           {
