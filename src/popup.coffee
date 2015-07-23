@@ -96,7 +96,9 @@ angular.module 'bdate.popup', [
       isDayInSelectedMonth: (date) ->
         return ((date.month is scope.popupSource.selected.month.num) and (date.year is scope.popupSource.selected.year.num))
       refreshSelectedData: (month, year) ->
-        scope.popupRefresh(month, year)
+        scope.popupRefresh
+          m: month
+          y: year
 
 
     scope.$watch 'popupSource', ->

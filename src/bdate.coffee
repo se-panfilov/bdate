@@ -29,16 +29,16 @@ angular.module 'bdate', [
       $scope.isDataReady = true
     , true
 
+    getFormattedDate = (dmy) ->
+      datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
+      return $filter('date') datetime, $scope.bSource.format
+
     $scope.$watch 'popupResult', (newVal, oldVal) ->
       return if newVal is oldVal
       return if not newVal
       return if angular.equals {}, newVal
       $scope.bModel = getFormattedDate($scope.popupResult)
     , true
-
-    getFormattedDate = (dmy) ->
-      datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
-      return $filter('date') datetime, $scope.bSource.format
 
   link: (scope, elem) ->
     scope.date =
@@ -68,6 +68,6 @@ angular.module 'bdate', [
         scope.popup.state.isOpen = false
 
     do () ->
-      scope.bRefresh()
+      scope.bRefresh(1, 2)
 
     $document.on 'click', processClick

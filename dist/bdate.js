@@ -80,7 +80,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepick
         }
       };
       (function() {
-        return scope.bRefresh();
+        return scope.bRefresh(1, 2);
       })();
       return $document.on('click', processClick);
     }
