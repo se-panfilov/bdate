@@ -30,20 +30,13 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     popup-source="bSource"
     popup-result="popupResult"
     popup-refresh="bRefreshTest(m, y)"
-    ng-if="!bRanged"
+    ng-if="!bRange"
     )
-    .ranges(ng-if="bRanged")
-        bdate-popup(
-        class="{{::bPopupClasses}}",
-        popup-state="popup.state",
-        popup-source="bRangeSource"
-        popup-result="popupRangeResult"
-        popup-refresh="bRefreshTest(m, y)"
-        )
-        bdate-popup(
-        class="{{::bPopupClasses}}",
-        popup-state="popup.state",
-        popup-source="bRangeSource"
-        popup-result="popupRangeResult"
-        popup-refresh="bRefreshTest(m, y)"
-        )
+    bdate-range-popup(
+    class="{{::bPopupClasses}}",
+    popup-state="popup.state",
+    popup-source="bSource"
+    popup-result="popupResult"
+    popup-refresh="bRefreshTest(m, y)"
+    ng-if="bRange"
+    )

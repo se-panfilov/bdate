@@ -10,6 +10,7 @@ angular.module 'bdate', [
   scope:
     bModel: '='
     bSource: '='
+    bRange: '=?'
     bRootClasses: '@?'
     bInputClasses: '@?'
     bButtonClasses: '@?'
