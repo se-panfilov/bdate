@@ -46,7 +46,7 @@ angular.module 'bdate.popup', [
           return false
         else
           year = scope.popupSource.selected.year.num
-          month = scope.popupSource.selected.month - 1
+          month = scope.popupSource.selected.month.num - 1
 
         scope.popup.refreshSelectedData month, year
       isFirstMonth: () ->

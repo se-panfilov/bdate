@@ -68,6 +68,12 @@ angular.module 'bdate', [
         scope.popup.state.isOpen = false
 
     do () ->
-      scope.bRefresh(1, 2)
+      scope.bRefresh()
+
+    scope.bRefreshTest = (m, y) ->
+      scope.bRefresh
+        m: m
+        y: y
+
 
     $document.on 'click', processClick
