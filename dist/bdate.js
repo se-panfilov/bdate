@@ -111,7 +111,10 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
         },
         selectDate: function(date) {
           scope.popupResult = date;
-          return scope.popup.hidePopup();
+          scope.popup.hidePopup();
+          if (!scope.popup.isDayInSelectedMonth(date)) {
+            return scope.popup.refreshSelectedData(date.month, date.year);
+          }
         },
         goPrevYear: function() {
           var month, year;

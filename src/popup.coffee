@@ -18,6 +18,8 @@ angular.module 'bdate.popup', [
       selectDate: (date) ->
         scope.popupResult = date
         scope.popup.hidePopup()
+        if not scope.popup.isDayInSelectedMonth date
+          scope.popup.refreshSelectedData date.month, date.year
       goPrevYear: () ->
         return if not scope.popupSource.selected or not scope.popupSource.selected.year
         if scope.popupSource.selected.year.isStart
@@ -103,7 +105,6 @@ angular.module 'bdate.popup', [
         scope.popupRefresh
           m: month
           y: year
-
 
     scope.$watch 'popupSource', ->
       scope.isDataReady = true
