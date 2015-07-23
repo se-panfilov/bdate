@@ -54,6 +54,10 @@ angular.module 'bdate', [
         scope.$apply ->
           scope.popup.hidePopup()
 
+    scope.clear = () ->
+      scope.bModel = null;
+      scope.popupResult = null;
+
     scope.popup =
       state:
         isOpen: false
