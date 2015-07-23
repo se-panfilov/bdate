@@ -17,9 +17,9 @@
         .b_popup_month(ng-bind="popupSource.selected.month.name")
         | &nbsp;
         select.b_popup_year(
-        ng-model="popup.selectViewedYear",
+        ng-model="popupSource.selected.year.num",
         ng-options="year for year in popupSource.years",
-        ng-init="popup.selectViewedYear = popupSource.selected.year.num",
+        ng-init="year = popupSource.selected.year.num",
         ng-change="popup.goToYear()"
         )
         .b_btn_next_container
