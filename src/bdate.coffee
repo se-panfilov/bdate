@@ -9,7 +9,9 @@ angular.module 'bdate', [
   templateUrl: 'bdate.html'
   scope:
     bModel: '='
-    bSource: '='
+    bSource: '=?'
+    bStartSource: '=?'
+    bEndSource: '=?'
     bRange: '=?'
     bRootClasses: '@?'
     bInputClasses: '@?'
@@ -19,6 +21,8 @@ angular.module 'bdate', [
     bDaysNames: '=?'
     placeholder: '@?'
     bRefresh: "&?"
+    bStartRefresh: "&?"
+    bEndRefresh: "&?"
   controller: ($scope) ->
     $scope.state =
       isDataReady: false

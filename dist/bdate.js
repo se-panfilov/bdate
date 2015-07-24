@@ -4,7 +4,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepick
     templateUrl: 'bdate.html',
     scope: {
       bModel: '=',
-      bSource: '=',
+      bSource: '=?',
+      bStartSource: '=?',
+      bEndSource: '=?',
       bRange: '=?',
       bRootClasses: '@?',
       bInputClasses: '@?',
@@ -13,7 +15,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepick
       bMonthNames: '=?',
       bDaysNames: '=?',
       placeholder: '@?',
-      bRefresh: "&?"
+      bRefresh: "&?",
+      bStartRefresh: "&?",
+      bEndRefresh: "&?"
     },
     controller: ['$scope', function($scope) {
       var getFormattedDate;
@@ -257,13 +261,27 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdateRangePopup', 
     templateUrl: 'range-popup.html',
     scope: {
       popupState: '=',
-      popupSource: '=',
+      popupStartSource: '=',
+      popupEndSource: '=',
       popupResult: '=',
-      popupRefresh: "&?"
+      popupStartRefresh: "&?",
+      popupEndRefresh: "&?"
     },
     link: function(scope) {
+      var getSource;
+      scope.data = {
+        startDate: '',
+        endDate: ''
+      };
+      getSource = function(isStartPopup) {
+        if (isStartPopup) {
+          return scope.popupStartSource;
+        } else {
+          return scope.popupEndSource;
+        }
+      };
       scope.popup = {
-        hidePopup: function(isStartPopup) {
+        hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
         selectDate: function(isStartPopup, date) {
@@ -274,100 +292,112 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdateRangePopup', 
           }
         },
         goPrevYear: function(isStartPopup) {
-          var month, year;
-          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+          var month, popupSource, year;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource.selected || !popupSource.selected.year) {
             return;
           }
-          if (scope.popupSource.selected.year.isStart) {
+          if (popupSource.selected.year.isStart) {
             console.error('error');
             return false;
           }
-          year = scope.popupSource.selected.year.num - 1;
-          month = scope.popupSource.selected.month.num;
+          year = popupSource.selected.year.num - 1;
+          month = popupSource.selected.month.num;
           return scope.popup.refreshSelectedData(month, year);
         },
         isFirstYear: function(isStartPopup) {
-          if (!scope.popupSource || !scope.popupSource.selected) {
+          var popupSource;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource || !popupSource.selected) {
             return;
           }
-          return scope.popupSource.selected.year.isStart;
+          return popupSource.selected.year.isStart;
         },
         goPrevMonth: function(isStartPopup) {
-          var december, month, year;
-          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+          var december, month, popupSource, year;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource.selected || !popupSource.selected.year) {
             return;
           }
-          if (scope.popupSource.selected.month.isStart && scope.popupSource.selected.year.isStart) {
+          if (popupSource.selected.month.isStart && popupSource.selected.year.isStart) {
             console.error('error');
             return false;
           }
           december = 12;
-          month = scope.popupSource.selected.month.num;
-          if (scope.popupSource.selected.month.isStart) {
-            year = scope.popupSource.selected.year.num - 1;
+          month = popupSource.selected.month.num;
+          if (popupSource.selected.month.isStart) {
+            year = popupSource.selected.year.num - 1;
             month = december;
-          } else if (scope.popupSource.selected.month.isStart && scope.popupSource.selected.year.isStart) {
+          } else if (popupSource.selected.month.isStart && popupSource.selected.year.isStart) {
             console.error('error');
             return false;
           } else {
-            year = scope.popupSource.selected.year.num;
-            month = scope.popupSource.selected.month.num - 1;
+            year = popupSource.selected.year.num;
+            month = popupSource.selected.month.num - 1;
           }
           return scope.popup.refreshSelectedData(month, year);
         },
         isFirstMonth: function(isStartPopup) {
-          if (!scope.popupSource || !scope.popupSource.selected) {
+          var popupSource;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource || !popupSource.selected) {
             return;
           }
-          return scope.popupSource.selected.month.isStart;
+          return popupSource.selected.month.isStart;
         },
         goNextMonth: function(isStartPopup) {
-          var january, month, year;
-          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+          var january, month, popupSource, year;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource.selected || !popupSource.selected.year) {
             return;
           }
-          if (scope.popupSource.selected.month.isEnd && scope.popupSource.selected.year.isEnd) {
+          if (popupSource.selected.month.isEnd && popupSource.selected.year.isEnd) {
             console.error('error');
             return false;
           }
           january = 1;
-          month = scope.popupSource.selected.month.num;
-          if (scope.popupSource.selected.month.isEnd) {
-            year = scope.popupSource.selected.year.num + 1;
+          month = popupSource.selected.month.num;
+          if (popupSource.selected.month.isEnd) {
+            year = popupSource.selected.year.num + 1;
             month = january;
-          } else if (scope.popupSource.selected.month.isEnd && scope.popupSource.selected.year.isEnd) {
+          } else if (popupSource.selected.month.isEnd && popupSource.selected.year.isEnd) {
             console.error('error');
             return false;
           } else {
-            year = scope.popupSource.selected.year.num;
-            month = scope.popupSource.selected.month.num + 1;
+            year = popupSource.selected.year.num;
+            month = popupSource.selected.month.num + 1;
           }
           return scope.popup.refreshSelectedData(month, year);
         },
         isLastMonth: function(isStartPopup) {
-          if (!scope.popupSource || !scope.popupSource.selected) {
+          var popupSource;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource || !popupSource.selected) {
             return;
           }
-          return scope.popupSource.selected.month.isEnd;
+          return popupSource.selected.month.isEnd;
         },
         goNextYear: function(isStartPopup) {
-          var month, year;
-          if (!scope.popupSource.selected || !scope.popupSource.selected.year) {
+          var month, popupSource, year;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource.selected || !popupSource.selected.year) {
             return;
           }
-          if (scope.popupSource.selected.year.isEnd) {
+          if (popupSource.selected.year.isEnd) {
             console.error('error');
             return false;
           }
-          year = scope.popupSource.selected.year.num + 1;
-          month = scope.popupSource.selected.month.num;
+          year = popupSource.selected.year.num + 1;
+          month = popupSource.selected.month.num;
           return scope.popup.refreshSelectedData(month, year);
         },
         isLastYear: function(isStartPopup) {
-          if (!scope.popupSource || !scope.popupSource.selected) {
+          var popupSource;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource || !popupSource.selected) {
             return;
           }
-          return scope.popupSource.selected.year.isEnd;
+          return popupSource.selected.year.isEnd;
         },
         isSelectedDay: function(date) {
           if (!scope.popupResult || !scope.popupResult.day) {
@@ -376,20 +406,24 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdateRangePopup', 
           return (date.day === scope.popupResult.day) && (date.month === scope.popupResult.month) && (date.year === scope.popupResult.year);
         },
         getTodayDateTime: function(isStartPopup) {
-          var today;
-          if (!scope.popupSource || !scope.popupSource.today) {
+          var popupSource, today;
+          popupSource = getSource(isStartPopup);
+          if (!popupSource || !popupSource.today) {
             return;
           }
-          today = scope.popupSource.today;
+          today = popupSource.today;
           return new Date(today.year, today.month - 1, today.day).getTime();
         },
         isDayInSelectedMonth: function(isStartPopup, date) {
-          return (date.month === scope.popupSource.selected.month.num) && (date.year === scope.popupSource.selected.year.num);
+          var popupSource;
+          popupSource = getSource(isStartPopup);
+          return (date.month === popupSource.selected.month.num) && (date.year === popupSource.selected.year.num);
         },
         goToYear: function(isStartPopup) {
-          var month, year;
-          year = scope.popupSource.selected.year.num;
-          month = scope.popupSource.selected.month.num;
+          var month, popupSource, year;
+          popupSource = getSource(isStartPopup);
+          year = popupSource.selected.year.num;
+          month = popupSource.selected.month.num;
           return scope.popup.refreshSelectedData(month, year);
         },
         refreshSelectedData: function(month, year) {
