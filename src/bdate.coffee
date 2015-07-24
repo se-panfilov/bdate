@@ -11,6 +11,7 @@ angular.module 'bdate', [
   scope:
     bModel: '='
     bSource: '=?'
+    bSettings: '=?'
     bStartSource: '=?'
     bEndSource: '=?'
     bRange: '=?'
