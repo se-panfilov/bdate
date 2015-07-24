@@ -10,7 +10,7 @@ angular.module 'bdate', [
   scope:
     bModel: '='
     bSource: '=?'
-    bStartSource: '=?'
+    : '=?'
     bEndSource: '=?'
     bRange: '=?'
     bRootClasses: '@?'
@@ -30,9 +30,11 @@ angular.module 'bdate', [
     $scope.data =
       date: null
 
-    $scope.$watch 'bSource', ->
-      $scope.isDataReady = true
-    , true
+
+    #TODO (S.Panfilov) should improve wait for data in case or ranges bStartSource and bEndSource
+    #$scope.$watch 'bSource', ->
+    $scope.isDataReady = true
+    #, true
 
     getFormattedDate = (dmy) ->
       datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
