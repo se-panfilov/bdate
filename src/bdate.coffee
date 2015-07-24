@@ -33,9 +33,9 @@ angular.module 'bdate', [
       date: null
 
     #TODO (S.Panfilov) should improve wait for data in case or ranges bStartSource and bEndSource
-    $scope.$watch 'bSource', ->
-      $scope.isDataReady = true
-    , true
+    #$scope.$watch 'bSource', ->
+    $scope.isDataReady = true
+    #, true
 
     getFormattedDate = (dmy) ->
       datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
@@ -76,10 +76,24 @@ angular.module 'bdate', [
         scope.popup.state.isOpen = false
 
     do () ->
-      scope.bRefresh()
+      if not scope.bRange
+        scope.bRefresh()
+      else
+        scope.bStartRefresh()
+        scope.bEndRefresh()
 
-    scope.bRefreshTest = (m, y) ->
+    scope.bRefreshWrap = (m, y) ->
       scope.bRefresh
+        m: m
+        y: y
+
+    scope.bStartRefreshWrap = (m, y) ->
+      scope.bStartRefresh
+        m: m
+        y: y
+
+    scope.bEndRefreshWrap = (m, y) ->
+      scope.bEndRefresh
         m: m
         y: y
 

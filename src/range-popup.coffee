@@ -32,7 +32,7 @@ angular.module 'bdate.popup.ranged', [
         scope.popupResult = date
         scope.popup.hidePopup()
         if not scope.popup.isDayInSelectedMonth date
-          scope.popup.refreshSelectedData date.month, date.year
+          scope.popup.refreshSelectedData isStartPopup, date.month, date.year
       goPrevYear: (isStartPopup) ->
         popupSource = getSource isStartPopup
 
@@ -42,7 +42,7 @@ angular.module 'bdate.popup.ranged', [
           return false
         year = popupSource.year.num - 1
         month = popupSource.month.num
-        scope.popup.refreshSelectedData month, year
+        scope.popup.refreshSelectedData isStartPopup, month, year
       isFirstYear: (isStartPopup) ->
         popupSource = getSource isStartPopup
         return if not popupSource or not popupSource
@@ -67,7 +67,7 @@ angular.module 'bdate.popup.ranged', [
           year = popupSource.year.num
           month = popupSource.month.num - 1
 
-        scope.popup.refreshSelectedData month, year
+        scope.popup.refreshSelectedData isStartPopup, month, year
       isFirstMonth: (isStartPopup) ->
         popupSource = getSource isStartPopup
         return if not popupSource or not popupSource
@@ -92,7 +92,7 @@ angular.module 'bdate.popup.ranged', [
           year = popupSource.year.num
           month = popupSource.month.num + 1
 
-        scope.popup.refreshSelectedData month, year
+        scope.popup.refreshSelectedData isStartPopup, month, year
       isLastMonth: (isStartPopup) ->
         popupSource = getSource isStartPopup
         return if not popupSource or not popupSource
@@ -105,7 +105,7 @@ angular.module 'bdate.popup.ranged', [
           return false
         year = popupSource.year.num + 1
         month = popupSource.month.num
-        scope.popup.refreshSelectedData month, year
+        scope.popup.refreshSelectedData isStartPopup, month, year
       isLastYear: (isStartPopup) ->
         popupSource = getSource isStartPopup
         return if not popupSource or not popupSource
@@ -124,11 +124,16 @@ angular.module 'bdate.popup.ranged', [
         popupSource = getSource isStartPopup
         year = popupSource.year.num
         month = popupSource.month.num
-        scope.popup.refreshSelectedData month, year
-      refreshSelectedData: (month, year) ->
-        scope.popupRefresh
-          m: month
-          y: year
+        scope.popup.refreshSelectedData isStartPopup, month, year
+      refreshSelectedData: (isStartPopup, month, year) ->
+        if isStartPopup
+          scope.popupStartRefresh
+            m: month
+            y: year
+        else
+          scope.popupEndRefresh
+            m: month
+            y: year
 
     scope.$watch 'popupSource', ->
       scope.isDataReady = true
