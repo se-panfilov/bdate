@@ -1,4 +1,4 @@
-angular.module('bdate', ['bdate.popup', 'bdate.templates']).directive('bdatepicker', ['$document', '$filter', function($document, $filter) {
+angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']).directive('bdatepicker', ['$document', '$filter', function($document, $filter) {
   return {
     restrict: 'E',
     templateUrl: 'bdate.html',
@@ -110,6 +110,9 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
       popupRefresh: "&?"
     },
     link: function(scope) {
+      scope.$watch('popupSource', function() {
+        return console.log(scope.popupState);
+      }, true);
       scope.popup = {
         hidePopup: function() {
           return scope.popupState.isOpen = false;
@@ -254,7 +257,7 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
   };
 });
 
-angular.module('bdate.popup', ['bdate.templates']).directive('bdateRangePopup', function() {
+angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangePopup', function() {
   return {
     restrict: 'E',
     replace: true,

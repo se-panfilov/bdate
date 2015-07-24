@@ -1,4 +1,4 @@
-angular.module 'bdate.popup', [
+angular.module 'bdate.popup.ranged', [
   'bdate.templates'
 ]
 
