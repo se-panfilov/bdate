@@ -118,7 +118,7 @@
         .b_popup_today(ng-show="popupSettings.today")
             button.b_popup_today_btn(
             type="button",
-            ng-bind="popup.getTodayDateTime(false) | date:popupSettings.format",
+            ng-bind="popup.getTodayDateTime() | date:popupSettings.format",
 
             )
     button(
