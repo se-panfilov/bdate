@@ -13,11 +13,6 @@ angular.module 'bdate.popup', [
     popupRefresh: "&?"
   link: (scope) ->
 
-
-    scope.$watch 'popupSource', ->
-      console.log scope.popupState
-    , true
-    
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
