@@ -115,8 +115,8 @@ angular.module 'bdate.popup.ranged', [
         return ((date.day is scope.popupResult.day) and (date.month is scope.popupResult.month) and (date.year is scope.popupResult.year))
       getTodayDateTime: (isStartPopup) ->
         popupSource = getSource isStartPopup
-        return if not popupSource or not popupSource.today
-        today = popupSource.today
+        return if not popupSource or not popupSettings.today
+        today = popupSettings.today
         return new Date(today.year, today.month - 1, today.day).getTime()
       isDayInSelectedMonth: (isStartPopup, date) ->
         popupSource = getSource isStartPopup

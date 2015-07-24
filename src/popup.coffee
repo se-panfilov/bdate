@@ -94,8 +94,8 @@ angular.module 'bdate.popup', [
         return if not scope.popupResult or not scope.popupResult.day
         return ((date.day is scope.popupResult.day) and (date.month is scope.popupResult.month) and (date.year is scope.popupResult.year))
       getTodayDateTime: () ->
-        return if not scope.popupSource or not scope.popupSource.today
-        today = scope.popupSource.today
+        return if not scope.popupSource or not scope.popupSettings.today
+        today = scope.popupSettings.today
         return new Date(today.year, today.month - 1, today.day).getTime()
       isDayInSelectedMonth: (date) ->
         return ((date.month is scope.popupSource.month.num) and (date.year is scope.popupSource.year.num))

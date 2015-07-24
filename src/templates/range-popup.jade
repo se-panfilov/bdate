@@ -39,7 +39,7 @@
                     | &#9654;
         table.b_popup_days
             tr
-                td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::popupSource.week")
+                td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::popupSettings.week")
                     span(ng-bind="::dayOfWeek")
         table.b_popup_weeks
             tr.b_popup_week
@@ -54,11 +54,11 @@
                     ng-disabled="date.isDisabled",
                     ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(true, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(date)}"
                     )
-        .b_popup_today(ng-show="popupSource.today")
+        .b_popup_today(ng-show="popupSettings.today")
             button.b_popup_today_btn(
             type="button",
-            ng-bind="popup.getTodayDateTime() | date:popupSource.format",
-            ng-click="popup.selectDate(true, popupSource.today)"
+            ng-bind="popup.getTodayDateTime() | date:popupSettings.format",
+            ng-click="popup.selectDate(true, popupSettings.today)"
             )
     .b_popup.b_range_popup.b_range_popup_end
         .b_popup_controls
@@ -80,7 +80,7 @@
             | &nbsp;
             select.b_popup_year(
             ng-model="popupSource.year.num",
-            ng-options="year for year in popupSource.years",
+            ng-options="year for year in popupSettings.years",
             ng-init="year = popupSource.year.num",
             ng-change="popup.goToYear(false)"
             )
@@ -100,7 +100,7 @@
                     | &#9654;
         table.b_popup_days
             tr
-                td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::popupSource.week")
+                td.b_popup_day_of_week(ng-repeat="dayOfWeek in ::popupSettings.week")
                     span(ng-bind="::dayOfWeek")
         table.b_popup_weeks
             tr.b_popup_week
@@ -115,10 +115,10 @@
                     ng-disabled="date.isDisabled",
                     ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(date)}"
                     )
-        .b_popup_today(ng-show="popupSource.today")
+        .b_popup_today(ng-show="popupSettings.today")
             button.b_popup_today_btn(
             type="button",
-            ng-bind="popup.getTodayDateTime(false) | date:popupSource.format",
+            ng-bind="popup.getTodayDateTime(false) | date:popupSettings.format",
 
             )
     button(

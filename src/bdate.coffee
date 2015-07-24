@@ -39,7 +39,7 @@ angular.module 'bdate', [
 
     getFormattedDate = (dmy) ->
       datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
-      return $filter('date') datetime, $scope.bSource.format
+      return $filter('date') datetime, $scope.bSettings.format
 
     $scope.$watch 'popupResult', (newVal, oldVal) ->
       return if newVal is oldVal
