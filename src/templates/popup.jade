@@ -18,7 +18,7 @@
         | &nbsp;
         select.b_popup_year(
         ng-model="popupSource.year.num",
-        ng-options="year for year in popupSettings.years",
+        ng-options="year for year in popupSource.years",
         ng-init="year = popupSource.year.num",
         ng-change="popup.goToYear()"
         )
