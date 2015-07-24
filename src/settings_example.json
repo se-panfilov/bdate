@@ -5,5 +5,6 @@
         "month": 1,
         "year": 2010
     },
-    "format": "dd-MM-yyyy"
+    "format": "dd-MM-yyyy",
+    "range_delimeter": "--"
 }

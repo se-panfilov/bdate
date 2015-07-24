@@ -52,7 +52,7 @@
                     ng-bind="date.day",
                     ng-click="popup.selectDate(true, date)",
                     ng-disabled="date.isDisabled",
-                    ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(true, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(date)}"
+                    ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(true, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(true, date)}"
                     )
     .b_popup.b_range_popup.b_range_popup_end
         .b_popup_controls
@@ -105,9 +105,9 @@
                     button.b_popup_day_btn(
                     type="button",
                     ng-bind="date.day",
-                    ng-click="popup.selectDate(date)",
+                    ng-click="popup.selectDate(false, date)",
                     ng-disabled="date.isDisabled",
-                    ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(false, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(date)}"
+                    ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(false, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(false, date)}"
                     )
     .b_popup_today(ng-show="popupSettings.today")
         button.b_popup_today_btn(

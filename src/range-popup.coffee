@@ -16,8 +16,8 @@ angular.module 'bdate.popup.ranged', [
     popupEndRefresh: "&?"
   link: (scope) ->
     scope.data =
-      startDate: ''
-      endDate: ''
+      startResult: null
+      endResult: null
 
     getSource = (isStartPopup) ->
       if isStartPopup
@@ -25,13 +25,19 @@ angular.module 'bdate.popup.ranged', [
       else
         return scope.popupEndSource
 
+    setDataResult = (isStartPopup, date) ->
+      if isStartPopup
+        scope.data.startResult = date
+      else
+        scope.data.endResult = date
+
     scope.popup =
       hidePopup: () ->
         scope.popupState.isOpen = false
       selectDate: (isStartPopup, date) ->
-        scope.popupResult = date
-        scope.popup.hidePopup()
-        if not scope.popup.isDayInSelectedMonth date
+        setDataResult isStartPopup, date
+
+        if not scope.popup.isDayInSelectedMonth isStartPopup, date
           scope.popup.refreshSelectedData isStartPopup, date.month, date.year
       goPrevYear: (isStartPopup) ->
         popupSource = getSource isStartPopup
@@ -110,9 +116,13 @@ angular.module 'bdate.popup.ranged', [
         popupSource = getSource isStartPopup
         return if not popupSource or not popupSource
         return popupSource.year.isEnd
-      isSelectedDay: (date) ->
-        return if not scope.popupResult or not scope.popupResult.day
-        return ((date.day is scope.popupResult.day) and (date.month is scope.popupResult.month) and (date.year is scope.popupResult.year))
+      isSelectedDay: (isStartPopup, date) ->
+        if isStartPopup
+          return if not scope.data.startResult or not scope.data.startResult.day
+          return ((date.day is scope.data.startResult.day) and (date.month is scope.data.startResult.month) and (date.year is scope.data.startResult.year))
+        else
+          return if not scope.data.endResult or not scope.data.endResult.day
+          return ((date.day is scope.data.endResult.day) and (date.month is scope.data.endResult.month) and (date.year is scope.data.endResult.year))
       getTodayDateTime: () ->
         return if not scope.popupSettings or not scope.popupSettings.today
         today = scope.popupSettings.today
