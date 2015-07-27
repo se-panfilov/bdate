@@ -127,12 +127,15 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
       popupRefresh: "&?"
     },
     link: function(scope) {
+      scope.$watch('popupResult ', function() {
+        return console.log(scope.popupResult);
+      }, true);
       scope.popup = {
         hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
         selectDate: function(date) {
-          scope.popupResult = date;
+          scope.popupResult = datecxz;
           scope.popup.hidePopup();
           if (!scope.popup.isDayInSelectedMonth(date)) {
             return scope.popup.refreshSelectedData(date.month, date.year);

@@ -13,12 +13,15 @@ angular.module 'bdate.popup', [
     popupResult: '='
     popupRefresh: "&?"
   link: (scope) ->
+    scope.$watch 'popupResult ', ->
+      console.log scope.popupResult
+    , true
 
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
       selectDate: (date) ->
-        scope.popupResult = date
+        scope.popupResult = datecxz
         scope.popup.hidePopup()
         if not scope.popup.isDayInSelectedMonth date
           scope.popup.refreshSelectedData date.month, date.year

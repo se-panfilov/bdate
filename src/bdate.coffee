@@ -45,10 +45,12 @@ angular.module 'bdate', [
       return if newVal is oldVal
       return if not newVal
       return if angular.equals {}, newVal
+      #TODO (S.Panfilov) add ranged case
       $scope.bModel = getFormattedDate($scope.popupResult)
     , true
 
   link: (scope, elem) ->
+    #TODO (S.Panfilov) is it still required?
     scope.date =
       viewed: ''
       model: {}
