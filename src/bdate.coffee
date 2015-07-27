@@ -41,6 +41,10 @@ angular.module 'bdate', [
       datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
       return $filter('date') datetime, scope.bSettings.format
 
+    getFormattedDatRange = (dmy) ->
+      #datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
+      #return $filter('date') datetime, scope.bSettings.format
+
     scope.$watch 'popup.result', (newVal, oldVal) ->
       return if newVal is oldVal
       return if not newVal
@@ -49,7 +53,7 @@ angular.module 'bdate', [
       if (not scope.bRange)
         scope.bModel = getFormattedDate(scope.popup.result)
       else
-        #scope.bModel = getFormattedDate(scope.popup.result)
+#        scope.bModel = getFormattedDatRange(scope.popup.result)
     , true
 
     processClick = (event) ->
