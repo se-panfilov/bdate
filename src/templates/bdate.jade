@@ -29,7 +29,7 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     popup-settings="bSettings",
     popup-state="popup.state",
     popup-source="bSource"
-    popup-result="popupResult"
+    popup-result="popup.result"
     popup-refresh="bRefreshWrap(m, y)"
     ng-if="!bRange"
     )
@@ -39,7 +39,7 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     popup-state="popup.state",
     popup-start-source="bStartSource"
     popup-end-source="bEndSource"
-    popup-result="popupResult"
+    popup-result="popup.result"
     popup-start-refresh="bStartRefreshWrap(m, y)"
     popup-end-refresh="bEndRefreshWrap(m, y)"
     ng-if="bRange"

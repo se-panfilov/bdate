@@ -25,35 +25,30 @@ angular.module 'bdate', [
     bRefresh: "&?"
     bStartRefresh: "&?"
     bEndRefresh: "&?"
-  controller: ($scope) ->
-    $scope.state =
+  link: (scope, elem) ->
+    scope.state =
       isDataReady: false
 
-    $scope.data =
+    scope.data =
       date: null
 
     #TODO (S.Panfilov) should improve wait for data in case or ranges bStartSource and bEndSource
-    #$scope.$watch 'bSource', ->
-    $scope.isDataReady = true
+    #scope.$watch 'bSource', ->
+    scope.isDataReady = true
     #, true
 
     getFormattedDate = (dmy) ->
       datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
-      return $filter('date') datetime, $scope.bSettings.format
+      return $filter('date') datetime, scope.bSettings.format
 
-    $scope.$watch 'popupResult', (newVal, oldVal) ->
+    scope.$watch 'popup.result', (newVal, oldVal) ->
+      console.log 22
       return if newVal is oldVal
       return if not newVal
       return if angular.equals {}, newVal
       #TODO (S.Panfilov) add ranged case
-      $scope.bModel = getFormattedDate($scope.popupResult)
+      scope.bModel = getFormattedDate(scope.popup.result)
     , true
-
-  link: (scope, elem) ->
-    #TODO (S.Panfilov) is it still required?
-    scope.date =
-      viewed: ''
-      model: {}
 
     processClick = (event) ->
       isOpen = scope.popup.state.isOpen
@@ -66,9 +61,10 @@ angular.module 'bdate', [
 
     scope.clear = () ->
       scope.bModel = null;
-      scope.popupResult = null;
+      scope.popup.result = null;
 
     scope.popup =
+      result: null
       state:
         isOpen: false
       togglePopup: () ->
