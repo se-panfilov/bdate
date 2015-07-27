@@ -35,7 +35,6 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         return $filter('date')(datetime, scope.bSettings.format);
       };
       scope.$watch('popup.result', function(newVal, oldVal) {
-        console.log(22);
         if (newVal === oldVal) {
           return;
         }
@@ -45,7 +44,11 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         if (angular.equals({}, newVal)) {
           return;
         }
-        return scope.bModel = getFormattedDate(scope.popup.result);
+        if (!scope.bRange) {
+          return scope.bModel = getFormattedDate(scope.popup.result);
+        } else {
+
+        }
       }, true);
       processClick = function(event) {
         var clickedElem, isOpen, isOutsideClick, popupElem;
@@ -122,16 +125,13 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
       popupRefresh: "&?"
     },
     link: function(scope) {
-      scope.$watch('popupResult ', function() {
-        console.log(11);
-        return console.log(scope.popupResult);
-      }, true);
       scope.popup = {
+        result: null,
         hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
         selectDate: function(date) {
-          scope.popupResult = date;
+          scope.popup.result = date;
           scope.popup.hidePopup();
           if (!scope.popup.isDayInSelectedMonth(date)) {
             return scope.popup.refreshSelectedData(date.month, date.year);
@@ -234,10 +234,10 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popupSource.year.isEnd;
         },
         isSelectedDay: function(date) {
-          if (!scope.popupResult || !scope.popupResult.day) {
+          if (!scope.popup.result || !scope.popup.result.day) {
             return;
           }
-          return (date.day === scope.popupResult.day) && (date.month === scope.popupResult.month) && (date.year === scope.popupResult.year);
+          return (date.day === scope.popup.result.day) && (date.month === scope.popup.result.month) && (date.year === scope.popup.result.year);
         },
         getTodayDateTime: function() {
           var today;
@@ -305,6 +305,7 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
         }
       };
       scope.popup = {
+        result: null,
         hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
@@ -469,7 +470,7 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
           }
         },
         selectRangedDate: function() {
-          return scope.popupResult = {
+          return scope.popup.result = {
             start: scope.data.startResult,
             end: scope.data.endResult
           };

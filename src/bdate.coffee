@@ -46,7 +46,10 @@ angular.module 'bdate', [
       return if not newVal
       return if angular.equals {}, newVal
       #TODO (S.Panfilov) add ranged case
-      scope.bModel = getFormattedDate(scope.popup.result)
+      if (not scope.bRange)
+        scope.bModel = getFormattedDate(scope.popup.result)
+      else
+        #scope.bModel = getFormattedDate(scope.popup.result)
     , true
 
     processClick = (event) ->
