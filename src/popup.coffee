@@ -13,16 +13,13 @@ angular.module 'bdate.popup', [
     popupResult: '='
     popupRefresh: "&?"
   link: (scope) ->
-    scope.$watch 'popupResult ', ->
-      console.log 11
-      console.log scope.popupResult
-    , true
 
     scope.popup =
+      result: null
       hidePopup: ->
         scope.popupState.isOpen = false
       selectDate: (date) ->
-        scope.popupResult = date
+        scope.popup.result = date
         scope.popup.hidePopup()
         if not scope.popup.isDayInSelectedMonth date
           scope.popup.refreshSelectedData date.month, date.year
@@ -95,8 +92,8 @@ angular.module 'bdate.popup', [
         return if not scope.popupSource or not scope.popupSource
         return scope.popupSource.year.isEnd
       isSelectedDay: (date) ->
-        return if not scope.popupResult or not scope.popupResult.day
-        return ((date.day is scope.popupResult.day) and (date.month is scope.popupResult.month) and (date.year is scope.popupResult.year))
+        return if not scope.popup.result or not scope.popup.result.day
+        return ((date.day is scope.popup.result.day) and (date.month is scope.popup.result.month) and (date.year is scope.popup.result.year))
       getTodayDateTime: () ->
         return if not scope.popupSettings or not scope.popupSettings.today
         today = scope.popupSettings.today

@@ -42,7 +42,6 @@ angular.module 'bdate', [
       return $filter('date') datetime, scope.bSettings.format
 
     scope.$watch 'popup.result', (newVal, oldVal) ->
-      console.log 22
       return if newVal is oldVal
       return if not newVal
       return if angular.equals {}, newVal

@@ -32,6 +32,7 @@ angular.module 'bdate.popup.ranged', [
         scope.data.endResult = date
 
     scope.popup =
+      result: null
       hidePopup: () ->
         scope.popupState.isOpen = false
       selectDate: (isStartPopup, date) ->
@@ -145,7 +146,7 @@ angular.module 'bdate.popup.ranged', [
             m: month
             y: year
       selectRangedDate: () ->
-        scope.popupResult =
+        scope.popup.result =
           start: scope.data.startResult
           end: scope.data.endResult
 
