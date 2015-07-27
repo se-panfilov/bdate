@@ -144,11 +144,11 @@ angular.module 'bdate.popup.ranged', [
           scope.popupEndRefresh
             m: month
             y: year
+      selectRangedDate: () ->
+        scope.popupResult =
+          start: scope.data.startResult
+          end: scope.data.endResult
 
     scope.$watch 'popupSource', ->
       scope.isDataReady = true
-    , true
-
-    scope.$watch 'data.startResult', ->
-      console.log scope.data.startResult
     , true

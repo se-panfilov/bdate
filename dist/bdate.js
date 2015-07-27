@@ -468,13 +468,16 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
               y: year
             });
           }
+        },
+        selectRangedDate: function() {
+          return scope.popupResult = {
+            start: scope.data.startResult,
+            end: scope.data.endResult
+          };
         }
       };
-      scope.$watch('popupSource', function() {
+      return scope.$watch('popupSource', function() {
         return scope.isDataReady = true;
-      }, true);
-      return scope.$watch('data.startResult', function() {
-        return console.log(scope.data.startResult);
       }, true);
     }
   };

@@ -97,5 +97,4 @@ angular.module 'bdate', [
         m: m
         y: y
 
-
     $document.on 'click', processClick
