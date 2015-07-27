@@ -54,6 +54,12 @@
                     ng-disabled="date.isDisabled",
                     ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(true, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(true, date)}"
                     )
+        .b_popup_today(ng-show="popupSettings.today")
+            button.b_popup_today_btn(
+            type="button",
+            ng-click="popup.selectDate(true, popupSettings.today)",
+            ng-bind="popup.getTodayDateTime() | date:popupSettings.format",
+            )
     .b_popup.b_range_popup.b_range_popup_end
         .b_popup_controls
             .b_btn_prev_container
@@ -109,13 +115,15 @@
                     ng-disabled="date.isDisabled",
                     ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(false, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(false, date)}"
                     )
-    .b_popup_today(ng-show="popupSettings.today")
-        button.b_popup_today_btn(
-        type="button",
-        ng-bind="popup.getTodayDateTime() | date:popupSettings.format",
-        )
-    button(
+        .b_popup_today(ng-show="popupSettings.today")
+            button.b_popup_today_btn(
+            type="button",
+            ng-click="popup.selectDate(false, popupSettings.today)",
+            ng-bind="popup.getTodayDateTime() | date:popupSettings.format",
+            )
+    button.ok_btn(
     type="button"
+    ng-disabled="!data.startResult || !data.endResult",
     ng-click="popup.selectRangedDate()"
     )
         | Ok
