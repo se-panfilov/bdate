@@ -145,7 +145,7 @@ angular.module 'bdate', [
               return callback()
             return
 
-          if newVal isnt getOutputDate scope.popup.result
+          if not scope.popup.result or newVal isnt getOutputDate scope.popup.result
             scope.watchers.popup.result.stop()
             scope.popup.result = parseOutputDate newVal
             scope.watchers.popup.result.start()
