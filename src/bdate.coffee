@@ -41,19 +41,20 @@ angular.module 'bdate', [
       datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
       return $filter('date') datetime, scope.bSettings.format
 
-    getFormattedDatRange = (dmy) ->
-      #datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime()
-      #return $filter('date') datetime, scope.bSettings.format
+    getFormattedDateRange = (dmyRange) ->
+      datetimeStart = new Date(dmyRange.start.year, dmyRange.start.month - 1, dmyRange.start.day).getTime()
+      datetimeEnd = new Date(dmyRange.end.year, dmyRange.end.month - 1, dmyRange.end.day).getTime()
+      startDate = $filter('date') datetimeStart, scope.bSettings.format
+      endDate = $filter('date') datetimeEnd, scope.bSettings.format
 
     scope.$watch 'popup.result', (newVal, oldVal) ->
       return if newVal is oldVal
       return if not newVal
       return if angular.equals {}, newVal
-      #TODO (S.Panfilov) add ranged case
       if (not scope.bRange)
         scope.bModel = getFormattedDate(scope.popup.result)
       else
-#        scope.bModel = getFormattedDatRange(scope.popup.result)
+        scope.bModel = getFormattedDateRange(scope.popup.result)
     , true
 
     processClick = (event) ->
