@@ -46,6 +46,7 @@ angular.module 'bdate', [
       datetimeEnd = new Date(dmyRange.end.year, dmyRange.end.month - 1, dmyRange.end.day).getTime()
       startDate = $filter('date') datetimeStart, scope.bSettings.format
       endDate = $filter('date') datetimeEnd, scope.bSettings.format
+      return startDate + scope.bSettings.range_delimiter + endDate
 
     scope.$watch 'popup.result', (newVal, oldVal) ->
       return if newVal is oldVal

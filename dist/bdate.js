@@ -39,7 +39,8 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         datetimeStart = new Date(dmyRange.start.year, dmyRange.start.month - 1, dmyRange.start.day).getTime();
         datetimeEnd = new Date(dmyRange.end.year, dmyRange.end.month - 1, dmyRange.end.day).getTime();
         startDate = $filter('date')(datetimeStart, scope.bSettings.format);
-        return endDate = $filter('date')(datetimeEnd, scope.bSettings.format);
+        endDate = $filter('date')(datetimeEnd, scope.bSettings.format);
+        return startDate + scope.bSettings.range_delimiter + endDate;
       };
       scope.$watch('popup.result', function(newVal, oldVal) {
         if (newVal === oldVal) {
@@ -133,12 +134,11 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
     },
     link: function(scope) {
       scope.popup = {
-        result: null,
         hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
         selectDate: function(date) {
-          scope.popup.result = date;
+          scope.popupResult = date;
           scope.popup.hidePopup();
           if (!scope.popup.isDayInSelectedMonth(date)) {
             return scope.popup.refreshSelectedData(date.month, date.year);
@@ -241,10 +241,10 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popupSource.year.isEnd;
         },
         isSelectedDay: function(date) {
-          if (!scope.popup.result || !scope.popup.result.day) {
+          if (!scope.popupResult || !scope.popupResult.day) {
             return;
           }
-          return (date.day === scope.popup.result.day) && (date.month === scope.popup.result.month) && (date.year === scope.popup.result.year);
+          return (date.day === scope.popupResult.day) && (date.month === scope.popupResult.month) && (date.year === scope.popupResult.year);
         },
         getTodayDateTime: function() {
           var today;
@@ -312,7 +312,6 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
         }
       };
       scope.popup = {
-        result: null,
         hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
@@ -477,7 +476,7 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
           }
         },
         selectRangedDate: function() {
-          return scope.popup.result = {
+          return scope.popupResult = {
             start: scope.data.startResult,
             end: scope.data.endResult
           };
