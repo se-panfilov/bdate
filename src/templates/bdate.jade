@@ -9,19 +9,22 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     class="{{::bInputClasses}}",
     ng-click="popup.togglePopup()",
     ng-disabled="!isDataReady",
+    aria-label="Toggle date popup"
     readonly="readonly"
     )
     button.b_clear_btn(
     type="button",
     class="{{::bButtonClasses}}",
-    ng-click="clear()"
+    ng-click="clear()",
+    aria-label="Clear Date"
     )
         | &times;
     button.b_datepicker_button.b_calendar_btn(
     type="button",
     class="{{::bButtonClasses}}",
     ng-click="popup.togglePopup()",
-    ng-disabled="!isDataReady"
+    ng-disabled="!isDataReady",
+    aria-label="Toggle date popup"
     )
         | &nbsp;
     bdate-popup(
