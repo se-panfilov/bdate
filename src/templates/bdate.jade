@@ -16,6 +16,7 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     type="button",
     class="{{::bButtonClasses}}",
     ng-click="clear()",
+    ng-keydown="clear()",
     aria-label="Clear Date"
     )
         | &times;
@@ -23,6 +24,7 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     type="button",
     class="{{::bButtonClasses}}",
     ng-click="popup.togglePopup()",
+    ng-keydown="popup.togglePopup()",
     ng-disabled="!isDataReady",
     aria-label="Toggle date popup"
     )
