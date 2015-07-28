@@ -23,12 +23,11 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
     link: function(scope, elem) {
       var getFormattedDate, getFormattedDateRange, processClick;
       scope.state = {
-        isDataReady: false
+        isSourceReady: false
       };
       scope.data = {
         date: null
       };
-      scope.isDataReady = true;
       getFormattedDate = function(dmy) {
         var datetime;
         datetime = new Date(dmy.year, dmy.month - 1, dmy.day).getTime();
@@ -42,11 +41,26 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         endDate = $filter('date')(datetimeEnd, scope.bSettings.format);
         return startDate + scope.bSettings.range_delimiter + endDate;
       };
-      scope.modelWatchers = {
-        popupResultWatcher: null,
-        startWatchPopupResult: function() {
-          var popupResultWatcher;
-          popupResultWatcher = scope.$watch('popup.result', function(newVal, oldVal) {
+      scope.watchers = {
+        popup: {
+          result: {
+            handler: null,
+            start: function(callback) {
+              scope.watchers.popup.result.handler = scope.$watch('popup.result', function(newVal, oldVal) {
+                if (callback) {
+                  return callback(newVal, oldVal);
+                }
+              }, true);
+              return scope.watchers.popup.result.handler;
+            },
+            stop: function() {
+              scope.watchers.popup.result.handler();
+              return scope.watchers.popup.result.handler = null;
+            }
+          }
+        },
+        watchPopupResult: function(callback) {
+          return scope.watchers.popup.result.start(function(newVal, oldVal) {
             if (newVal === oldVal) {
               return;
             }
@@ -57,15 +71,135 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
               return;
             }
             if (!scope.bRange) {
-              return scope.bModel = getFormattedDate(scope.popup.result);
+              scope.bModel = getFormattedDate(scope.popup.result);
             } else {
-              return scope.bModel = getFormattedDateRange(scope.popup.result);
+              scope.bModel = getFormattedDateRange(scope.popup.result);
             }
-          }, true);
-          return popupResultWatcher;
+            scope.watchers.popup.result.stop();
+            if (callback) {
+              return callback(newVal, oldVal);
+            }
+          });
         },
-        stopPopupResultWatcher: function() {
-          return scope.modelWatchers.popupResultWatcher;
+        bModel: {
+          handler: null,
+          start: function(callback) {
+            scope.watchers.bModel.handler = scope.$watch('bModel', function(newVal, oldVal) {
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            }, true);
+            return scope.watchers.bModel.handler;
+          },
+          stop: function() {
+            scope.watchers.bModel.handler();
+            return scope.watchers.bModel.handler = null;
+          }
+        },
+        watchBModel: function(callback) {
+          return scope.watchers.bModel.start(function(newVal, oldVal) {
+            if (newVal === oldVal) {
+              return;
+            }
+            if (!newVal) {
+              return;
+            }
+            console.log(newVal);
+            scope.watchers.bModel.stop();
+            if (callback) {
+              return callback(newVal, oldVal);
+            }
+          });
+        },
+        bSource: {
+          handler: null,
+          start: function(callback) {
+            scope.watchers.bSource.handler = scope.$watch('bSource', function(newVal, oldVal) {
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            });
+            return scope.watchers.bSource.handler;
+          },
+          stop: function() {
+            scope.watchers.bSource.handler();
+            return scope.watchers.bSource.handler = null;
+          }
+        },
+        bStartSource: {
+          handler: null,
+          start: function(callback) {
+            scope.watchers.bStartSource.handler = scope.$watch('bStartSource', function(newVal, oldVal) {
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            });
+            return scope.watchers.bStartSource.handler;
+          },
+          stop: function() {
+            return scope.watchers.bStartSource.handler();
+          }
+        },
+        bEndSource: {
+          handler: null,
+          start: function(callback) {
+            scope.watchers.bEndSource.handler = scope.$watch('bEndSource', function(newVal, oldVal) {
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            });
+            return scope.watchers.bEndSource.handler;
+          },
+          stop: function() {
+            scope.watchers.bEndSource.handler();
+            return scope.watchers.bEndSource.handler = null;
+          }
+        },
+        watchSource: function(callback) {
+          var isEndSourceReady, isStartSourceReady;
+          if (!scope.bRange) {
+            return scope.watchers.bSource.start(function(val) {
+              if (!val) {
+                return;
+              }
+              scope.isSourceReady = true;
+              scope.watchers.bSource.stop();
+              if (callback) {
+                return callback(val);
+              }
+            });
+          } else {
+            isStartSourceReady = false;
+            isEndSourceReady = false;
+            scope.watchers.bStartSource.start(function(val) {
+              if (!val) {
+                return;
+              }
+              isStartSourceReady = true;
+              if (isStartSourceReady && isEndSourceReady) {
+                scope.isSourceReady = true;
+                scope.watchers.bStartSource.stop();
+                scope.watchers.bEndSource.stop();
+                if (callback) {
+                  return callback(val);
+                }
+              }
+            });
+            return scope.watchers.bEndSource.start(function(val) {
+              if (!val) {
+                return;
+              }
+              isEndSourceReady = true;
+              if (isStartSourceReady && isEndSourceReady) {
+                scope.isSourceReady = true;
+                scope.watchers.bStartSource.stop();
+                scope.watchers.bEndSource.stop();
+                if (callback) {
+                  return callback(val);
+                }
+              }
+            });
+          }
         }
       };
       processClick = function(event) {
@@ -90,7 +224,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
           isOpen: false
         },
         togglePopup: function() {
-          if (!scope.isDataReady) {
+          if (!scope.isSourceReady) {
             return;
           }
           return scope.popup.state.isOpen = !scope.popup.state.isOpen;
@@ -100,6 +234,10 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         }
       };
       (function() {
+        scope.watchers.watchSource((function() {
+          scope.watchers.watchPopupResult();
+          return scope.watchers.watchBModel();
+        }));
         if (!scope.bRange) {
           return scope.bRefresh();
         } else {
@@ -500,6 +638,6 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
   };
 });
 
-angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div ng-class=\"{b_datepicker_in_progress: !isDataReady}\" class=\"b_datepicker_root {{::bRootClasses}}\"><input type=text ng-model=bModel placeholder={{placeholder}} ng-click=popup.togglePopup() ng-disabled=!isDataReady aria-label=\"Toggle date popup\" readonly=readonly class=\"b_datepicker_input {{::bInputClasses}}\"><button type=button ng-click=clear() ng-keydown=clear() aria-label=\"Clear Date\" class=\"b_clear_btn {{::bButtonClasses}}\">&times;</button><button type=button ng-click=popup.togglePopup() ng-keydown=popup.togglePopup() ng-disabled=!isDataReady aria-label=\"Toggle date popup\" class=\"b_datepicker_button b_calendar_btn {{::bButtonClasses}}\">&nbsp;</button><bdate-popup popup-settings=bSettings popup-state=popup.state popup-source=bSource popup-result=popup.result popup-refresh=\"bRefreshWrap(m, y)\" ng-if=!bRange class={{::bPopupClasses}}></bdate-popup><bdate-range-popup popup-settings=bSettings popup-state=popup.state popup-start-source=bStartSource popup-end-source=bEndSource popup-result=popup.result popup-start-refresh=\"bStartRefreshWrap(m, y)\" popup-end-refresh=\"bEndRefreshWrap(m, y)\" ng-if=bRange class={{::bPopupClasses}}></bdate-range-popup></div>");
+angular.module("bdate.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("bdate.html","<div ng-class=\"{b_datepicker_in_progress: !isSourceReady}\" class=\"b_datepicker_root {{::bRootClasses}}\"><input type=text ng-model=bModel placeholder={{placeholder}} ng-click=popup.togglePopup() ng-disabled=!isSourceReady aria-label=\"Toggle date popup\" readonly=readonly class=\"b_datepicker_input {{::bInputClasses}}\"><button type=button ng-click=clear() ng-keydown=clear() aria-label=\"Clear Date\" class=\"b_clear_btn {{::bButtonClasses}}\">&times;</button><button type=button ng-click=popup.togglePopup() ng-keydown=popup.togglePopup() ng-disabled=!isSourceReady aria-label=\"Toggle date popup\" class=\"b_datepicker_button b_calendar_btn {{::bButtonClasses}}\">&nbsp;</button><bdate-popup popup-settings=bSettings popup-state=popup.state popup-source=bSource popup-result=popup.result popup-refresh=\"bRefreshWrap(m, y)\" ng-if=!bRange class={{::bPopupClasses}}></bdate-popup><bdate-range-popup popup-settings=bSettings popup-state=popup.state popup-start-source=bStartSource popup-end-source=bEndSource popup-result=popup.result popup-start-refresh=\"bStartRefreshWrap(m, y)\" popup-end-refresh=\"bEndRefreshWrap(m, y)\" ng-if=bRange class={{::bPopupClasses}}></bdate-range-popup></div>");
 $templateCache.put("popup.html","<div ng-show=popupState.isOpen aria-label=\"Select date popup\" class=b_popup><div aria-label=\"Popup navigation\" class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=popup.goPrevYear() aria-label=\"Select preview year\" ng-disabled=popup.isFirstYear() class=\"b_popup_btn b_btn_prev\">&#9664; &#9664;</button><button type=button ng-click=popup.goPrevMonth() aria-label=\"Select preview month\" ng-disabled=\"popup.isFirstMonth() &amp;&amp; popup.isFirstYear()\" class=\"b_popup_btn b_btn_prev\">&#9664;</button></div><div ng-bind=popupSource.month.name class=b_popup_month></div>&nbsp;<select ng-model=popupSource.year.num ng-options=\"year for year in popupSource.years\" ng-init=\"year = popupSource.year.num\" aria-label=\"Select year from list\" ng-change=popup.goToYear() class=b_popup_year></select><div class=b_btn_next_container><button type=button ng-click=popup.goNextMonth() aria-label=\"Select next month\" ng-disabled=\"popup.isLastMonth() &amp;&amp; popup.isLastYear()\" class=\"b_popup_btn b_btn_next\">&#9654;</button><button type=button ng-click=popup.goNextYear() aria-label=\"Select next year\" ng-disabled=popup.isLastYear() class=\"b_popup_btn b_btn_next\">&#9654; &#9654;</button></div></div><table aria-label=\"Days of selected month\" class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::popupSettings.week\" aria-label=\"Days of week\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr aria-label=\"Days of month\" class=b_popup_week><td ng-repeat=\"date in popupSource.dates track by $index\" ng-class=\"{b_popup_today_day_container: date.isToday}\" class=b_popup_day><button type=button ng-bind=date.day ng-click=popup.selectDate(date) ng-disabled=date.isDisabled aria-label={{date.day}}-{{date.month}}-{{date.year}} ng-class=\"{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(date)}\" class=b_popup_day_btn></button></td></tr></table><div ng-show=popupSettings.today aria-label=\"Select today\" class=b_popup_today><button type=button ng-bind=\"popup.getTodayDateTime() | date:popupSettings.format\" ng-click=popup.selectDate(popupSettings.today) class=b_popup_today_btn></button></div></div>");
 $templateCache.put("range-popup.html","<div ng-show=popupState.isOpen aria-label=\"Select dates range popup\" class=b_range_popup_back><div class=\"b_popup b_range_popup b_range_popup_start\"><div aria-label=\"Popup navigation\" class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=popup.goPrevYear(true) aria-label=\"Select preview year\" ng-disabled=popup.isFirstYear(true) class=\"b_popup_btn b_btn_prev\">&#9664; &#9664;</button><button type=button ng-click=popup.goPrevMonth(true) aria-label=\"Select preview month\" ng-disabled=\"popup.isFirstMonth(true) &amp;&amp; popup.isFirstYear(true)\" class=\"b_popup_btn b_btn_prev\">&#9664;</button></div><div ng-bind=popupStartSource.month.name class=b_popup_month></div>&nbsp;<select ng-model=popupStartSource.year.num ng-options=\"year for year in popupStartSource.years\" ng-init=\"year = popupStartSource.year.num\" aria-label=\"Select year from list\" ng-change=popup.goToYear(true) class=b_popup_year></select><div class=b_btn_next_container><button type=button ng-click=popup.goNextMonth(true) aria-label=\"Select next month\" ng-disabled=\"popup.isLastMonth(true) &amp;&amp; popup.isLastYear(true)\" class=\"b_popup_btn b_btn_next\">&#9654;</button><button type=button ng-click=popup.goNextYear(true) aria-label=\"Select next year\" ng-disabled=popup.isLastYear(true) class=\"b_popup_btn b_btn_next\">&#9654; &#9654;</button></div></div><table aria-label=\"Days of selected month\" class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::popupSettings.week\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr aria-label=\"Days of month\" class=b_popup_week><td ng-repeat=\"date in popupStartSource.dates track by $index\" ng-class=\"{b_popup_today_day_container: date.isToday}\" class=b_popup_day><button type=button ng-bind=date.day ng-click=\"popup.selectDate(true, date)\" ng-disabled=date.isDisabled aria-label={{date.day}}-{{date.month}}-{{date.year}} ng-class=\"{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(true, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(true, date)}\" class=b_popup_day_btn></button></td></tr></table><div ng-show=popupSettings.today aria-label=\"Select today\" class=b_popup_today><button type=button ng-click=\"popup.selectDate(true, popupSettings.today)\" ng-bind=\"popup.getTodayDateTime() | date:popupSettings.format\" class=b_popup_today_btn></button></div></div><div class=\"b_popup b_range_popup b_range_popup_end\"><div aria-label=\"Popup navigation\" class=b_popup_controls><div class=b_btn_prev_container><button type=button ng-click=popup.goPrevYear(false) aria-label=\"Select preview year\" ng-disabled=popup.isFirstYear(false) class=\"b_popup_btn b_btn_prev\">&#9664; &#9664;</button><button type=button ng-click=popup.goPrevMonth(false) aria-label=\"Select preview month\" ng-disabled=\"popup.isFirstMonth(false) &amp;&amp; popup.isFirstYear(false)\" class=\"b_popup_btn b_btn_prev\">&#9664;</button></div><div ng-bind=popupEndSource.month.name class=b_popup_month></div>&nbsp;<select ng-model=popupEndSource.year.num ng-options=\"year for year in popupEndSource.years\" ng-init=\"year = popupEndSource.year.num\" aria-label=\"Select year from list\" ng-change=popup.goToYear(false) class=b_popup_year></select><div class=b_btn_next_container><button type=button ng-click=popup.goNextMonth(false) aria-label=\"Select next month\" ng-disabled=\"popup.isLastMonth(false) &amp;&amp; popup.isLastYear(false)\" class=\"b_popup_btn b_btn_next\">&#9654;</button><button type=button ng-click=popup.goNextYear(false) aria-label=\"Select next year\" ng-disabled=popup.isLastYear(false) class=\"b_popup_btn b_btn_next\">&#9654; &#9654;</button></div></div><table aria-label=\"Days of selected month\" class=b_popup_days><tr><td ng-repeat=\"dayOfWeek in ::popupSettings.week\" class=b_popup_day_of_week><span ng-bind=::dayOfWeek></span></td></tr></table><table class=b_popup_weeks><tr aria-label=\"Days of month\" class=b_popup_week><td ng-repeat=\"date in popupEndSource.dates track by $index\" ng-class=\"{b_popup_today_day_container: date.isToday}\" class=b_popup_day><button type=button ng-bind=date.day ng-click=\"popup.selectDate(false, date)\" ng-disabled=date.isDisabled aria-label={{date.day}}-{{date.month}}-{{date.year}} ng-class=\"{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(false, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(false, date)}\" class=b_popup_day_btn></button></td></tr></table><div ng-show=popupSettings.today aria-label=\"Select today\" class=b_popup_today><button type=button ng-click=\"popup.selectDate(false, popupSettings.today)\" ng-bind=\"popup.getTodayDateTime() | date:popupSettings.format\" class=b_popup_today_btn></button></div></div><button type=button ng-disabled=\"!data.startResult || !data.endResult\" ng-click=popup.selectRangedDate() class=ok_btn>Ok</button></div>");}]);

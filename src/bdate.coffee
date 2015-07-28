@@ -67,7 +67,8 @@ angular.module 'bdate', [
           else
             scope.bModel = getFormattedDateRange(scope.popup.result)
           scope.watchers.popup.result.stop()
-          callback newVal, oldVal
+          if callback
+            callback newVal, oldVal
       bModel:
         handler: null
         start: (callback) ->
@@ -89,7 +90,8 @@ angular.module 'bdate', [
           console.log newVal
 
           scope.watchers.bModel.stop()
-          callback newVal, oldVal
+          if callback
+            callback newVal, oldVal
       bSource:
         handler: null
         start: (callback) ->
@@ -125,7 +127,8 @@ angular.module 'bdate', [
             return if not val
             scope.isSourceReady = true
             scope.watchers.bSource.stop()
-            callback val
+            if callback
+              callback  val
         else
           isStartSourceReady = false
           isEndSourceReady = false
@@ -136,7 +139,8 @@ angular.module 'bdate', [
               scope.isSourceReady = true
               scope.watchers.bStartSource.stop()
               scope.watchers.bEndSource.stop()
-              callback val
+              if callback
+                callback  val
           scope.watchers.bEndSource.start (val) ->
             return if not val
             isEndSourceReady = true
@@ -144,7 +148,8 @@ angular.module 'bdate', [
               scope.isSourceReady = true
               scope.watchers.bStartSource.stop()
               scope.watchers.bEndSource.stop()
-              callback val
+              if callback
+                callback  val
 
 
     processClick = (event) ->
@@ -171,7 +176,7 @@ angular.module 'bdate', [
         scope.popup.state.isOpen = false
 
     do () ->
-      scope.watchers.watchSource (
+      scope.watchers.watchSource (->
         scope.watchers.watchPopupResult()
         scope.watchers.watchBModel()
       )
