@@ -122,12 +122,18 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
             return scope.watchers.bModel.handler = null;
           }
         },
-        watchBModel: function(callback) {
+        watchBModel: function(onChangeCb, callback) {
           return scope.watchers.bModel.start(function(newVal, oldVal) {
             if (newVal === oldVal) {
+              if (callback) {
+                return callback();
+              }
               return;
             }
             if (!newVal) {
+              if (callback) {
+                return callback();
+              }
               return;
             }
             if (newVal !== getOutputDate(scope.popup.result)) {
@@ -135,8 +141,8 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
               scope.popup.result = parseOutputDate(newVal);
               scope.watchers.popup.result.start();
             }
-            if (callback) {
-              return callback(newVal, oldVal);
+            if (onChangeCb) {
+              return onChangeCb(newVal, oldVal);
             }
           });
         },
@@ -273,7 +279,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
       };
       (function() {
         scope.watchers.watchSource((function() {
-          return scope.watchers.watchBModel(function() {
+          return scope.watchers.watchBModel(null, function() {
             return scope.watchers.watchPopupResult();
           });
         }));

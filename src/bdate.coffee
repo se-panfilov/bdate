@@ -103,18 +103,25 @@ angular.module 'bdate', [
         stop: () ->
           scope.watchers.bModel.handler()
           scope.watchers.bModel.handler = null
-      watchBModel: (callback) ->
+      watchBModel: (onChangeCb, callback) ->
         scope.watchers.bModel.start (newVal, oldVal) ->
-          return if newVal is oldVal
-          return if not newVal
+          if newVal is oldVal
+            if callback
+              return callback()
+            return
+
+          if not newVal
+            if callback
+              return callback()
+            return
 
           if newVal isnt getOutputDate scope.popup.result
             scope.watchers.popup.result.stop()
             scope.popup.result = parseOutputDate newVal
             scope.watchers.popup.result.start()
 
-          if callback
-            callback newVal, oldVal
+          if onChangeCb
+            onChangeCb newVal, oldVal
       bSource:
         handler: null
         start: (callback) ->
@@ -203,7 +210,7 @@ angular.module 'bdate', [
 
     do () ->
       scope.watchers.watchSource (->
-        scope.watchers.watchBModel(->
+        scope.watchers.watchBModel(null, ->
           scope.watchers.watchPopupResult()
         )
       )
