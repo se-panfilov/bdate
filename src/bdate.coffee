@@ -49,8 +49,38 @@ angular.module 'bdate', [
       else
         return getFormattedDateRange(date)
 
-    parseDateStringToDMY = () ->
-      return {}
+    parseDateStringToDMY = (dateStr, format) ->
+      return if dateStr.length isnt format.length #throw error
+
+      elements =
+        day: 'd'
+        month: 'm'
+        year: 'y'
+
+
+      dateStr = '12-01-2010'
+      dateStrRegex = new RegExp '\d+', '/g'
+
+      format = 'dd-MM-yyyy'
+      format = format.toLowerCase()
+      formatRegex = new RegExp '\\w+', 'g'
+
+      keys = format.match formatRegex
+      vals = dateStr.match dateStrRegex
+      parsedObj = {}
+
+      i = 0
+      while i <= keys.length
+        parsedObj[keys[i]] = vals[i]
+        i++
+
+      for k of parsedObj
+        for e of elements
+          if parsedObj[k].indexOf[elements[e]] > 0
+            console.log parsedObj[k]
+
+
+    #      return new Date year, month, day
 
     parseDateRangeStringToDMY = () ->
       return {}
@@ -58,9 +88,9 @@ angular.module 'bdate', [
     parseOutputDate = (dateStr) ->
       result = null
       if (not scope.bRange)
-        result =  parseDateStringToDMY(dateStr)
+        result = parseDateStringToDMY(dateStr)
       else
-        result =  parseDateRangeStringToDMY(dateStr)
+        result = parseDateRangeStringToDMY(dateStr)
       return result
 
     scope.watchers =
@@ -85,7 +115,7 @@ angular.module 'bdate', [
           return if angular.equals {}, newVal
 
           scope.watchers.bModel.stop()
-          scope.bModel =  getOutputDate(scope.popup.result)
+          scope.bModel = getOutputDate(scope.popup.result)
           scope.watchers.bModel.start()
 
           if callback

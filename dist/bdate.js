@@ -48,8 +48,14 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
           return getFormattedDateRange(date);
         }
       };
-      parseDateStringToDMY = function() {
-        return {};
+      parseDateStringToDMY = function(dateStr, format) {
+        var formatRegex;
+        dateStr = '12-01-2010';
+        format = 'dd-MM-yyyy';
+        formatRegex = new RegExp('\w+/g');
+        if (dateStr.length !== format.length) {
+
+        }
       };
       parseDateRangeStringToDMY = function() {
         return {};
