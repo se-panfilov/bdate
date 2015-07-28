@@ -21,7 +21,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
       bEndRefresh: "&?"
     },
     link: function(scope, elem) {
-      var getFormattedDate, getFormattedDateRange, processClick;
+      var getFormattedDate, getFormattedDateRange, getOutputDate, parseDateRangeStringToDMY, parseDateStringToDMY, parseOutputDate, processClick;
       scope.state = {
         isSourceReady: false
       };
@@ -41,11 +41,37 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         endDate = $filter('date')(datetimeEnd, scope.bSettings.format);
         return startDate + scope.bSettings.range_delimiter + endDate;
       };
+      getOutputDate = function(date) {
+        if (!scope.bRange) {
+          return getFormattedDate(date);
+        } else {
+          return getFormattedDateRange(date);
+        }
+      };
+      parseDateStringToDMY = function() {
+        return {};
+      };
+      parseDateRangeStringToDMY = function() {
+        return {};
+      };
+      parseOutputDate = function(dateStr) {
+        var result;
+        result = null;
+        if (!scope.bRange) {
+          result = parseDateStringToDMY(dateStr);
+        } else {
+          result = parseDateRangeStringToDMY(dateStr);
+        }
+        return result;
+      };
       scope.watchers = {
         popup: {
           result: {
             handler: null,
             start: function(callback) {
+              if (scope.watchers.popup.result.handler) {
+                return;
+              }
               scope.watchers.popup.result.handler = scope.$watch('popup.result', function(newVal, oldVal) {
                 if (callback) {
                   return callback(newVal, oldVal);
@@ -70,12 +96,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
             if (angular.equals({}, newVal)) {
               return;
             }
-            if (!scope.bRange) {
-              scope.bModel = getFormattedDate(scope.popup.result);
-            } else {
-              scope.bModel = getFormattedDateRange(scope.popup.result);
-            }
-            scope.watchers.popup.result.stop();
+            scope.watchers.bModel.stop();
+            scope.bModel = getOutputDate(scope.popup.result);
+            scope.watchers.bModel.start();
             if (callback) {
               return callback(newVal, oldVal);
             }
@@ -84,6 +107,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         bModel: {
           handler: null,
           start: function(callback) {
+            if (scope.watchers.bModel.handler) {
+              return;
+            }
             scope.watchers.bModel.handler = scope.$watch('bModel', function(newVal, oldVal) {
               if (callback) {
                 return callback(newVal, oldVal);
@@ -104,8 +130,11 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
             if (!newVal) {
               return;
             }
-            console.log(newVal);
-            scope.watchers.bModel.stop();
+            if (newVal !== getOutputDate(scope.popup.result)) {
+              scope.watchers.popup.result.stop();
+              scope.popup.result = parseOutputDate(newVal);
+              scope.watchers.popup.result.start();
+            }
             if (callback) {
               return callback(newVal, oldVal);
             }
@@ -114,6 +143,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         bSource: {
           handler: null,
           start: function(callback) {
+            if (scope.watchers.bSource.handler) {
+              return;
+            }
             scope.watchers.bSource.handler = scope.$watch('bSource', function(newVal, oldVal) {
               if (callback) {
                 return callback(newVal, oldVal);
@@ -129,6 +161,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         bStartSource: {
           handler: null,
           start: function(callback) {
+            if (scope.watchers.bStartSource.handler) {
+              return;
+            }
             scope.watchers.bStartSource.handler = scope.$watch('bStartSource', function(newVal, oldVal) {
               if (callback) {
                 return callback(newVal, oldVal);
@@ -143,6 +178,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         bEndSource: {
           handler: null,
           start: function(callback) {
+            if (scope.watchers.bEndSource.handler) {
+              return;
+            }
             scope.watchers.bEndSource.handler = scope.$watch('bEndSource', function(newVal, oldVal) {
               if (callback) {
                 return callback(newVal, oldVal);
@@ -235,8 +273,9 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
       };
       (function() {
         scope.watchers.watchSource((function() {
-          scope.watchers.watchPopupResult();
-          return scope.watchers.watchBModel();
+          return scope.watchers.watchBModel(function() {
+            return scope.watchers.watchPopupResult();
+          });
         }));
         if (!scope.bRange) {
           return scope.bRefresh();
@@ -281,7 +320,7 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
       popupRefresh: "&?"
     },
     link: function(scope) {
-      scope.popup = {
+      return scope.popup = {
         hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
@@ -418,9 +457,6 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           });
         }
       };
-      return scope.$watch('popupSource', function() {
-        return scope.isDataReady = true;
-      }, true);
     }
   };
 });

@@ -43,11 +43,32 @@ angular.module 'bdate', [
       endDate = $filter('date') datetimeEnd, scope.bSettings.format
       return startDate + scope.bSettings.range_delimiter + endDate
 
+    getOutputDate = (date) ->
+      if (not scope.bRange)
+        return getFormattedDate(date)
+      else
+        return getFormattedDateRange(date)
+
+    parseDateStringToDMY = () ->
+      return {}
+
+    parseDateRangeStringToDMY = () ->
+      return {}
+
+    parseOutputDate = (dateStr) ->
+      result = null
+      if (not scope.bRange)
+        result =  parseDateStringToDMY(dateStr)
+      else
+        result =  parseDateRangeStringToDMY(dateStr)
+      return result
+
     scope.watchers =
       popup:
         result:
           handler: null
           start: (callback) ->
+            return if scope.watchers.popup.result.handler
             scope.watchers.popup.result.handler = scope.$watch 'popup.result', (newVal, oldVal) ->
               if callback
                 callback newVal, oldVal
@@ -62,16 +83,17 @@ angular.module 'bdate', [
           return if newVal is oldVal
           return if not newVal
           return if angular.equals {}, newVal
-          if (not scope.bRange)
-            scope.bModel = getFormattedDate(scope.popup.result)
-          else
-            scope.bModel = getFormattedDateRange(scope.popup.result)
-          scope.watchers.popup.result.stop()
+
+          scope.watchers.bModel.stop()
+          scope.bModel =  getOutputDate(scope.popup.result)
+          scope.watchers.bModel.start()
+
           if callback
             callback newVal, oldVal
       bModel:
         handler: null
         start: (callback) ->
+          return if scope.watchers.bModel.handler
           scope.watchers.bModel.handler = scope.$watch 'bModel', (newVal, oldVal) ->
             if callback
               callback newVal, oldVal
@@ -86,15 +108,17 @@ angular.module 'bdate', [
           return if newVal is oldVal
           return if not newVal
 
-          #TODO (S.Panfilov) should init popup value in case of bModel external change
-          console.log newVal
+          if newVal isnt getOutputDate scope.popup.result
+            scope.watchers.popup.result.stop()
+            scope.popup.result = parseOutputDate newVal
+            scope.watchers.popup.result.start()
 
-          scope.watchers.bModel.stop()
           if callback
             callback newVal, oldVal
       bSource:
         handler: null
         start: (callback) ->
+          return if scope.watchers.bSource.handler
           scope.watchers.bSource.handler = scope.$watch 'bSource', (newVal, oldVal) ->
             if callback
               callback newVal, oldVal
@@ -105,6 +129,7 @@ angular.module 'bdate', [
       bStartSource:
         handler: null
         start: (callback) ->
+          return if scope.watchers.bStartSource.handler
           scope.watchers.bStartSource.handler = scope.$watch 'bStartSource', (newVal, oldVal) ->
             if callback
               callback newVal, oldVal
@@ -114,6 +139,7 @@ angular.module 'bdate', [
       bEndSource:
         handler: null
         start: (callback) ->
+          return if scope.watchers.bEndSource.handler
           scope.watchers.bEndSource.handler = scope.$watch 'bEndSource', (newVal, oldVal) ->
             if callback
               callback newVal, oldVal
@@ -128,7 +154,7 @@ angular.module 'bdate', [
             scope.isSourceReady = true
             scope.watchers.bSource.stop()
             if callback
-              callback  val
+              callback val
         else
           isStartSourceReady = false
           isEndSourceReady = false
@@ -140,7 +166,7 @@ angular.module 'bdate', [
               scope.watchers.bStartSource.stop()
               scope.watchers.bEndSource.stop()
               if callback
-                callback  val
+                callback val
           scope.watchers.bEndSource.start (val) ->
             return if not val
             isEndSourceReady = true
@@ -149,7 +175,7 @@ angular.module 'bdate', [
               scope.watchers.bStartSource.stop()
               scope.watchers.bEndSource.stop()
               if callback
-                callback  val
+                callback val
 
 
     processClick = (event) ->
@@ -177,8 +203,9 @@ angular.module 'bdate', [
 
     do () ->
       scope.watchers.watchSource (->
-        scope.watchers.watchPopupResult()
-        scope.watchers.watchBModel()
+        scope.watchers.watchBModel(->
+          scope.watchers.watchPopupResult()
+        )
       )
       if not scope.bRange
         scope.bRefresh()

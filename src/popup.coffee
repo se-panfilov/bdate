@@ -107,7 +107,3 @@ angular.module 'bdate.popup', [
         scope.popupRefresh
           m: month
           y: year
-
-    scope.$watch 'popupSource', ->
-      scope.isDataReady = true
-    , true
