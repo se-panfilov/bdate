@@ -148,6 +148,7 @@ angular.module 'bdate.popup.ranged', [
         scope.popupResult =
           start: scope.data.startResult
           end: scope.data.endResult
+        scope.popup.hidePopup()
 
     scope.$watch 'popupSource', ->
       scope.isDataReady = true

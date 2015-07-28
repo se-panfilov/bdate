@@ -60,7 +60,7 @@
                     aria-label="{{date.day}}-{{date.month}}-{{date.year}}",
                     ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(true, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(true, date)}"
                     )
-        .b_popup_today(ng-show="popupSettings.today", aria-label="Select today"))
+        .b_popup_today(ng-show="popupSettings.today", aria-label="Select today")
             button.b_popup_today_btn(
             type="button",
             ng-click="popup.selectDate(true, popupSettings.today)",
@@ -127,7 +127,7 @@
                     aria-label="{{date.day}}-{{date.month}}-{{date.year}}",
                     ng-class="{b_popup_day_in_selected_month: popup.isDayInSelectedMonth(false, date), b_popup_today_day: date.isToday, b_popup_selected_day: popup.isSelectedDay(false, date)}"
                     )
-        .b_popup_today(ng-show="popupSettings.today", aria-label="Select today")))
+        .b_popup_today(ng-show="popupSettings.today", aria-label="Select today")
             button.b_popup_today_btn(
             type="button",
             ng-click="popup.selectDate(false, popupSettings.today)",
