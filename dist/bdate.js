@@ -42,22 +42,32 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         endDate = $filter('date')(datetimeEnd, scope.bSettings.format);
         return startDate + scope.bSettings.range_delimiter + endDate;
       };
-      scope.$watch('popup.result', function(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return;
+      scope.modelWatchers = {
+        popupResultWatcher: null,
+        startWatchPopupResult: function() {
+          var popupResultWatcher;
+          popupResultWatcher = scope.$watch('popup.result', function(newVal, oldVal) {
+            if (newVal === oldVal) {
+              return;
+            }
+            if (!newVal) {
+              return;
+            }
+            if (angular.equals({}, newVal)) {
+              return;
+            }
+            if (!scope.bRange) {
+              return scope.bModel = getFormattedDate(scope.popup.result);
+            } else {
+              return scope.bModel = getFormattedDateRange(scope.popup.result);
+            }
+          }, true);
+          return popupResultWatcher;
+        },
+        stopPopupResultWatcher: function() {
+          return scope.modelWatchers.popupResultWatcher;
         }
-        if (!newVal) {
-          return;
-        }
-        if (angular.equals({}, newVal)) {
-          return;
-        }
-        if (!scope.bRange) {
-          return scope.bModel = getFormattedDate(scope.popup.result);
-        } else {
-          return scope.bModel = getFormattedDateRange(scope.popup.result);
-        }
-      }, true);
+      };
       processClick = function(event) {
         var clickedElem, isOpen, isOutsideClick, popupElem;
         isOpen = scope.popup.state.isOpen;

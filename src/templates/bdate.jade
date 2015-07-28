@@ -1,6 +1,6 @@
 .b_datepicker_root(
 class="{{::bRootClasses}}",
-ng-class="{b_datepicker_in_progress: !isDataReady}"
+ng-class="{b_datepicker_in_progress: !isSourceReady}"
 )
     input.b_datepicker_input(
     type="text",
@@ -8,7 +8,7 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     placeholder="{{placeholder}}",
     class="{{::bInputClasses}}",
     ng-click="popup.togglePopup()",
-    ng-disabled="!isDataReady",
+    ng-disabled="!isSourceReady",
     aria-label="Toggle date popup"
     readonly="readonly"
     )
@@ -25,7 +25,7 @@ ng-class="{b_datepicker_in_progress: !isDataReady}"
     class="{{::bButtonClasses}}",
     ng-click="popup.togglePopup()",
     ng-keydown="popup.togglePopup()",
-    ng-disabled="!isDataReady",
+    ng-disabled="!isSourceReady",
     aria-label="Toggle date popup"
     )
         | &nbsp;
