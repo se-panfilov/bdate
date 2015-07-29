@@ -48,8 +48,8 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
           return getFormattedDateRange(date);
         }
       };
-      parseDateStringToDMY = function(dateStr, format) {
-        var dateStrRegex, e, elements, formatRegex, i, k, keys, parsedObj, results, vals;
+      parseDateStringToDMY = function(dateStr) {
+        var dateStrRegex, e, elements, format, formatRegex, i, k, keys, parsedObj, vals;
         if (dateStr.length !== format.length) {
           return;
         }
@@ -58,38 +58,38 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
           month: 'm',
           year: 'y'
         };
-        dateStr = '12-01-2010';
-        dateStrRegex = new RegExp('\d+', '/g');
-        format = 'dd-MM-yyyy';
+        dateStrRegex = new RegExp('\\d+', 'g');
+        format = scope.bSettings.format;
         format = format.toLowerCase();
         formatRegex = new RegExp('\\w+', 'g');
         keys = format.match(formatRegex);
         vals = dateStr.match(dateStrRegex);
         parsedObj = {};
         i = 0;
-        while (i <= keys.length) {
+        while (i < keys.length) {
           parsedObj[keys[i]] = vals[i];
           i++;
         }
-        results = [];
         for (k in parsedObj) {
-          results.push((function() {
-            var results1;
-            results1 = [];
-            for (e in elements) {
-              if (parsedObj[k].indexOf[elements[e]] > 0) {
-                results1.push(console.log(parsedObj[k]));
-              } else {
-                results1.push(void 0);
-              }
+          for (e in elements) {
+            if (k.indexOf(elements[e]) >= 0) {
+              elements[e] = parsedObj[k];
             }
-            return results1;
-          })());
+          }
         }
-        return results;
+        return elements;
       };
-      parseDateRangeStringToDMY = function() {
-        return {};
+      parseDateRangeStringToDMY = function(dateStr) {
+        var dateEndStr, dateStartStr, delimiterLength, formatLength, result;
+        delimiterLength = scope.bSettings.range_delimiter.length;
+        formatLength = scope.bSettings.format.length;
+        dateStartStr = dateStr.substr(0, formatLength);
+        dateEndStr = dateStr.substr(formatLength + delimiterLength);
+        result = {
+          start: parseDateStringToDMY = dateStartStr,
+          end: parseDateStringToDMY = dateEndStr
+        };
+        return result;
       };
       parseOutputDate = function(dateStr) {
         var result;

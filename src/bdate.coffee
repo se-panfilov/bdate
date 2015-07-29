@@ -49,7 +49,7 @@ angular.module 'bdate', [
       else
         return getFormattedDateRange(date)
 
-    parseDateStringToDMY = (dateStr, format) ->
+    parseDateStringToDMY = (dateStr) ->
       return if dateStr.length isnt format.length #throw error
 
       elements =
@@ -57,11 +57,9 @@ angular.module 'bdate', [
         month: 'm'
         year: 'y'
 
+      dateStrRegex = new RegExp '\\d+', 'g'
 
-      dateStr = '12-01-2010'
-      dateStrRegex = new RegExp '\d+', '/g'
-
-      format = 'dd-MM-yyyy'
+      format = scope.bSettings.format
       format = format.toLowerCase()
       formatRegex = new RegExp '\\w+', 'g'
 
@@ -70,20 +68,27 @@ angular.module 'bdate', [
       parsedObj = {}
 
       i = 0
-      while i <= keys.length
+      while i < keys.length
         parsedObj[keys[i]] = vals[i]
         i++
 
       for k of parsedObj
         for e of elements
-          if parsedObj[k].indexOf[elements[e]] > 0
-            console.log parsedObj[k]
+          if k.indexOf(elements[e]) >= 0
+            elements[e] = parsedObj[k]
 
+      #return new Date elements.year, elements.month, elements.day
+      return elements
 
-    #      return new Date year, month, day
-
-    parseDateRangeStringToDMY = () ->
-      return {}
+    parseDateRangeStringToDMY = (dateStr) ->
+      delimiterLength =  scope.bSettings.range_delimiter.length
+      formatLength = scope.bSettings.format.length
+      dateStartStr = dateStr.substr(0, formatLength)
+      dateEndStr = dateStr.substr(formatLength + delimiterLength)
+      result =
+        start: parseDateStringToDMY = (dateStartStr)
+        end: parseDateStringToDMY = (dateEndStr)
+      return result
 
     parseOutputDate = (dateStr) ->
       result = null
