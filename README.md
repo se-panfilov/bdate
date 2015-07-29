@@ -13,7 +13,7 @@ This is angularjs datepicker (like [angular-ui datepicker][2]) but with one seri
 bDate Datepicker **didn't** count any date on client side, it **works only with provided (json) data**.
 
 ##But why?
-There are many reasons. Mostly because sometimes you may want to set available ranges of dates from the backend. For example: you may set only aug and sept of 2014, and jan of 2015. There is do nothing with timezones - server say what is today and etc.
+There are many reasons. But mostly it's made for people who want to take a control for datepicker from the backend.
 
 #Installation
 
@@ -51,129 +51,308 @@ There are many reasons. Mostly because sometimes you may want to set available r
 * add directive to html:
     
     ```html
-    <bdatepicker b-model="resultModel" b-source="demoData"></bdatepicker>
+    <bdatepicker 
+        b-model="resultModel" 
+        b-source="demoData"
+        b-settings="settings"
+        b-refresh="refreshData(m, y)",
+        placeholder="Enter the date"
+        ></bdatepicker>
     ```
     
-    `b-model` and `b-source` should be defined in controller's js.
+    `b-model`  - is the result of date selection;
     
-    `b-source` - is where from we get available data
+    `b-source` - Data with dates (may come from backend);
     
-    `b-model` - where we save the results of select. Btw, you can use `b-model` as initial value
+    `b-settings` - Var with params (format, month and day names, etc);
+    
+    `b-refresh` - Function wich calls every time, when you should update source (for example go to next month in popup). Should define with two args -`m` for month and `y` for year;
 
 #Features
-- 14kb for js (with injected html templates) and 6kb for css;
+- Date ranges aviable
+- 20kb minified;
 - No dependencies (only angularjs);
-- Date data setup once and strict. If the data provided through ajax-query, datepicker will wait until it loaded;
 - No extra options (just pick a date);
 - Easy to custom - you may provide custom id and class (in progress right now) for each element of each directive (if you have multiple ones);
 - Able to set date model externally;
 
-#Example
+#Date Raanges
 
-```html
-<label for="bdatepicker">Date</label>
-<bdatepicker b-input-id="bdatepicker" b-model="resultModel" b-source="demoData"></bdatepicker>
-```
-
-`bdatepicker` - name of the directive;
-
-**Required**:
-
-`b-model` - Object where selected date will be stored (also may be used as init value)
-
-`b-source` - Object (json) where we take available dates
-
-**Optional**:
-
-`b-input-classes` - Provides classes for the directive's input element
-
-`b-root-classes` - Provides classes for the directive's root element
-
-`b-popup-classes` - Provides classes for the directive's popup element
-
-`placeholder` - Provides a placeholder to the input
-
-`id` - Provides a placeholder to the input
-
-**Expected json format**:
+    ```html
+    <bdatepicker 
+        b-model="resultModel" 
+        b-start-source="startSource"
+        b-end-source="endSource"
+        b-settings="settings"
+        b-start-refresh="refreshStartData(m, y)"
+        b-end-refresh="refreshEndData(m, y)"
+        b-range="true"
+        placeholder="Enter the date"
+    ```
+    
+    `b-range` - define ranges mode
+    `b-start-source` and `b-end-source` work as `b-source` (and insteado of them). Each work for start range and end range popups.;
+    `b-start-refresh` and `b-end-refresh` - all the same as `b-refresh` function, but wotks separately for start and end popup;
+    
+    
+#Settings format
 
 ```json
-
 {
-    "format": "dd-mm-yyyy",
-    "delimiter": "-",
+    "week": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
     "today": {
-        "date": 1432537266825,
-        "year": 2015,
-        "month": 5,
-        "day": 25,
-        "day_of_week": 1
+        "day": 3,
+        "month": 1,
+        "year": 2010
     },
-    "years": {
-        "2015": {
-            "2": {
-                "days_total": 28,
-                "start_day": 7
-            } 
-        }
-    }
+    "format": "dd-MM-yyyy",
+    "range_delimiter": "--"
 }
 ```
 
-`format` - Now maintained only simple formats with days, month and years (**no** `EEE`, `hh:mm`). Should be only one type of delimiter (here is "`-`"), please do not pass mixed-delimiters format (**no** 'dd-MM-yy hh:mm' ).
-*format is case sensetive* - `mm` - is minutes, but `MM` - is months (because on angular js politic);
 
-`delimiter` - delimiter for `format` (in example is "`-`")
+#Data format
+```json
 
-`today` - This is today's date (by server's opinion - in other world - without meaning of timezones). And todat.date is just a timestamp (in ms).
-
-`years` - Object with available ranges. You should provide every year, which should be able to be selected. 
-
-Each year should contain a list of available monthes (**monthes start from 1**, not 0, it's clear?).
-
-Each month contains total days count - `days_total` (because of february) and day of week for the 1st month day  - `start_day` (for example 1st of Feb 2015 is Sunday - `7`)
-
-#Localization
-
-Default language is english.
-You able to pass month and days names as directives attributes:
-
-```html
-<bdatepicker b-month-names="localizedMonth" b-days-names="localizedDays" b-model="resultModel" b-source="demoData"></bdatepicker>
-```
-
-`b-month-names` - **object** of localized month names. Example:
-
-```js
-$scope.localizedMonth = {
-    1: {name: 'Январь', short: 'Янв'},
-    2: {name: 'Февраль', short: 'Фев'},
-    3: {name: 'Март', short: 'Март'},
-    4: {name: 'Апрель', short: 'Май'},
-    5: {name: 'Май', short: 'Май'},
-    6: {name: 'Июнь', short: 'Июнь'},
-    7: {name: 'Июль', short: 'Июль'},
-    8: {name: 'Август', short: 'Авг'},
-    9: {name: 'Сентябрь', short: 'Сент'},
-    10: {name: 'Октябрь', short: 'Окт'},
-    11: {name: 'Ноябрь', short: 'Ноя'},
-    12: {name: 'Декабрь', short: 'Дек'}
-};
-```
-
-`b-days-names` - **array** of localized days names. Example:
-
-```js
-$scope.localizedDays = [
-    {name: 'Понедельник', short: 'Пн'},
-    {name: 'Вторник', short: 'Вт'},
-    {name: 'Среда', short: 'Ср'},
-    {name: 'Четверг', short: 'Чт'},
-    {name: 'Пятница', short: 'Пт'},
-    {name: 'Суббота', short: 'Сб'},
-    {name: 'Воскресенье', short: 'Вс'}
-];
-```
+{
+      "id": "1-2010",
+      "years": [
+        2015,
+        2014,
+        2013,
+        2012,
+        2011,
+        2010
+      ],
+      "month": {
+        "num": 1,
+        "name": "Январь",
+        "isStart": true,
+        "isEnd": false
+      },
+      "year": {
+        "num": 2010,
+        "isStart": true,
+        "isEnd": false
+      },
+      "dates": [
+        {
+          "day": 28,
+          "month": 12,
+          "year": 2009,
+          "isDisabled": true
+        },
+        {
+          "day": 29,
+          "month": 12,
+          "year": 2009,
+          "isDisabled": true
+        },
+        {
+          "day": 30,
+          "month": 12,
+          "year": 2009,
+          "isDisabled": true
+        },
+        {
+          "day": 31,
+          "month": 12,
+          "year": 2009,
+          "isDisabled": true
+        },
+        {
+          "day": 1,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 2,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 3,
+          "month": 1,
+          "year": 2010,
+          "isToday": true
+        },
+        {
+          "day": 4,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 5,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 6,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 7,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 8,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 9,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 10,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 11,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 12,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 13,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 14,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 15,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 16,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 17,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 18,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 19,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 20,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 21,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 22,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 23,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 24,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 25,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 26,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 27,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 28,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 29,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 30,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 31,
+          "month": 1,
+          "year": 2010
+        },
+        {
+          "day": 1,
+          "month": 2,
+          "year": 2010
+        },
+        {
+          "day": 2,
+          "month": 2,
+          "year": 2010
+        },
+        {
+          "day": 3,
+          "month": 2,
+          "year": 2010
+        },
+        {
+          "day": 4,
+          "month": 2,
+          "year": 2010
+        },
+        {
+          "day": 5,
+          "month": 2,
+          "year": 2010
+        },
+        {
+          "day": 6,
+          "month": 2,
+          "year": 2010
+        },
+        {
+          "day": 7,
+          "month": 2,
+          "year": 2010
+        }
+      ]
+    }
 
 #Developing
 
