@@ -1,7 +1,7 @@
 {
   "name": "bdate",
   "private": true,
-  "version": "0.6.9",
+  "version": "0.7.6",
   "homepage": "https://github.com/se-panfilov/bdate",
   "authors": [
     "S.Panfilov <se-panfilov@ya.ru>"
@@ -34,6 +34,6 @@
     "bootstrap": "~3.3.4"
   },
   "dependencies": {
-    "bdate": "~0.6.9"
+    "bdate": "~0.7.6"
   }
 }
