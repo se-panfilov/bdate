@@ -6,6 +6,8 @@ angular.module('app', [
 
     .controller('IndexPageCtrl', function ($scope, $timeout) {
 
+        var data = {};
+
         $scope.settings = {
             "week": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
             "today": {
@@ -22,11 +24,9 @@ angular.module('app', [
             var params = (m && y) ? m + '-' + y : defVal;
             var url = 'http://localhost:3000/resp/' + params;
 
-            $http.get(url).success(function (data) {
+            $timeout(function () {
                 $scope.source = data;
-            }).error(function (data, status) {
-                console.error(status);
-            });
+            })
 
         };
 
