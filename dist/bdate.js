@@ -50,7 +50,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
       };
       parseDateStringToDMY = function(dateStr) {
         var dateStrRegex, e, elements, format, formatRegex, i, k, keys, parsedObj, vals;
-        if (dateStr.length !== scope.bSettings.format) {
+        if (dateStr.length !== scope.bSettings.format.length) {
           return;
         }
         elements = {
@@ -73,7 +73,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         for (k in parsedObj) {
           for (e in elements) {
             if (k.indexOf(elements[e]) >= 0) {
-              elements[e] = parsedObj[k];
+              elements[e] = +parsedObj[k];
             }
           }
         }

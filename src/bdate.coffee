@@ -50,7 +50,7 @@ angular.module 'bdate', [
         return getFormattedDateRange(date)
 
     parseDateStringToDMY = (dateStr) ->
-      return if dateStr.length isnt scope.bSettings.format #TODO (S.Panfilov) throw error
+      return if dateStr.length isnt scope.bSettings.format.length #TODO (S.Panfilov) throw error
 
       elements =
         day: 'd'
@@ -75,7 +75,7 @@ angular.module 'bdate', [
       for k of parsedObj
         for e of elements
           if k.indexOf(elements[e]) >= 0
-            elements[e] = parsedObj[k]
+            elements[e] = +parsedObj[k]
 
       #return new Date elements.year, elements.month, elements.day
       return elements
