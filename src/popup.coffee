@@ -14,6 +14,30 @@ angular.module 'bdate.popup', [
     popupRefresh: "&?"
   link: (scope) ->
 
+    scope.watchers =
+      result:
+        handler: null
+        start: (callback) ->
+          return if scope.watchers.result.handler
+          scope.watchers.result.handler = scope.$watch 'popupResult', (newVal, oldVal) ->
+            if callback
+              callback newVal, oldVal
+          ,
+            true
+        stop: () ->
+          scope.watchers.result.handler()
+          scope.watchers.result.handler = null
+        watchPopupResult: (callback) ->
+          scope.watchers.result.start (newVal, oldVal) ->
+            return if newVal is oldVal
+            return if not newVal
+            return if angular.equals {}, newVal
+
+            scope.popup.refreshSelectedData newVal.month, newVal.year
+
+            if callback
+              callback newVal, oldVal
+
     scope.popup =
       hidePopup: ->
         scope.popupState.isOpen = false
@@ -107,3 +131,6 @@ angular.module 'bdate.popup', [
         scope.popupRefresh
           m: month
           y: year
+
+    do () ->
+      scope.watchers.result.watchPopupResult()

@@ -50,7 +50,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
       };
       parseDateStringToDMY = function(dateStr) {
         var dateStrRegex, e, elements, format, formatRegex, i, k, keys, parsedObj, vals;
-        if (dateStr.length !== format.length) {
+        if (dateStr.length !== scope.bSettings.format) {
           return;
         }
         elements = {
@@ -363,7 +363,43 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
       popupRefresh: "&?"
     },
     link: function(scope) {
-      return scope.popup = {
+      scope.watchers = {
+        result: {
+          handler: null,
+          start: function(callback) {
+            if (scope.watchers.result.handler) {
+              return;
+            }
+            return scope.watchers.result.handler = scope.$watch('popupResult', function(newVal, oldVal) {
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            }, true);
+          },
+          stop: function() {
+            scope.watchers.result.handler();
+            return scope.watchers.result.handler = null;
+          },
+          watchPopupResult: function(callback) {
+            return scope.watchers.result.start(function(newVal, oldVal) {
+              if (newVal === oldVal) {
+                return;
+              }
+              if (!newVal) {
+                return;
+              }
+              if (angular.equals({}, newVal)) {
+                return;
+              }
+              scope.popup.refreshSelectedData(newVal.month, newVal.year);
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            });
+          }
+        }
+      };
+      scope.popup = {
         hidePopup: function() {
           return scope.popupState.isOpen = false;
         },
@@ -500,6 +536,9 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           });
         }
       };
+      return (function() {
+        return scope.watchers.result.watchPopupResult();
+      })();
     }
   };
 });
