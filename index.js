@@ -4,7 +4,7 @@ angular.module('demo', [
     'bdate'
 ])
 
-    .controller('DemoPageCtrl', function ($scope, $http) {
+    .controller('DemoPageCtrl', function ($scope, $http, $filter) {
 
         $scope.settings = {
             "week": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
@@ -28,6 +28,21 @@ angular.module('demo', [
                 console.error(status);
             });
 
+        };
+
+        $scope.controls = {
+            setToday: function () {
+                $scope.resultModel = $filter('date')(new Date(), $scope.settings.format)
+            },
+            setTodayRanged: function () {
+                var yesterday = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1);
+                var dates = {
+                    start: $filter('date')(yesterday, $scope.settings.format),
+                    end: $filter('date')(new Date(), $scope.settings.format)
+                };
+
+                $scope.resultRangeModel = dates.start + $scope.settings.range_delimiter + dates.end;
+            }
         };
 
         $scope.refreshStartData = function (m, y) {
