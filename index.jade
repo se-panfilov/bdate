@@ -46,89 +46,44 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='app')
                         p There is many reasons. Mostly because sometimes you may want to set available ranges of dates from the backend. For example: you may set only aug and sept of 2014, and jan of 2015. There is do nothing with timezones - server say what is today and etc.
                 .container
                     section#common_case
-                        h1 Common case
-                        h3 Simple form and simple datepicker
-                        .case_description
-                            | This is common case. Data provided with "demoData" object and result saves to the "resultModel" object.
-                        form#demo_simple_form(name="demo_simple_form")
-                            .form-group
-                                label.control-label(for="bdatepicker_1") Date
-                            bdatepicker#bdatepicker_1(b-model="resultModel", b-source="demoData", placeholder="Enter the date")
-                            button.btn.btn-info(type="submit")
-                                | The result is
-                                | &nbsp;
-                                span(ng-bind="resultModel")
-                    section#wait_for_data_case
-                        h1 Wait for remote data case
-                        h3 Datepicker wait for remote data
-                        .case_description
-                            | In this case datepicker waits for remote data (which will be loaded at 2 sec).
-                            | Data provided with "delayedDemoData" object and result saves to the "resultDelayedModel" object.
-                        form#demo_remote_form(name="demo_remote_form")
-                            .form-group
-                                label.control-label(for="bdatepicker_2") Date
-                            bdatepicker#bdatepicker_2(b-model="resultDelayedModel", b-source="delayedDemoData")
-                            button.btn.btn-info(type="submit")
-                                | The result is
-                                | &nbsp;
-                                span(ng-bind="resultDelayedModel")
-                    section#linked_data_case
-                        h1 Wait for remote data case
-                        h3 Datepicker wait for remote data
-                        .case_description
-                            | In this case two datepickers and one simple text input use same model.
-                            | Data provided with "bigDemoData" object and result saves to the "resultLinkedModel" object.
-                        form#demo_linked_form(name="demo_linked_form")
-                            .form-group
-                                label.control-label(for="bdatepicker_3") Linked Date 1
-                            bdatepicker#bdatepicker_3(b-model="resultLinkedModel", b-source="bigDemoData")
-                            .form-group
-                                label.control-label(for="bdatepicker_4") Linked Date 2
-                            bdatepicker#bdatepicker_4(b-model="resultLinkedModel", b-source="bigDemoData")
-                            .form-group
-                                label.control-label(for="inp_2") Linked Date 3
-                                input#inp_2.form-control(type="text", ng-model="resultLinkedModel")
-                            .form-group
-                                label.control-label(for="inp_4") Not linked
-                                input#inp_4.form-control(type="text")
-                            button.btn.btn-info(type="submit")
-                                | The result is
-                                | &nbsp;
-                                span(ng-bind="resultLinkedModel")
-                    section#custom_classes_case
-                        h1 Custom element classes
-                        h3 Simple form and simple datepicker
-                        .case_description
-                            | This is common case with custom classes provided for each elements
-                        form#demo_custom_classes_form(name="demo_custom_classes_form")
-                            .form-group
-                                label.control-label(for="bdatepicker_5") Colored input
-                            bdatepicker#bdatepicker_5(b-input-classes="custom_input_1 custom_input_2", b-model="resultModel", b-source="demoData")
-                            .form-group
-                                label.control-label(for="bdatepicker_6") Colored button
-                            bdatepicker#bdatepicker_6(b-button-classes="custom_input_1 custom_input_2", b-model="resultModel", b-source="demoData")
-                            .form-group
-                                label.control-label(for="bdatepicker_7") Colored root
-                            bdatepicker#bdatepicker_7(b-root-classes="custom_input_1 custom_input_2 custom_root", b-model="resultModel", b-source="demoData")
-                            .form-group
-                                label.control-label(for="bdatepicker_8") Colored popup
-                            bdatepicker#bdatepicker_8(b-popup-classes="custom_input_1", b-model="resultModel", b-source="demoData")
-                section#external_case
-                    h1 External model change case
-                    h3 Simple form and simple datepicker
-                    .case_description
-                        | This is common case. Data provided with "demoData" object and result saves to the "resultModel" object.
-                    form#demo_external_model_form(name="demo_external_model_form")
+                    h1 Common case
+                    form#demo_simple_form(name="demo_simple_form")
                         .form-group
-                            label.control-label(for="bdatepicker_9") Date
-                            bdatepicker#bdatepicker_9(b-model="externalModel", b-source="demoData")
-                        button.btn.btn-success(type="button", ng-click="externalModel = null")
-                            | Dropmodel value
-                        button.btn.btn-info(type="submit")
-                            | The result is
-                            | &nbsp;
-                            span(ng-bind="externalModel")
-
+                            label.control-label(for="bdatepicker_1") Date
+                            bdatepicker#bdatepicker_1(
+                            b-model="resultModel",
+                            b-source="source",
+                            b-settings="settings",
+                            b-refresh="refreshData(m, y)",
+                            placeholder="Enter the date"
+                            )
+                        button.btn.btn-info(
+                        type="button",
+                        ng-click="controls.setToday()"
+                        )
+                            | Set today
+                        div(ng-bind="resultModel")
+                section#range_case
+                    h1 Range case
+                    form#demo_range_form(name="demo_range_form")
+                        .form-group
+                            label.control-label(for="bdatepicker_2") Date
+                            bdatepicker#bdatepicker_2(
+                            b-model="resultRangeModel",
+                            b-start-source="startSource",
+                            b-end-source="endSource",
+                            b-settings="settings",
+                            b-start-refresh="refreshStartData(m, y)",
+                            b-end-refresh="refreshEndData(m, y)",
+                            b-range="true"
+                            placeholder="Enter the date"
+                            )
+                        button.btn.btn-info(
+                        type="button",
+                        ng-click="controls.setTodayRanged()"
+                        )
+                            | Set today
+                        span(ng-bind="resultRangeModel")
                 section.main-content
                     footer.site-footer
                         span.site-footer-owner

@@ -1,0 +1,51 @@
+.b_datepicker_root(
+class="{{::bRootClasses}}",
+ng-class="{b_datepicker_in_progress: !isSourceReady}"
+)
+    input.b_datepicker_input(
+    type="text",
+    ng-model="bModel",
+    placeholder="{{placeholder}}",
+    class="{{::bInputClasses}}",
+    ng-click="popup.togglePopup()",
+    ng-disabled="!isSourceReady",
+    aria-label="Toggle date popup"
+    readonly="readonly"
+    )
+    button.b_clear_btn(
+    type="button",
+    class="{{::bButtonClasses}}",
+    ng-click="clear()",
+    ng-keydown="clear()",
+    aria-label="Clear Date"
+    )
+        | &times;
+    button.b_datepicker_button.b_calendar_btn(
+    type="button",
+    class="{{::bButtonClasses}}",
+    ng-click="popup.togglePopup()",
+    ng-keydown="popup.togglePopup()",
+    ng-disabled="!isSourceReady",
+    aria-label="Toggle date popup"
+    )
+        | &nbsp;
+    bdate-popup(
+    class="{{::bPopupClasses}}",
+    popup-settings="bSettings",
+    popup-state="popup.state",
+    popup-source="bSource"
+    popup-result="popup.result"
+    popup-refresh="bRefreshWrap(m, y)"
+    ng-if="!bRange"
+    )
+    bdate-range-popup(
+    class="{{::bPopupClasses}}",
+    popup-settings="bSettings",
+    popup-state="popup.state",
+    popup-start-source="bStartSource"
+    popup-end-source="bEndSource"
+    popup-result="popup.result"
+    popup-start-refresh="bStartRefreshWrap(m, y)"
+    popup-end-refresh="bEndRefreshWrap(m, y)"
+    ng-if="bRange"
+    )

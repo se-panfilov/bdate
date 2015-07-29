@@ -1,0 +1,127 @@
+b_control_height = 25px
+bg_color = white
+bg_selected_day_color = #0089EC
+text_color = #373737
+day_button_bg_hover = #ebebeb
+day_button_bg = white
+
+.b_popup
+  width 280px
+  font-size 1em
+  background-color bg_color
+  box-shadow 2px 4px 13px -2px #646464
+  border 1px solid rgb(171, 171, 171)
+  position absolute
+  color text_color
+  border-bottom-right-radius 3px
+  border-bottom-left-radius 3px
+  z-index 10
+  .b_popup_controls
+    text-align center
+    min-height b_control_height
+    height auto
+    margin-bottom 5px
+    overflow hidden
+    *
+      text-align center
+    .b_popup_btn
+      min-height b_control_height
+      color text_color
+      &[disabled]
+        color #A0A0A0
+      &:hover, &:active, &:focus, &:active:focus
+        outline 0
+    .b_btn_prev_container
+      float left
+      .b_btn_prev
+        display inline-block
+    .b_btn_next_container
+      float right
+      .b_btn_next
+        display inline-block
+    .b_popup_month
+      display inline-block
+      line-height b_control_height
+    .b_popup_year
+      display inline-block
+      vertical-align middle
+      border 1px solid #E0E0E0
+      background-color #FFF
+      outline none
+    .b_popup_btn
+      color text_color
+      border 1px solid bg_color
+      background-color bg_color
+  .b_popup_days
+    margin 10px 27px
+  .b_popup_weeks
+    margin 10px 27px
+    .b_popup_week
+      .b_popup_day
+        width 30px
+        height 23px
+        display inline-block
+        margin 1px
+        &.b_popup_today_day_container
+          background-color bg_selected_day_color
+        .b_popup_day_btn
+          color lighten(text_color, 40)
+          border 1px solid white
+          background-color day_button_bg
+          outline 0
+          display inline-block
+          width 30px
+          height 23px
+          text-align center
+          padding 0
+          cursor: pointer
+          &[disabled]
+            cursor not-allowed
+          &.b_popup_day_in_selected_month
+            color text_color
+            border 1px solid white
+            background-color day_button_bg
+            cursor pointer
+            &:hover
+              background-color day_button_bg_hover
+              outline 0
+            &:active
+              background-color day_button_bg_hover
+              text-decoration underline
+              outline 0
+            &:hover, &:active, &:focus, &:active:focus
+              outline 0
+          &.b_popup_today_day
+            text-decoration underline
+            border-top-right-radius 8px
+          &.b_popup_selected_day
+            color day_button_bg
+            text-decoration underline
+            border 1px solid bg_selected_day_color
+            background-color bg_selected_day_color
+            &:hover, &:active, &:focus, &:active:focus
+              background-color bg_selected_day_color
+          &.b_popup_locked_day
+            cursor auto
+  .b_popup_day_of_week
+    display inline-block
+    width 30px
+    height 23px
+    text-align center
+    margin 1px
+    background-color day_button_bg
+    &:nth-child(6), &:nth-child(7)
+      background-color darken(day_button_bg, 5)
+  .b_popup_today
+    text-align center
+    margin 5px
+    cursor pointer
+    .b_popup_today_btn
+      background none
+      border none
+      outline none
+      &:active
+        box-shadow none
+      &:hover, &:active, &:focus, &:active:focus
+        text-decoration underline
+        outline none
