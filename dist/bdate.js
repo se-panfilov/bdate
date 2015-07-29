@@ -86,8 +86,8 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         dateStartStr = dateStr.substr(0, formatLength);
         dateEndStr = dateStr.substr(formatLength + delimiterLength);
         result = {
-          start: parseDateStringToDMY = dateStartStr,
-          end: parseDateStringToDMY = dateEndStr
+          start: parseDateStringToDMY(dateStartStr),
+          end: parseDateStringToDMY(dateEndStr)
         };
         return result;
       };
@@ -563,6 +563,43 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
         startResult: null,
         endResult: null
       };
+      scope.watchers = {
+        result: {
+          handler: null,
+          start: function(callback) {
+            if (scope.watchers.result.handler) {
+              return;
+            }
+            return scope.watchers.result.handler = scope.$watch('popupResult', function(newVal, oldVal) {
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            }, true);
+          },
+          stop: function() {
+            scope.watchers.result.handler();
+            return scope.watchers.result.handler = null;
+          },
+          watchPopupResult: function(callback) {
+            return scope.watchers.result.start(function(newVal, oldVal) {
+              if (newVal === oldVal) {
+                return;
+              }
+              if (!newVal) {
+                return;
+              }
+              if (angular.equals({}, newVal)) {
+                return;
+              }
+              scope.popup.refreshSelectedData(true, newVal.start.month, newVal.start.year);
+              scope.popup.refreshSelectedData(false, newVal.end.month, newVal.end.year);
+              if (callback) {
+                return callback(newVal, oldVal);
+              }
+            });
+          }
+        }
+      };
       getSource = function(isStartPopup) {
         if (isStartPopup) {
           return scope.popupStartSource;
@@ -749,9 +786,9 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
           return scope.popup.hidePopup();
         }
       };
-      return scope.$watch('popupSource', function() {
-        return scope.isDataReady = true;
-      }, true);
+      return (function() {
+        return scope.watchers.result.watchPopupResult();
+      })();
     }
   };
 });

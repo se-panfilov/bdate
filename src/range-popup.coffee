@@ -19,6 +19,32 @@ angular.module 'bdate.popup.ranged', [
       startResult: null
       endResult: null
 
+    scope.watchers =
+      result:
+        handler: null
+        start: (callback) ->
+          return if scope.watchers.result.handler
+          scope.watchers.result.handler = scope.$watch 'popupResult', (newVal, oldVal) ->
+            if callback
+              callback newVal, oldVal
+          ,
+            true
+        stop: () ->
+          scope.watchers.result.handler()
+          scope.watchers.result.handler = null
+        watchPopupResult: (callback) ->
+          scope.watchers.result.start (newVal, oldVal) ->
+            return if newVal is oldVal
+            return if not newVal
+            return if angular.equals {}, newVal
+
+            scope.popup.refreshSelectedData true, newVal.start.month, newVal.start.year
+            scope.popup.refreshSelectedData false, newVal.end.month, newVal.end.year
+
+            if callback
+              callback newVal, oldVal
+
+
     getSource = (isStartPopup) ->
       if isStartPopup
         return scope.popupStartSource
@@ -150,6 +176,5 @@ angular.module 'bdate.popup.ranged', [
           end: scope.data.endResult
         scope.popup.hidePopup()
 
-    scope.$watch 'popupSource', ->
-      scope.isDataReady = true
-    , true
+    do () ->
+      scope.watchers.result.watchPopupResult()

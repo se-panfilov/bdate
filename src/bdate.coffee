@@ -86,8 +86,8 @@ angular.module 'bdate', [
       dateStartStr = dateStr.substr(0, formatLength)
       dateEndStr = dateStr.substr(formatLength + delimiterLength)
       result =
-        start: parseDateStringToDMY = (dateStartStr)
-        end: parseDateStringToDMY = (dateEndStr)
+        start: parseDateStringToDMY dateStartStr
+        end: parseDateStringToDMY dateEndStr
       return result
 
     parseOutputDate = (dateStr) ->
