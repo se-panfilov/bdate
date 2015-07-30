@@ -55,7 +55,7 @@ There are many reasons. But mostly it's made for people who want to take a contr
         b-model="resultModel" 
         b-source="demoData"
         b-settings="settings"
-        b-refresh="refreshData(m, y)",
+        b-refresh="refreshData(m, y)"
         placeholder="Enter the date"
         ></bdatepicker>
     ```
