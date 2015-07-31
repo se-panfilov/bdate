@@ -90,8 +90,10 @@ There are many reasons. But mostly it's made for people who want to take a contr
     placeholder="Enter the date"
 ```
 
-`b-range` - define ranges mode
-`b-start-source` and `b-end-source` work as `b-source` (and insteado of them). Each work for start range and end range popups.;
+`b-range` - define ranges mode;
+
+`b-start-source` and `b-end-source` work as `b-source` (and insteado of them). Each work for start range and end range popups;
+
 `b-start-refresh` and `b-end-refresh` - all the same as `b-refresh` function, but wotks separately for start and end popup;
     
     
