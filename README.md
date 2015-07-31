@@ -78,21 +78,21 @@ There are many reasons. But mostly it's made for people who want to take a contr
 
 #Date Raanges
 
-    ```html
-    <bdatepicker 
-        b-model="resultModel" 
-        b-start-source="startSource"
-        b-end-source="endSource"
-        b-settings="settings"
-        b-start-refresh="refreshStartData(m, y)"
-        b-end-refresh="refreshEndData(m, y)"
-        b-range="true"
-        placeholder="Enter the date"
-    ```
-    
-    `b-range` - define ranges mode
-    `b-start-source` and `b-end-source` work as `b-source` (and insteado of them). Each work for start range and end range popups.;
-    `b-start-refresh` and `b-end-refresh` - all the same as `b-refresh` function, but wotks separately for start and end popup;
+```html
+<bdatepicker 
+    b-model="resultModel" 
+    b-start-source="startSource"
+    b-end-source="endSource"
+    b-settings="settings"
+    b-start-refresh="refreshStartData(m, y)"
+    b-end-refresh="refreshEndData(m, y)"
+    b-range="true"
+    placeholder="Enter the date"
+```
+
+`b-range` - define ranges mode
+`b-start-source` and `b-end-source` work as `b-source` (and insteado of them). Each work for start range and end range popups.;
+`b-start-refresh` and `b-end-refresh` - all the same as `b-refresh` function, but wotks separately for start and end popup;
     
     
 #Settings format
