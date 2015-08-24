@@ -1,6 +1,6 @@
 {
   "name": "bdate",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "backend-based angular datepicker",
   "main": "bdate.js",
   "scripts": {
