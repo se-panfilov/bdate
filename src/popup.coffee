@@ -78,10 +78,10 @@ angular.module 'bdate.popup', [
 
         scope.popup.refreshSelectedData month, year
       isFirstMonth: () ->
-        return if not scope.popupSource or not scope.popupSource
+        return if not scope.popupSource or not scope.popupSource.month or angular.equals scope.popupSource, {}
         return scope.popupSource.month.isStart
       goNextMonth: () ->
-        return if not scope.popupSource or not scope.popupSource.year
+        return if not scope.popupSource or not scope.popupSource.year or angular.equals scope.popupSource, {}
         if scope.popupSource.month.isEnd and scope.popupSource.year.isEnd
           console.error 'error'
           return false
@@ -101,10 +101,10 @@ angular.module 'bdate.popup', [
 
         scope.popup.refreshSelectedData month, year
       isLastMonth: () ->
-        return if not scope.popupSource or not scope.popupSource
+        return if not scope.popupSource or not scope.popupSource or angular.equals scope.popupSource, {}
         return scope.popupSource.month.isEnd
       goNextYear: () ->
-        return if not scope.popupSource or not scope.popupSource.year
+        return if not scope.popupSource or not scope.popupSource.year or angular.equals scope.popupSource, {}
         if scope.popupSource.year.isEnd
           console.error 'error'
           return false
@@ -112,13 +112,13 @@ angular.module 'bdate.popup', [
         month = scope.popupSource.month.num
         scope.popup.refreshSelectedData month, year
       isLastYear: () ->
-        return if not scope.popupSource or not scope.popupSource
+        return if not scope.popupSource or not scope.popupSource or angular.equals scope.popupSource, {}
         return scope.popupSource.year.isEnd
       isSelectedDay: (date) ->
-        return if not scope.popupResult or not scope.popupResult.day
+        return if not scope.popupResult or not scope.popupResult.day or angular.equals scope.popupSource, {}
         return ((date.day is scope.popupResult.day) and (date.month is scope.popupResult.month) and (date.year is scope.popupResult.year))
       getTodayDateTime: () ->
-        return if not scope.popupSettings or not scope.popupSettings.today
+        return if not scope.popupSettings or not scope.popupSettings.today or angular.equals scope.popupSettings, {}
         today = scope.popupSettings.today
         return new Date(today.year, today.month - 1, today.day).getTime()
       isDayInSelectedMonth: (date) ->

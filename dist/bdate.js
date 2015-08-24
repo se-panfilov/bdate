@@ -453,14 +453,14 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popup.refreshSelectedData(month, year);
         },
         isFirstMonth: function() {
-          if (!scope.popupSource || !scope.popupSource) {
+          if (!scope.popupSource || !scope.popupSource.month || angular.equals(scope.popupSource, {})) {
             return;
           }
           return scope.popupSource.month.isStart;
         },
         goNextMonth: function() {
           var january, month, year;
-          if (!scope.popupSource || !scope.popupSource.year) {
+          if (!scope.popupSource || !scope.popupSource.year || angular.equals(scope.popupSource, {})) {
             return;
           }
           if (scope.popupSource.month.isEnd && scope.popupSource.year.isEnd) {
@@ -482,14 +482,14 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popup.refreshSelectedData(month, year);
         },
         isLastMonth: function() {
-          if (!scope.popupSource || !scope.popupSource) {
+          if (!scope.popupSource || !scope.popupSource || angular.equals(scope.popupSource, {})) {
             return;
           }
           return scope.popupSource.month.isEnd;
         },
         goNextYear: function() {
           var month, year;
-          if (!scope.popupSource || !scope.popupSource.year) {
+          if (!scope.popupSource || !scope.popupSource.year || angular.equals(scope.popupSource, {})) {
             return;
           }
           if (scope.popupSource.year.isEnd) {
@@ -501,20 +501,20 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
           return scope.popup.refreshSelectedData(month, year);
         },
         isLastYear: function() {
-          if (!scope.popupSource || !scope.popupSource) {
+          if (!scope.popupSource || !scope.popupSource || angular.equals(scope.popupSource, {})) {
             return;
           }
           return scope.popupSource.year.isEnd;
         },
         isSelectedDay: function(date) {
-          if (!scope.popupResult || !scope.popupResult.day) {
+          if (!scope.popupResult || !scope.popupResult.day || angular.equals(scope.popupSource, {})) {
             return;
           }
           return (date.day === scope.popupResult.day) && (date.month === scope.popupResult.month) && (date.year === scope.popupResult.year);
         },
         getTodayDateTime: function() {
           var today;
-          if (!scope.popupSettings || !scope.popupSettings.today) {
+          if (!scope.popupSettings || !scope.popupSettings.today || angular.equals(scope.popupSettings, {})) {
             return;
           }
           today = scope.popupSettings.today;
