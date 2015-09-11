@@ -105,13 +105,17 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         popup: {
           result: {
             handler: null,
+            callback: null,
             start: function(callback) {
               if (scope.watchers.popup.result.handler) {
                 return;
               }
+              if (callback != null) {
+                scope.watchers.popup.result.callback = callback;
+              }
               scope.watchers.popup.result.handler = scope.$watch('popup.result', function(newVal, oldVal) {
-                if (callback) {
-                  return callback(newVal, oldVal);
+                if (scope.watchers.popup.result.callback) {
+                  return scope.watchers.popup.result.callback(newVal, oldVal);
                 }
               }, true);
               return scope.watchers.popup.result.handler;
@@ -143,13 +147,17 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         },
         bModel: {
           handler: null,
+          callback: null,
           start: function(callback) {
+            if (!scope.watchers.bModel.callback) {
+              scope.watchers.bModel.callback = callback;
+            }
             if (scope.watchers.bModel.handler) {
               return;
             }
             scope.watchers.bModel.handler = scope.$watch('bModel', function(newVal, oldVal) {
-              if (callback) {
-                return callback(newVal, oldVal);
+              if (scope.watchers.bModel.callback) {
+                return scope.watchers.bModel.callback(newVal, oldVal);
               }
             }, true);
             return scope.watchers.bModel.handler;
@@ -363,16 +371,23 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
       popupRefresh: "&?"
     },
     link: function(scope) {
+      setInterval(function() {
+        return console.log(scope.popupResult);
+      }, 1000);
       scope.watchers = {
         result: {
           handler: null,
+          callback: null,
           start: function(callback) {
             if (scope.watchers.result.handler) {
               return;
             }
+            if (callback != null) {
+              scope.watchers.result.callback = callback;
+            }
             return scope.watchers.result.handler = scope.$watch('popupResult', function(newVal, oldVal) {
-              if (callback) {
-                return callback(newVal, oldVal);
+              if (scope.watchers.result.callback) {
+                return scope.watchers.result.callback(newVal, oldVal);
               }
             }, true);
           },

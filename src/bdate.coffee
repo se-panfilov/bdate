@@ -102,11 +102,14 @@ angular.module 'bdate', [
       popup:
         result:
           handler: null
+          callback: null
           start: (callback) ->
             return if scope.watchers.popup.result.handler
+            if callback?
+              scope.watchers.popup.result.callback = callback
             scope.watchers.popup.result.handler = scope.$watch 'popup.result', (newVal, oldVal) ->
-              if callback
-                callback newVal, oldVal
+              if scope.watchers.popup.result.callback
+                scope.watchers.popup.result.callback  newVal, oldVal
             ,
               true
             return scope.watchers.popup.result.handler
@@ -120,18 +123,20 @@ angular.module 'bdate', [
           return if angular.equals {}, newVal
 
           scope.watchers.bModel.stop()
-          scope.bModel = getOutputDate(scope.popup.result)
+          scope.bModel = getOutputDate scope.popup.result
           scope.watchers.bModel.start()
 
           if callback
             callback newVal, oldVal
       bModel:
         handler: null
+        callback: null
         start: (callback) ->
+          scope.watchers.bModel.callback = callback if not scope.watchers.bModel.callback
           return if scope.watchers.bModel.handler
           scope.watchers.bModel.handler = scope.$watch 'bModel', (newVal, oldVal) ->
-            if callback
-              callback newVal, oldVal
+            if scope.watchers.bModel.callback
+              scope.watchers.bModel.callback newVal, oldVal
           ,
             true
           return scope.watchers.bModel.handler

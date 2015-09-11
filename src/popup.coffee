@@ -14,14 +14,21 @@ angular.module 'bdate.popup', [
     popupRefresh: "&?"
   link: (scope) ->
 
+    setInterval ->
+      console.log scope.popupResult;
+    , 1000
+
     scope.watchers =
       result:
         handler: null
+        callback: null
         start: (callback) ->
           return if scope.watchers.result.handler
+          if callback?
+            scope.watchers.result.callback = callback
           scope.watchers.result.handler = scope.$watch 'popupResult', (newVal, oldVal) ->
-            if callback
-              callback newVal, oldVal
+            if scope.watchers.result.callback
+              scope.watchers.result.callback newVal, oldVal
           ,
             true
         stop: () ->
