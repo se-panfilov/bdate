@@ -60,5 +60,38 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='demo')
                             | Set today
                         span(ng-bind="resultRangeModel")
                 //TODO (S.Panfilov) wait_for_data_case
-                //TODO (S.Panfilov) linked_data_case
+                section#linked_case
+                    h1 Linked model case
+                    form#demo_linked_form(name="demo_linked_form")
+                        .form-group
+                            label.control-label(for="bdatepicker_linked") Date
+                            bdatepicker#bdatepicker_linked(
+                            b-model="result.linked",
+                            b-source="source",
+                            b-settings="settings",
+                            b-refresh="refreshData(m, y)",
+                            placeholder="Enter the date"
+                            )
+                        .form-group
+                            button.btn.btn-info(
+                            type="button",
+                            ng-click="controls.setToday(result.linked)"
+                            )
+                                | Set today
+                        .form-group
+                            label.control-label(for="bdatepicker_linked") Date
+                            bdatepicker#bdatepicker_linked(
+                            b-model="result.linked",
+                            b-source="source",
+                            b-settings="settings",
+                            b-refresh="refreshData(m, y)",
+                            placeholder="Enter the date"
+                            )
+                        .form-group
+                            button.btn.btn-info(
+                            type="button",
+                            ng-click="controls.setToday(result.linked)"
+                            )
+                                | Set today
+                        div(ng-bind="resultModel")
                 //TODO (S.Panfilov) external_case
