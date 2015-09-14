@@ -132,7 +132,8 @@ angular.module 'bdate', [
         handler: null
         callback: null
         start: (callback) ->
-          scope.watchers.bModel.callback = callback if not scope.watchers.bModel.callback
+          if callback?
+            scope.watchers.bModel.callback = callback
           return if scope.watchers.bModel.handler
           scope.watchers.bModel.handler = scope.$watch 'bModel', (newVal, oldVal) ->
             if scope.watchers.bModel.callback
@@ -164,32 +165,41 @@ angular.module 'bdate', [
             onChangeCb newVal, oldVal
       bSource:
         handler: null
+        callback: null
         start: (callback) ->
+          if callback?
+            scope.watchers.bSource.callback = callback
           return if scope.watchers.bSource.handler
           scope.watchers.bSource.handler = scope.$watch 'bSource', (newVal, oldVal) ->
-            if callback
-              callback newVal, oldVal
+            if scope.watchers.bSource.callback
+              scope.watchers.bSource.callback newVal, oldVal
           return scope.watchers.bSource.handler
         stop: () ->
           scope.watchers.bSource.handler()
           scope.watchers.bSource.handler = null
       bStartSource:
         handler: null
+        callback: null
         start: (callback) ->
+          if callback?
+            scope.watchers.bStartSource.callback = callback
           return if scope.watchers.bStartSource.handler
           scope.watchers.bStartSource.handler = scope.$watch 'bStartSource', (newVal, oldVal) ->
-            if callback
-              callback newVal, oldVal
+            if scope.watchers.bStartSource.callback
+              scope.watchers.bStartSource.callback newVal, oldVal
           return scope.watchers.bStartSource.handler
         stop: () ->
           scope.watchers.bStartSource.handler()
       bEndSource:
         handler: null
+        callback: null
         start: (callback) ->
+          if callback?
+            scope.watchers.bEndSource.callback = callback
           return if scope.watchers.bEndSource.handler
           scope.watchers.bEndSource.handler = scope.$watch 'bEndSource', (newVal, oldVal) ->
-            if callback
-              callback newVal, oldVal
+            if scope.watchers.bEndSource.callback
+              scope.watchers.bEndSource.callback newVal, oldVal
           return scope.watchers.bEndSource.handler
         stop: () ->
           scope.watchers.bEndSource.handler()

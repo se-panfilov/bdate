@@ -14,10 +14,6 @@ angular.module 'bdate.popup', [
     popupRefresh: "&?"
   link: (scope) ->
 
-    setInterval ->
-      console.log scope.popupResult;
-    , 1000
-
     scope.watchers =
       result:
         handler: null

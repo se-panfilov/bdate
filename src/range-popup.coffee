@@ -22,11 +22,14 @@ angular.module 'bdate.popup.ranged', [
     scope.watchers =
       result:
         handler: null
+        callback: null
         start: (callback) ->
+          if callback?
+            scope.watchers.result.callback = callback
           return if scope.watchers.result.handler
           scope.watchers.result.handler = scope.$watch 'popupResult', (newVal, oldVal) ->
-            if callback
-              callback newVal, oldVal
+            if scope.watchers.result.callback
+              scope.watchers.result.callback newVal, oldVal
           ,
             true
         stop: () ->

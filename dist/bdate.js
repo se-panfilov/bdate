@@ -149,7 +149,7 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
           handler: null,
           callback: null,
           start: function(callback) {
-            if (!scope.watchers.bModel.callback) {
+            if (callback != null) {
               scope.watchers.bModel.callback = callback;
             }
             if (scope.watchers.bModel.handler) {
@@ -193,13 +193,17 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         },
         bSource: {
           handler: null,
+          callback: null,
           start: function(callback) {
+            if (callback != null) {
+              scope.watchers.bSource.callback = callback;
+            }
             if (scope.watchers.bSource.handler) {
               return;
             }
             scope.watchers.bSource.handler = scope.$watch('bSource', function(newVal, oldVal) {
-              if (callback) {
-                return callback(newVal, oldVal);
+              if (scope.watchers.bSource.callback) {
+                return scope.watchers.bSource.callback(newVal, oldVal);
               }
             });
             return scope.watchers.bSource.handler;
@@ -211,13 +215,17 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         },
         bStartSource: {
           handler: null,
+          callback: null,
           start: function(callback) {
+            if (callback != null) {
+              scope.watchers.bStartSource.callback = callback;
+            }
             if (scope.watchers.bStartSource.handler) {
               return;
             }
             scope.watchers.bStartSource.handler = scope.$watch('bStartSource', function(newVal, oldVal) {
-              if (callback) {
-                return callback(newVal, oldVal);
+              if (scope.watchers.bStartSource.callback) {
+                return scope.watchers.bStartSource.callback(newVal, oldVal);
               }
             });
             return scope.watchers.bStartSource.handler;
@@ -228,13 +236,17 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
         },
         bEndSource: {
           handler: null,
+          callback: null,
           start: function(callback) {
+            if (callback != null) {
+              scope.watchers.bEndSource.callback = callback;
+            }
             if (scope.watchers.bEndSource.handler) {
               return;
             }
             scope.watchers.bEndSource.handler = scope.$watch('bEndSource', function(newVal, oldVal) {
-              if (callback) {
-                return callback(newVal, oldVal);
+              if (scope.watchers.bEndSource.callback) {
+                return scope.watchers.bEndSource.callback(newVal, oldVal);
               }
             });
             return scope.watchers.bEndSource.handler;
@@ -371,9 +383,6 @@ angular.module('bdate.popup', ['bdate.templates']).directive('bdatePopup', funct
       popupRefresh: "&?"
     },
     link: function(scope) {
-      setInterval(function() {
-        return console.log(scope.popupResult);
-      }, 1000);
       scope.watchers = {
         result: {
           handler: null,
@@ -581,13 +590,17 @@ angular.module('bdate.popup.ranged', ['bdate.templates']).directive('bdateRangeP
       scope.watchers = {
         result: {
           handler: null,
+          callback: null,
           start: function(callback) {
+            if (callback != null) {
+              scope.watchers.result.callback = callback;
+            }
             if (scope.watchers.result.handler) {
               return;
             }
             return scope.watchers.result.handler = scope.$watch('popupResult', function(newVal, oldVal) {
-              if (callback) {
-                return callback(newVal, oldVal);
+              if (scope.watchers.result.callback) {
+                return scope.watchers.result.callback(newVal, oldVal);
               }
             }, true);
           },
