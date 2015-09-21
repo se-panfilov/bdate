@@ -57,6 +57,8 @@ angular.module('demo', [
         };
 
         $scope.commonCase = {};
+        $scope.rangedCase = {};
+        $scope.linkedCase = {};
 
     })
 
