@@ -18,80 +18,92 @@ html#ng-app(xmlns:ng='http://angularjs.org', ng-app='demo')
         <![endif]-->
         title bdate demo
     body
-        #content_view.container
-            #demo_page(ng-controller="DemoPageCtrl")
-                section#common_case
-                    h1 Common case
-                    form#demo_simple_form(name="demo_simple_form")
-                        .form-group
-                            label.control-label(for="bdatepicker_1") Date
-                            bdatepicker#bdatepicker_1(
-                            b-model="resultModel",
-                            b-source="source",
-                            b-settings="settings",
-                            b-refresh="refreshData(m, y)",
-                            placeholder="Enter the date"
-                            )
-                        button.btn.btn-info(
-                        type="button",
-                        ng-click="controls.setToday()"
-                        )
-                            | Set today
-                        div(ng-bind="resultModel")
-                section#range_case
-                    h1 Range case
-                    form#demo_range_form(name="demo_range_form")
-                        .form-group
-                            label.control-label(for="bdatepicker_2") Date
-                            bdatepicker#bdatepicker_2(
-                            b-model="resultRangeModel",
-                            b-start-source="startSource",
-                            b-end-source="endSource",
-                            b-settings="settings",
-                            b-start-refresh="refreshStartData(m, y)",
-                            b-end-refresh="refreshEndData(m, y)",
-                            b-range="true"
-                            placeholder="Enter the date"
-                            )
-                        button.btn.btn-info(
-                        type="button",
-                        ng-click="controls.setTodayRanged()"
-                        )
-                            | Set today
-                        span(ng-bind="resultRangeModel")
-                //TODO (S.Panfilov) wait_for_data_case
-                section#linked_case
-                    h1 Linked model case
-                    form#demo_linked_form(name="demo_linked_form")
-                        .form-group
-                            label.control-label(for="bdatepicker_linked") Date
-                            bdatepicker#bdatepicker_linked(
-                            b-model="result.linked",
-                            b-source="source",
-                            b-settings="settings",
-                            b-refresh="refreshData(m, y)",
-                            placeholder="Enter the date"
-                            )
-                        .form-group
-                            button.btn.btn-info(
-                            type="button",
-                            ng-click="controls.setToday(result.linked)"
-                            )
-                                | Set today
-                        .form-group
-                            label.control-label(for="bdatepicker_linked") Date
-                            bdatepicker#bdatepicker_linked(
-                            b-model="result.linked",
-                            b-source="source",
-                            b-settings="settings",
-                            b-refresh="refreshData(m, y)",
-                            placeholder="Enter the date"
-                            )
-                        .form-group
-                            button.btn.btn-info(
-                            type="button",
-                            ng-click="controls.setToday(result.linked)"
-                            )
-                                | Set today
-                        div(ng-bind="resultModel")
-                //TODO (S.Panfilov) external_case
+        #content_view.container(ng-controller="DemoPageCtrl")
+            ol
+                li
+                    section
+                        h3 Common case
+                        .case_description
+                            ul
+                                li Valid ngModel
+                            form#demo_simple_form(name="demo_simple_form")
+                                .form-group
+                                    label.control-label(for="bdatepicker_1") Date
+                                    bdatepicker#bdatepicker_1(
+                                    b-model="commonCase.model",
+                                    b-source="source",
+                                    b-settings="settings",
+                                    b-refresh="refreshData(m, y)",
+                                    placeholder="Enter the date"
+                                    )
+                        model-well(case-model="commonCase")
+                //section#common_case
+                //    h1 Common case
+                //    form#demo_simple_form(name="demo_simple_form")
+                //        .form-group
+                //            label.control-label(for="bdatepicker_1") Date
+                //            bdatepicker#bdatepicker_1(
+                //            b-model="resultModel",
+                //            b-source="source",
+                //            b-settings="settings",
+                //            b-refresh="refreshData(m, y)",
+                //            placeholder="Enter the date"
+                //            )
+                //        model-well(case-model="commonCase")
+                //section#range_case
+                //    h1 Range case
+                //    form#demo_range_form(name="demo_range_form")
+                //        .form-group
+                //            label.control-label(for="bdatepicker_2") Date
+                //            bdatepicker#bdatepicker_2(
+                //            b-model="resultRangeModel",
+                //            b-start-source="startSource",
+                //            b-end-source="endSource",
+                //            b-settings="settings",
+                //            b-start-refresh="refreshStartData(m, y)",
+                //            b-end-refresh="refreshEndData(m, y)",
+                //            b-range="true"
+                //            placeholder="Enter the date"
+                //            )
+                //        button.btn.btn-info(
+                //        type="button",
+                //        ng-click="controls.setTodayRanged()"
+                //        )
+                //            | Set today
+                //        span(ng-bind="resultRangeModel")
+                ////TODO (S.Panfilov) wait_for_data_case
+                //section#linked_case
+                //    h1 Linked model case
+                //    form#demo_linked_form(name="demo_linked_form")
+                //        .form-group
+                //            label.control-label(for="bdatepicker_linked") Date
+                //            bdatepicker#bdatepicker_linked(
+                //            b-model="result.linked",
+                //            b-source="source",
+                //            b-settings="settings",
+                //            b-refresh="refreshData(m, y)",
+                //            placeholder="Enter the date"
+                //            )
+                //        .form-group
+                //            button.btn.btn-info(
+                //            type="button",
+                //            ng-click="controls.setToday(result.linked)"
+                //            )
+                //                | Set today
+                //        .form-group
+                //            label.control-label(for="bdatepicker_linked") Date
+                //            bdatepicker#bdatepicker_linked(
+                //            b-model="result.linked",
+                //            b-source="source",
+                //            b-settings="settings",
+                //            b-refresh="refreshData(m, y)",
+                //            placeholder="Enter the date"
+                //            )
+                //        .form-group
+                //            button.btn.btn-info(
+                //            type="button",
+                //            ng-click="controls.setToday(result.linked)"
+                //            )
+                //                | Set today
+                //        div(ng-bind="resultModel")
+                ////TODO (S.Panfilov) external_case

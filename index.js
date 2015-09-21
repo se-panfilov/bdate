@@ -30,20 +30,6 @@ angular.module('demo', [
 
         };
 
-        $scope.controls = {
-            setToday: function (model) {
-                model = $filter('date')(new Date(2010, 1, 15), $scope.settings.format)
-            },
-            setTodayRanged: function () {
-                var dates = {
-                    start: $filter('date')(new Date(2010, 0, 1), $scope.settings.format),
-                    end: $filter('date')(new Date(2010, 1, 20), $scope.settings.format)
-                };
-
-                $scope.resultRangeModel = dates.start + $scope.settings.range_delimiter + dates.end;
-            }
-        };
-
         $scope.refreshStartData = function (m, y) {
             var defVal = "1-2010";
             var params = (m && y) ? m + '-' + y : defVal;
@@ -70,19 +56,63 @@ angular.module('demo', [
             });
         };
 
-        //$scope.delayedDemoData = {};
-        //
-        //function copy(sourceObj) {
-        //    return JSON.parse(JSON.stringify(sourceObj));
-        //}
-        //
-        //$timeout(function () {
-        //    $scope.delayedDemoData = copy($scope.demoData);
-        //}, 2000);
-        //
-        //$scope.resultModel = '';
-        //$scope.resultDelayedModel = '';
-        //$scope.resultLinkedModel = '';
-        //$scope.externalModel = '';
+        $scope.commonCase = {};
+
     })
+
+    .directive('modelWell', function ($filter) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                caseModel: '='
+            },
+            template: '<section class=well>' +
+            '<div><span>Value:</span>&nbsp;<span ng-bind=caseModel.model></span></div>' +
+            '<div><span>Start limit:</span>&nbsp;<span ng-bind=caseModel.startDate></span>&nbsp;<span>({{getDate(caseModel.startDate)}})</span></div>' +
+            '<div><span>End limit:</span>&nbsp;<span ng-bind=caseModel.endDate></span>&nbsp;<span>({{getDate(caseModel.endDate)}})</span></div>' +
+            '<div><button type="button" ng-click="plusOneMonth()">+1 month</button></div>' +
+            '<div><button type="button" ng-click="minusOneMonth()">-1 month</button></div>' +
+            '</section>',
+            link: function (scope) {
+                var dateFormat = 'dd-MM-yyyy';
+                var dateRegex = /\d+/g;
+
+                scope.getDate = function (datetime) {
+                    if (!datetime) return ' none ';
+
+                    return $filter('date')(new Date(datetime), dateFormat);
+                };
+
+                scope.plusOneMonth = function () {
+                    var dateArr = (scope.caseModel.model).match(dateRegex);
+                    var date = new Date(dateArr[2], dateArr[1] - 1, dateArr[0]);
+                    if (date.getMonth() === 11) {
+                        date.setMonth(0);
+                        date.setFullYear(date.getFullYear() + 1)
+                    } else {
+                        date.setMonth(date.getMonth() + 1);
+                    }
+
+                    scope.caseModel.model = $filter('date')(date, dateFormat);
+                };
+
+                scope.minusOneMonth = function () {
+                    var dateArr = (scope.caseModel.model).match(dateRegex);
+                    var date = new Date(dateArr[2], dateArr[1] - 1, dateArr[0]);
+
+                    if (date.getMonth() === 0) {
+                        date.setMonth(11);
+                        date.setFullYear(date.getFullYear() - 1)
+                    } else {
+                        date.setMonth(date.getMonth() - 1);
+                    }
+
+                    scope.caseModel.model = $filter('date')(date, dateFormat);
+                };
+            }
+        };
+    })
+
+
 ;
