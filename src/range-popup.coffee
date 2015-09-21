@@ -12,6 +12,7 @@ angular.module 'bdate.popup.ranged', [
     popupStartSource: '='
     popupEndSource: '='
     popupResult: '='
+    popupClick: "&?"
     popupStartRefresh: "&?"
     popupEndRefresh: "&?"
   link: (scope) ->
@@ -177,6 +178,11 @@ angular.module 'bdate.popup.ranged', [
         scope.popupResult =
           start: scope.data.startResult
           end: scope.data.endResult
+
+        if scope.popupClick
+          scope.popupClick
+            start: scope.data.startResult
+            end: scope.data.endResult
         scope.popup.hidePopup()
 
     do () ->

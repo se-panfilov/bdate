@@ -275,6 +275,11 @@ angular.module 'bdate', [
       scope.bOnSelect
         date: date
 
+    scope.bOnSelectRangeWrap = (start, end) ->
+      scope.bOnSelect
+        start: start
+        end: end
+
     scope.bRefreshWrap = (m, y) ->
       scope.bRefresh
         m: m
