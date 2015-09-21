@@ -15,6 +15,7 @@ angular.module 'bdate', [
     bStartSource: '=?'
     bEndSource: '=?'
     bRange: '=?'
+    bOnSelect: "&?"
     bRootClasses: '@?'
     bInputClasses: '@?'
     bButtonClasses: '@?'
@@ -269,6 +270,10 @@ angular.module 'bdate', [
       else
         scope.bStartRefresh()
         scope.bEndRefresh()
+
+    scope.bOnSelectWrap = (date) ->
+      scope.bOnSelect
+        date: date
 
     scope.bRefreshWrap = (m, y) ->
       scope.bRefresh
