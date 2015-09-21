@@ -56,9 +56,22 @@ angular.module('demo', [
             });
         };
 
+        $scope.onDateSelect = function (date) {
+            console.info('day select: ');
+            console.dir(date);
+        };
+
+        $scope.onDateSelectRange = function (start, end) {
+            console.info('range select: ');
+            console.dir(start);
+            console.dir(end);
+        };
+
         $scope.commonCase = {};
         $scope.rangedCase = {};
         $scope.linkedCase = {};
+        $scope.onSelectCase = {};
+        $scope.rangedOnSelectCase = {};
 
     })
 
