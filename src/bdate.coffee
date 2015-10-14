@@ -82,7 +82,7 @@ angular.module 'bdate', [
       return elements
 
     parseDateRangeStringToDMY = (dateStr) ->
-      delimiterLength =  scope.bSettings.range_delimiter.length
+      delimiterLength = scope.bSettings.range_delimiter.length
       formatLength = scope.bSettings.format.length
       dateStartStr = dateStr.substr(0, formatLength)
       dateEndStr = dateStr.substr(formatLength + delimiterLength)
@@ -99,6 +99,13 @@ angular.module 'bdate', [
         result = parseDateRangeStringToDMY(dateStr)
       return result
 
+    pauseAndUpdateResult = (val) ->
+      #We should restart watcher only if "watchPopupResult" has already started before (so "isHandler" check it)
+      isHandler = !!scope.watchers.popup.result.handler
+      scope.watchers.popup.result.stop() if isHandler
+      scope.popup.result = parseOutputDate val
+      scope.watchers.popup.result.start() if isHandler
+
     scope.watchers =
       popup:
         result:
@@ -110,7 +117,7 @@ angular.module 'bdate', [
               scope.watchers.popup.result.callback = callback
             scope.watchers.popup.result.handler = scope.$watch 'popup.result', (newVal, oldVal) ->
               if scope.watchers.popup.result.callback
-                scope.watchers.popup.result.callback  newVal, oldVal
+                scope.watchers.popup.result.callback newVal, oldVal
             ,
               true
             return scope.watchers.popup.result.handler
@@ -148,6 +155,8 @@ angular.module 'bdate', [
       watchBModel: (onChangeCb, callback) ->
         scope.watchers.bModel.start (newVal, oldVal) ->
           if newVal is oldVal
+            if newVal and not scope.popup.result
+              pauseAndUpdateResult newVal
             if callback
               return callback()
             return
@@ -158,9 +167,7 @@ angular.module 'bdate', [
             return
 
           if not scope.popup.result or newVal isnt getOutputDate scope.popup.result
-            scope.watchers.popup.result.stop()
-            scope.popup.result = parseOutputDate newVal
-            scope.watchers.popup.result.start()
+            pauseAndUpdateResult newVal
 
           if onChangeCb
             onChangeCb newVal, oldVal

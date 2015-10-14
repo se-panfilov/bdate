@@ -31,7 +31,7 @@ angular.module 'bdate.popup', [
         stop: () ->
           scope.watchers.result.handler()
           scope.watchers.result.handler = null
-        watchPopupResult: (callback) ->
+        watchResult: (callback) ->
           scope.watchers.result.start (newVal, oldVal) ->
             return if newVal is oldVal
             return if not newVal
@@ -140,4 +140,4 @@ angular.module 'bdate.popup', [
           y: year
 
     do () ->
-      scope.watchers.result.watchPopupResult()
+      scope.watchers.result.watchResult()
