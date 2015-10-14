@@ -4,7 +4,7 @@ angular.module('demo', [
     'bdate'
 ])
 
-    .controller('DemoPageCtrl', function ($scope, $http, $filter) {
+    .controller('DemoPageCtrl', function ($scope, $http) {
 
         $scope.settings = {
             "week": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
@@ -68,6 +68,9 @@ angular.module('demo', [
         };
 
         $scope.commonCase = {};
+        $scope.presetCase = {
+            model: '02-01-2010'
+        };
         $scope.rangedCase = {};
         $scope.linkedCase = {};
         $scope.onSelectCase = {};
