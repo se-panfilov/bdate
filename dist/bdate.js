@@ -338,8 +338,13 @@ angular.module('bdate', ['bdate.popup', 'bdate.popup.ranged', 'bdate.templates']
           isOpen: false
         },
         togglePopup: function() {
+          var date;
           if (!scope.isSourceReady) {
             return;
+          }
+          if (scope.bModel && scope.bModel !== '' && !angular.equals({}, scope.bModel)) {
+            date = parseDateStringToDMY(scope.bModel);
+            scope.bRefreshWrap(date.month, date.year);
           }
           return scope.popup.state.isOpen = !scope.popup.state.isOpen;
         },

@@ -262,6 +262,9 @@ angular.module 'bdate', [
         isOpen: false
       togglePopup: () ->
         return if not scope.isSourceReady
+        if scope.bModel and scope.bModel isnt '' and not angular.equals({}, scope.bModel)
+          date = parseDateStringToDMY scope.bModel
+          scope.bRefreshWrap date.month, date.year
         scope.popup.state.isOpen = not scope.popup.state.isOpen
       hidePopup: () ->
         scope.popup.state.isOpen = false
