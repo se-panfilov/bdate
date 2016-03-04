@@ -1,3 +1,5 @@
+# DEPRECATED
+
 [![Bower version](https://badge.fury.io/bo/bdate.svg)](http://badge.fury.io/bo/bdate)
 [![npm version](https://badge.fury.io/js/bdate.svg)](http://badge.fury.io/js/bdate)
 [![dependency Status](https://david-dm.org/se-panfilov/bdate/status.svg?branch=master)](https://david-dm.org/se-panfilov/bdate#info=Dependencies)
