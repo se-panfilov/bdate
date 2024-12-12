@@ -368,6 +368,17 @@ Global dependencies:
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/se-panfilov/bdate/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
+## Legal Disclaimer
+
+This project is provided "as is", without warranty of any kind. The authors and contributors disclaim all liability for any damages arising from its use, inability to use, or performance. Users are responsible for ensuring compliance with applicable laws and regulations in their jurisdiction, including but not limited to:
+
+- European Union: Cyber Resilience Act (CRA) and Artificial Intelligence Act (AI Act)
+- United States: Uniform Commercial Code (UCC) and Export Administration Regulations (EAR)
+- China: Cybersecurity Law
+- India: Information Technology Act
+
+For details, see the full [DISCLAIMER.md](DISCLAIMER.md) file
+
 [1]: https://se-panfilov.github.io/bdate/
 [2]: https://angular-ui.github.io/bootstrap/#/datepicker
 [3]: https://github.com/se-panfilov/bdate/releases
