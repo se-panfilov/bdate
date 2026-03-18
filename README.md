@@ -1,4 +1,6 @@
-# DEPRECATED
+# Deprecated / Unmaintained
+This project is no longer actively maintained. It may still work, but use it at your own risk.
+Please consider forking it if you need continued support.
 
 [![Bower version](https://badge.fury.io/bo/bdate.svg)](http://badge.fury.io/bo/bdate)
 [![npm version](https://badge.fury.io/js/bdate.svg)](http://badge.fury.io/js/bdate)
